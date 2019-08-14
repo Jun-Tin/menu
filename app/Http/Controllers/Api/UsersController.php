@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use DB;
-use Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,38 +13,6 @@ use App\Http\Resources\UserCollection;
 
 class UsersController extends Controller
 {
-    /**
-     * 自定义验证规则
-     */ 
-    protected function validatorUserRegister(array $data, string $type)
-    {
-        switch ($type) {
-            case 'register':
-                return Validator::make($data, [
-                    'name' => 'required',
-                    'password' => 'required',
-                    // 'email' => 'required|email|unique:users',
-                ], [
-                    'name.required' => '姓名不能为空',
-                    'password.required' => '密码不能为空',
-                    // 'email.required' => '邮箱不能为空',
-                    // 'email.email' => '请输入有效邮箱',
-                    // 'email.unique' => '此邮箱已被注册',
-                ]);
-                break;
-            case 'password':
-                return Validator::make($data, [
-                    'password' => 'required',
-                    'comfirmPassword' => 'required|same:password',
-                ], [
-                    'password.required' => '密码不能为空',
-                    'comfirmPassword.required' => '确认密码不能为空',
-                    'comfirmPassword.same' => '密码与确认密码不匹配',
-                ]);
-                break;
-        }
-    }
-
     /**
      * login api
      *
@@ -80,7 +47,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function register(Request $request, User $user)
     {   
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
@@ -91,9 +58,12 @@ class UsersController extends Controller
         if ( ! hash_equals($verifyData['code'], $request->code)) {
             return response()->json(['message' => '验证码错误' , 'status' => 402]);
         }
-
-        $validator = $this->validatorUserRegister($request->all(), 'register');
         
+        $data = $request->all();
+        $data['phone'] = $verifyData['phone'];
+
+        $validator = $user->validatorUserRegister($data, 'register');
+
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
         }
@@ -150,14 +120,14 @@ class UsersController extends Controller
             return response()->json(['message' => '验证码错误' , 'status' => 402]);
         }
 
-        $validator = $this->validatorUserRegister($request->all(), 'password');
+        $validator = $user->validatorUserRegister($request->all(), 'password');
         
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
         }
 
         $attributes['pro_password'] = $request->password;
-        $attributes['password'] = $user->setPasswordAttribute($request->password);
+        $attributes['password'] = bcrypt($request->password);
         
         $user = User::where('phone', $verifyData['phone'])->first();
         // $user::->update($attributes);

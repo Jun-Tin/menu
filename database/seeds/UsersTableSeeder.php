@@ -22,6 +22,8 @@ class UsersTableSeeder extends Seeder
         $user->area_code = '86';
         $user->phone = '15019424243';
         $user->password = bcrypt('password');
+        $user->pro_password = 'password';
+        $user->coins = '1000';
         $user->save();
     }
 }

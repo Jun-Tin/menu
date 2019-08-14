@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Store;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
+use App\Http\Resources\TagResource;
 
-class StoresController extends Controller
+class TagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,17 +35,14 @@ class StoresController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,Store $store)
+    public function store(Request $request, Tag $tag)
     {
         $user = auth()->user();
+        $tag->fill($request->all());
+        $tag->user_id = $user->id;
+        $tag->save();
 
-        $store->fill($request->all());
-        $store->user_id = $user->id;
-        $store->save();
-
-        return (new StoreResource($store))->additional(['status' => 200]);
-
-
+        return (new TagResource($tag))->additional(['status' => 200]);
     }
 
     /**
@@ -77,11 +74,11 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Store $store)
+    public function update(Request $request, Tag $tag)
     {
-        $store->update($request->all());
+        $tag->update($request->all());
 
-        return (new StoreResource($store))->additional(['status' => 200]);
+        return (new TagResource($tag))->additional(['status' => 200]);
     }
 
     /**
@@ -90,9 +87,9 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Store $store)
+    public function destroy(Tag $tag)
     {
-        $store->delete();
+        $tag->delete();
 
         return response()->json(['success' => '删除成功！', 'status' => 200]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Validator;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'remember_token',
+        'password', 'pro_password', 'remember_token',
     ];
 
     /** [ 多字段验证 ]*/ 
@@ -34,21 +35,43 @@ class User extends Authenticatable
         return $this->orWhere('email', $username)->orWhere('phone', $username)->first();
     }
 
-    /** [setPasswordAttribute 修改器修改密码] */
-    public function setPasswordAttribute($value)
-    {
-        if (strlen($value) != 60) {
-            // 不等于 60 ，不做加密处理
-            $value = bcrypt($value);
-        }
-
-        // $this->attributes['password'] = $value;
-        return $value;
-    }
-
     /** [ 一对多图片关联关系 ] */ 
     public function images()
     {
         return $this->hasMany(Image::class);
+    }
+
+    /**
+     * 自定义验证规则
+     */ 
+    public function validatorUserRegister(array $data, string $type)
+    {
+        switch ($type) {
+            case 'register':
+                return Validator::make($data, [
+                    'name' => 'required',
+                    'password' => 'required',
+                    'phone' => 'unique:users'
+                    // 'email' => 'required|email|unique:users',
+                ], [
+                    'name.required' => '姓名不能为空',
+                    'password.required' => '密码不能为空',
+                    'phone.unique' => '手机号码已存在'
+                    // 'email.required' => '邮箱不能为空',
+                    // 'email.email' => '请输入有效邮箱',
+                    // 'email.unique' => '此邮箱已被注册',
+                ]);
+                break;
+            case 'password':
+                return Validator::make($data, [
+                    'password' => 'required',
+                    'comfirmPassword' => 'required|same:password',
+                ], [
+                    'password.required' => '密码不能为空',
+                    'comfirmPassword.required' => '确认密码不能为空',
+                    'comfirmPassword.same' => '密码与确认密码不匹配',
+                ]);
+                break;
+        }
     }
 }
