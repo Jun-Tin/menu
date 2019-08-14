@@ -36,4 +36,5 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     // 门店
     Route::post('store', 'Api\StoresController@store');
+    // Route::post('store', 'Api\StoresController@store');
 });
