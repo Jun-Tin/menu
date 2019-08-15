@@ -16,7 +16,9 @@ class StoresController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        // return (new UserCollection($user->stores()->get()))->additional(['status' => 200]);
+        return new StoreResource($user->stores()->get());
     }
 
     /**

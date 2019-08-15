@@ -41,9 +41,19 @@ class User extends Authenticatable
         return $this->hasMany(Image::class);
     }
 
-    /**
-     * 自定义验证规则
-     */ 
+    /** [ 一对多门店关联关系 ] */
+    public function stores()
+    {
+        return $this->hasMany(Store::class);
+    }
+
+    /** [ 一对多标签关联关系 ] */
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    } 
+
+    /** [ 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
         switch ($type) {

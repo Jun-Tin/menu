@@ -16,7 +16,9 @@ class TagsController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+
+        return new TagResource($user->tags()->get());
     }
 
     /**
