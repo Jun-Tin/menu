@@ -14,7 +14,7 @@ class AddUserIdToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->integer('user_id')->nullable()->after('id')->comment('用户id');
+            $table->integer('user_id')->nullable()->after('pid')->comment('用户id');
         });
     }
 

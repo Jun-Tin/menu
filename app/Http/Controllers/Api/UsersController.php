@@ -29,7 +29,8 @@ class UsersController extends Controller
         }
 
         if (! $user) {
-            return response()->json(['error'=>'Unauthorised', 'status' => 401]);
+            // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
+            return response()->json(['error'=>['message' =>['Unauthorised']], 'status' => 401]);
         } else {
             if(Auth::attempt(['phone' => $user->phone, 'password' => request('password')])){
                 // 删除之前的token
@@ -39,7 +40,8 @@ class UsersController extends Controller
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return response()->json(['success' => $success, 'status' => 200]);
             }
-            return response()->json(['error'=>'Unauthorised', 'status' => 401]);
+            // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
+            return response()->json(['error'=>['message' =>['Unauthorised']], 'status' => 401]);
         }
     }
  

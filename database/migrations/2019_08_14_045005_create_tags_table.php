@@ -15,6 +15,7 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('pid')->nullable()->commit('父级id');
             $table->string('name')->nullable()->commit('标签名称');
             $table->string('category')->nullable()->commit('标签分类');
             $table->softDeletes();
