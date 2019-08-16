@@ -13,11 +13,7 @@ use App\Http\Resources\UserCollection;
 
 class UsersController extends Controller
 {
-    /**
-     * login api
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /**【 登录 】*/
     public function login(User $user){
         $account = request('account');
 
@@ -38,18 +34,14 @@ class UsersController extends Controller
                 DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->delete();
                 // 获取新的token
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
-                return response()->json(['success' => $success, 'status' => 200]);
+                return response()->json(['success' => $success, 'status' => 200, 'message' => '登录成功！']);
             }
             // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
             return response()->json(['error'=>['message' =>['密码错误！']], 'status' => 401]);
         }
     }
  
-    /**
-     * Register api
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /**【 注册 】*/
     public function register(Request $request, User $user)
     {   
         // 获取缓存的手机号和区号，以及验证码
@@ -93,11 +85,7 @@ class UsersController extends Controller
                                 'message' => '注册成功！' ]);
     }
 
-    /**
-     * details api
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /**【 个人信息 】*/
     public function member()
     {
         $user = auth()->user();
@@ -111,9 +99,7 @@ class UsersController extends Controller
                 // ->additional(['meta' => ['key' => 'value']]);
     }
 
-    /**
-     * 忘记密码
-     */ 
+    /**【 忘记密码 】*/ 
     public function forgotPassWord(Request $request, User $user)
     {
         // 获取缓存的手机号和区号，以及验证码
@@ -150,4 +136,6 @@ class UsersController extends Controller
                                 'status' => 200, 
                                 'message' => '密码修改成功！']);
     }
+
+    /**【 修改密码 / 手机号码 】*/
 }

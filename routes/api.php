@@ -33,6 +33,9 @@ Route::get('areacode', 'Api\AreacodesController@index');
 Route::group(['middleware' => 'auth:api'], function(){
     /**【 个人信息 】*/ 
     Route::get('user/member', 'Api\UsersController@member');
+    /**【 修改密码 /手机号码】*/ 
+    Route::patch('user/update', 'Api\UsersController@update');
+
 
     /**【 门店 】*/
     // 门店列表
