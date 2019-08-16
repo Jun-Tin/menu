@@ -50,7 +50,7 @@ class ImagesController extends Controller
                 	'path' => $url,
                 ]);
 
-                return response()->json(['message' => '上传成功', 'data' => array('img_id' => $image->id, 'url' => $url)],200);
+                return response()->json(['message' => '上传成功', 'data' => array('image_id' => $image->id, 'url' => $url)],200);
             }else{
                 return response()->json(['message' => '上传失败'], 200);
             }
@@ -96,6 +96,14 @@ class ImagesController extends Controller
 
                 if($bool){
                     $url[] = env('APP_URL').'/images/uploads/'.date('Ym',time()).'/'.$filename;
+
+                    // 保存在数据库
+                    $image = Image::create([
+                        'user_id' => auth()->user()->id,
+                        'type' => $request->type,
+                        'path' => env('APP_URL').'/images/uploads/'.date('Ym',time()).'/'.$filename,
+                    ]);
+                    $data[] = $image->id;
                 }else{
                     return response()->json(['message' => '上传失败'], 200);
                 }
@@ -103,6 +111,7 @@ class ImagesController extends Controller
                 return response()->json(['message' => '上传失败'], 200);
             }
         }
-        return response()->json(['message' => '上传成功', 'data' => array('url' => $url)],200);
+
+        return response()->json(['message' => '上传成功', 'data' => array('image_id' => $data, 'url' => $url)],200);
     }
 }

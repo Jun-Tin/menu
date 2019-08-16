@@ -16,7 +16,7 @@ class CreateDishesTable extends Migration
         Schema::create('dishes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('store_id')->nullable()->index()->commit('门店id');
-            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

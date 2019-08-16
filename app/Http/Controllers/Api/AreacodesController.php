@@ -14,8 +14,8 @@ class AreacodesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Areacode $areacode)
     {
-        return new AreacodeResource(Areacode::where('show',1)->orderBy('order_number','desc')->get());
+        return new AreacodeResource($areacode::where('show',1)->orderBy('order_number','desc')->get());
     }
 }

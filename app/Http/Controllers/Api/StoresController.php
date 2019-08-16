@@ -6,6 +6,7 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use App\Http\Resources\StoreCollection;
 
 class StoresController extends Controller
 {
@@ -18,7 +19,9 @@ class StoresController extends Controller
     {
         $user = auth()->user();
         // return (new UserCollection($user->stores()->get()))->additional(['status' => 200]);
-        return new StoreResource($user->stores()->get());
+        // return new StoreResource($user->stores()->get());
+        // return new StoreCollection($user->stores()->get());
+        return StoreResource::collection($user->stores()->get());
     }
 
     /**

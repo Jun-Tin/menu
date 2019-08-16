@@ -24,7 +24,8 @@ class UsersController extends Controller
         if (method_exists($user, 'findForPassport')) {
             $user = (new $user)->findForPassport($account);
         } else {
-            $user = (new $user)->where('email', $account)->first();
+            // $user = (new $user)->where('email', $account)->first();
+            $user = (new $user)->where('name', $account)->first();
         }
 
         if (! $user) {
