@@ -53,11 +53,13 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['message' => '验证码已失效', 'status' => 422]);
+            // return response()->json(['message' => '验证码已失效', 'status' => 422]);
+            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['message' => '验证码错误' , 'status' => 402]);
+            // return response()->json(['message' => '验证码错误' , 'status' => 402]);
+            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
         }
         
         $data = $request->all();
@@ -84,8 +86,9 @@ class UsersController extends Controller
         return response()->json(['success'=> [
                                     'name' => $user->name,
                                     'token' => $user->createToken('MyApp')->accessToken
-                                ]
-                                , 'status' => 200]);
+                                ], 
+                                'status' => 200 ,
+                                'message' => '注册成功！' ]);
     }
 
     /**
@@ -114,11 +117,13 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['message' => '验证码已失效', 'status' => 422]);
+            // return response()->json(['message' => '验证码已失效', 'status' => 422]);
+            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['message' => '验证码错误' , 'status' => 402]);
+            // return response()->json(['message' => '验证码错误' , 'status' => 402]);
+            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
         }
 
         $validator = $user->validatorUserRegister($request->all(), 'password');
@@ -139,8 +144,8 @@ class UsersController extends Controller
 
         return response()->json(['success'=> [
                                     'name' => $user->name,
-                                    'message' => '密码修改成功！'
-                                ]
-                                , 'status' => 200]);
+                                ], 
+                                'status' => 200, 
+                                'message' => '密码修改成功！']);
     }
 }
