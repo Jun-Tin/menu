@@ -47,7 +47,8 @@ class MessageCodesController extends Controller
         return response()->json(['success' => [
                                             'key' => $key,
                                             'expired_at' => $expiredAt->toDateTimeString()
-                                ]
-                                , 'status' => 200]);
+                                ], 
+                                'status' => 200 ,
+                                'message' => '发送成功！']);
     }
 }
