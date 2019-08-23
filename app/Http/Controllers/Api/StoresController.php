@@ -59,9 +59,9 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Store $store)
     {
-        //
+        return (new StoreCollection($store->menus))->additional(['status' => 200]);
     }
 
     /**

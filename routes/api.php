@@ -46,16 +46,28 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/update/{store}', 'Api\StoresController@update');
     // 删除门店
     Route::delete('store/destroy/{store}', 'Api\StoresController@destroy');
+    // 门店菜品列表
+    Route::get('store/show/{store}', 'Api\StoresController@show');
 
     /** 【 标签 】*/
-    // 门店列表
-    Route::get('tags/index', 'Api\TagsController@index');
+    // 标签列表
+    Route::post('tags/index', 'Api\TagsController@index');
     // 创建标签 
     Route::post('tags/store', 'Api\TagsController@store');
     // 修改标签 
     Route::patch('tags/update/{tag}', 'Api\TagsController@update');
     // 删除标签
     Route::delete('tags/destroy/{tag}', 'Api\TagsController@destroy');
+
+    /**【 菜品 】*/
+    // 菜品列表
+    Route::get('menu/index/{menu}', 'Api\MenusController@index');
+    // 创建菜品
+    Route::post('menu/store', 'Api\MenusController@store');
+    // 修改菜品
+    Route::patch('menu/update/{menu}', 'Api\MenusController@update');
+    // 删除菜品
+    Route::delete('menu/destroy/{menu}', 'Api\MenusController@destroy');
 
     /** 
      * 【 功能类接口 】

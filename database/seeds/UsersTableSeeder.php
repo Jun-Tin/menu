@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
         $user->password = bcrypt('password');
         $user->pro_password = 'password';
         $user->coins = '1000';
+        $user->image_id = '1';
         $user->save();
     }
 }

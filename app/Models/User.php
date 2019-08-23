@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'area_code', 'phone', 'pro_password'
+        'name', 'email', 'password', 'area_code', 'phone', 'pro_password', 'image_id'
     ];
 
     /**
@@ -34,6 +34,12 @@ class User extends Authenticatable
     {
         return $this->orWhere('email', $username)->orWhere('phone', $username)->orWhere('name',$username)->first();
     }
+
+    /** [ 一对一图片关联关系 ] */
+    public function image()
+    {
+        return $this->hasOne(Image::class);
+    } 
 
     /** [ 一对多图片关联关系 ] */ 
     public function images()

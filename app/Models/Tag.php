@@ -11,6 +11,12 @@ class Tag extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'user_id', 'name', 'category'
+        'pid', 'user_id', 'name', 'category'
     ];
+
+    /** [ 一对多标签关联关系 ]*/
+    public function menus()
+    {
+    	return $this->belongsToMany(Menu::class, 'menu_tag', 'tag_id', 'menu_id')->withTimestamps();
+    }
 }

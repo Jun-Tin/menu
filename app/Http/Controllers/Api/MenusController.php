@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Tag;
+use App\Models\Store;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TagResource;
+use App\Http\Resources\MenuResource;
+use App\Http\Resources\MenuCollection;
 
-class TagsController extends Controller
+class MenusController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        $user = auth()->user();
-
-        return new TagResource($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get());
+    public function index(Menu $menu)
+    {        
+        return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
     /**
@@ -37,14 +37,14 @@ class TagsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Tag $tag)
+    public function store(Request $request, Menu $menu)
     {
-        $user = auth()->user();
-        $tag->fill($request->all());
-        $tag->user_id = $user->id;
-        $tag->save();
-
-        return (new TagResource($tag))->additional(['status' => 200]);
+        $menu->fill($request->all());
+        
+        $menu->save();
+        $menu->tags()->sync(explode(',', $request->tag_id), false);
+        
+        return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
     /**
@@ -76,11 +76,13 @@ class TagsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, Menu $menu)
     {
-        $tag->update($request->all());
+        $menu->update($request->all());
+        $menu->tags()->detach();//先删除关系
+        $menu->tags()->sync(explode(',', $request->tag_id), false);
 
-        return (new TagResource($tag))->additional(['status' => 200]);
+        return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
     /**
@@ -89,10 +91,11 @@ class TagsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(Menu $menu)
     {
-        $tag->menus()->detach();
-        $tag->delete();
+
+        $menu->tags()->detach();
+        $menu->delete();
 
         return response()->json(['success' => '删除成功！', 'status' => 200]);
     }

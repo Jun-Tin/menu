@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable()->unique()->commit('邮箱');
             $table->integer('area_code')->nullable()->commit('区号');
             $table->string('phone')->nullable()->unique()->commit('手机号码');
+            $table->integer('image_id')->nullable()->commit('图片id');
             $table->string('password')->commit('加密密码');
             $table->string('pro_password')->nullable()->commit('明文密码');
             $table->rememberToken();
