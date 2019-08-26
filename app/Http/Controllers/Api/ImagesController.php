@@ -50,7 +50,7 @@ class ImagesController extends Controller
                 	'path' => $url,
                 ]);
 
-                return response()->json(['message' => '上传成功', 'data' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
+                return response()->json(['message' => '上传成功', 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
             }else{
                 return response()->json(['error' => ['message' => '上传失败'], 'status' => 201]);
             }
@@ -112,6 +112,6 @@ class ImagesController extends Controller
             }
         }
 
-        return response()->json(['message' => '上传成功', 'data' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
+        return response()->json(['message' => '上传成功', 'success' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
     }
 }
