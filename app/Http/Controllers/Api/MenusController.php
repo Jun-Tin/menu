@@ -43,7 +43,7 @@ class MenusController extends Controller
         $menu->save();
         $menu->tags()->sync(explode(',', $request->tag_id), false);
         
-        return (new MenuResource($menu))->additional(['status' => 200]);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**
@@ -81,7 +81,7 @@ class MenusController extends Controller
         $menu->tags()->detach();//先删除关系
         $menu->tags()->sync(explode(',', $request->tag_id), false);
 
-        return (new MenuResource($menu))->additional(['status' => 200]);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -96,6 +96,6 @@ class MenusController extends Controller
         $menu->tags()->detach();
         $menu->delete();
 
-        return response()->json(['success' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

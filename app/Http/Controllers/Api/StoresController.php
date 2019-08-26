@@ -48,7 +48,7 @@ class StoresController extends Controller
         $store->user_id = $user->id;
         $store->save();
 
-        return (new StoreResource($store))->additional(['status' => 200]);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
 
 
     }
@@ -86,7 +86,7 @@ class StoresController extends Controller
     {
         $store->update($request->all());
 
-        return (new StoreResource($store))->additional(['status' => 200]);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -99,6 +99,6 @@ class StoresController extends Controller
     {
         $store->delete();
 
-        return response()->json(['success' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

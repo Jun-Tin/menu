@@ -44,7 +44,7 @@ class TagsController extends Controller
         $tag->user_id = $user->id;
         $tag->save();
 
-        return (new TagResource($tag))->additional(['status' => 200]);
+        return (new TagResource($tag))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**
@@ -80,7 +80,7 @@ class TagsController extends Controller
     {
         $tag->update($request->all());
 
-        return (new TagResource($tag))->additional(['status' => 200]);
+        return (new TagResource($tag))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -94,6 +94,6 @@ class TagsController extends Controller
         $tag->menus()->detach();
         $tag->delete();
 
-        return response()->json(['success' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

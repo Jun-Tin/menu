@@ -41,8 +41,11 @@ class PackagesController extends Controller
         $package->fill($request->all());
         
         $package->save();
-        // $package->menus()->sync(explode(',', $request->menu_id), false);
-        $package->menus()->attach(explode(',', $request->menu_id), explode(',', $request->fill_price) , false);
+
+        // 循环对应不同差价
+        for ($i=0; $i < count(explode(',', $request->menu_id)) ; $i++) {
+            $package->menus()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
+        }
 
         return (new PackageResource($package))->additional(['status' => 200]);
     }
