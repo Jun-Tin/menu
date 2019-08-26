@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMenusTable extends Migration
+class CreatePackagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateMenusTable extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('store_id')->nullable()->index()->commit('门店id');
-            $table->string('name')->nullable()->commit('菜品名称');
-            $table->integer('image_id')->nullable()->commit('菜品图片');
-            $table->integer('original_price')->nullable()->commit('菜品原始价格');
-            $table->integer('special_price')->nullable()->commit('菜品特别价格');
+            $table->string('name')->nullable()->commit('套餐名称');
+            $table->integer('image_id')->nullable()->commit('套餐图片');
+            $table->integer('original_price')->nullable()->commit('套餐原始价格');
+            $table->integer('special_price')->nullable()->commit('套餐特别价格');
             $table->integer('level')->nullable()->commit('推荐指数');
             $table->softDeletes();
             $table->timestamps();
@@ -33,6 +33,6 @@ class CreateMenusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('packages');
     }
 }

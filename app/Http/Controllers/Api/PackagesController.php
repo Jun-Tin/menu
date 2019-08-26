@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Menu;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MenuResource;
-use App\Http\Resources\MenuCollection;
+use App\Http\Resources\PackageResource;
+use App\Http\Resources\PackageCollection;
 
-class MenusController extends Controller
+class PackagesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Menu $menu)
-    {        
-        return (new MenuResource($menu))->additional(['status' => 200]);
+    public function index(Package $package)
+    {
+        dd($package);
     }
 
     /**
@@ -36,14 +36,15 @@ class MenusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Menu $menu)
+    public function store(Request $request, Package $package)
     {
-        $menu->fill($request->all());
+        $package->fill($request->all());
         
-        $menu->save();
-        $menu->tags()->sync(explode(',', $request->tag_id), false);
-        
-        return (new MenuResource($menu))->additional(['status' => 200]);
+        $package->save();
+        // $package->menus()->sync(explode(',', $request->menu_id), false);
+        $package->menus()->attach(explode(',', $request->menu_id), explode(',', $request->prices) , false);
+
+        return (new PackageResource($package))->additional(['status' => 200]);
     }
 
     /**
@@ -75,13 +76,9 @@ class MenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, $id)
     {
-        $menu->update($request->all());
-        $menu->tags()->detach();//先删除关系
-        $menu->tags()->sync(explode(',', $request->tag_id), false);
-
-        return (new MenuResource($menu))->additional(['status' => 200]);
+        //
     }
 
     /**
@@ -90,12 +87,8 @@ class MenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Menu $menu)
+    public function destroy($id)
     {
-
-        $menu->tags()->detach();
-        $menu->delete();
-
-        return response()->json(['success' => '删除成功！', 'status' => 200]);
+        //
     }
 }

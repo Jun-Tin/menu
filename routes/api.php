@@ -69,6 +69,16 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除菜品
     Route::delete('menu/destroy/{menu}', 'Api\MenusController@destroy');
 
+    /**【 套餐 】*/
+    // 套餐列表
+    Route::get('package/index/{package}', 'Api\PackagesController@index');
+    // 创建套餐
+    Route::post('package/store', 'Api\PackagesController@store');
+    // 修改套餐
+    Route::patch('package/update/{package}', 'Api\PackagesController@update');
+    // 删除套餐
+    Route::delete('package/destroy/{package}', 'Api\PackagesController@destroy');
+
     /** 
      * 【 功能类接口 】
      */ 

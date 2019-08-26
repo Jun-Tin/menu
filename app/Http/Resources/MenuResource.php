@@ -2,9 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Menu;
 use App\Http\Resources\ImageResource;
-use App\Http\Resources\MenuResource;
 use App\Http\Resources\MenuCollection;
 use Illuminate\Http\Resources\Json\Resource;
 
@@ -30,8 +28,6 @@ class MenuResource extends Resource
             'level' => $this->level,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-            // 'tags' => Menu::collection($this->tags),
-            // 'tags' => MenuResource::collection($this->tags)
             'tags' => new MenuCollection($this->tags)
         ];
     }
