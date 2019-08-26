@@ -21,7 +21,7 @@ class StoresController extends Controller
         // return (new UserCollection($user->stores()->get()))->additional(['status' => 200]);
         // return new StoreResource($user->stores()->get());
         // return new StoreCollection($user->stores()->get());
-        return StoreResource::collection($user->stores);
+        return StoreResource::collection($user->stores)->additional(['status' => 200]);
     }
 
     /**

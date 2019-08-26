@@ -18,7 +18,7 @@ class TagsController extends Controller
     {
         $user = auth()->user();
 
-        return new TagResource($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get());
+        return (new TagResource($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
     }
 
     /**
