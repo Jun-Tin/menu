@@ -42,7 +42,7 @@ class PackagesController extends Controller
         
         $package->save();
         // $package->menus()->sync(explode(',', $request->menu_id), false);
-        $package->menus()->attach(explode(',', $request->menu_id), explode(',', $request->prices) , false);
+        $package->menus()->attach(explode(',', $request->menu_id), explode(',', $request->fill_price) , false);
 
         return (new PackageResource($package))->additional(['status' => 200]);
     }
