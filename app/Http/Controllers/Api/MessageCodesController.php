@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Overtrue\EasySms\EasySms;
-use Overtrue\EasySms\PhoneNumber;
+use Overtrue\EasySms\{EasySms, PhoneNumber};
 use App\Http\Controllers\Controller;
 
 class MessageCodesController extends Controller

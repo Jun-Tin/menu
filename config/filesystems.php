@@ -67,8 +67,7 @@ return [
             'driver' => 'local',
             'url'    => env('APP_URL').'/uploads',
             'root'   => public_path('images').'/uploads/'.date('Ym',time()),
-        ]
-
+        ],
     ],
 
 ];

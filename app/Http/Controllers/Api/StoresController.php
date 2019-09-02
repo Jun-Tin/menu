@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
-use App\Http\Resources\StoreCollection;
+use App\Http\Resources\{StoreResource, StoreCollection};
 
 class StoresController extends Controller
 {
@@ -61,7 +60,7 @@ class StoresController extends Controller
      */
     public function show(Store $store)
     {
-        return (new StoreCollection($store->menus))->additional(['status' => 200]);
+        return (new StoreResource($store))->additional(['status' => 200]);
     }
 
     /**
@@ -101,4 +100,22 @@ class StoresController extends Controller
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
+
+    /** 【菜品列表】 */
+    public function menus(Store $store)
+    {
+        return (new StoreCollection($store->menus))->additional(['status' => 200]);
+    }
+
+    /** 【套餐列表】 */
+    public function packages(Store $store)
+    {
+        return (new StoreCollection($store->packages))->additional(['status' => 200]);
+    }
+
+    /**【座位列表】*/
+    public function places(Request $request, Store $store)
+    {   
+        return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
+    } 
 }

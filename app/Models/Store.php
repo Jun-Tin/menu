@@ -31,4 +31,16 @@ class Store extends Model
     {
         return $this->hasMany(Menu::class);
     }
+
+    /** [ 一对多套餐关联关系 ] */ 
+    public function packages()
+    {
+        return $this->hasMany(Package::class);
+    }
+
+    /** [ 一对多座位关联关系 ] */ 
+    public function places()
+    {
+        return $this->hasMany(Place::class);
+    }
 }

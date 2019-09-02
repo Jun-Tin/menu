@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MenuResource;
-use App\Http\Resources\MenuCollection;
+use App\Http\Resources\{MenuResource, MenuCollection};
 
 class MenusController extends Controller
 {
@@ -92,7 +91,6 @@ class MenusController extends Controller
      */
     public function destroy(Menu $menu)
     {
-
         $menu->tags()->detach();
         $menu->delete();
 

@@ -183,6 +183,8 @@ return [
         Toplan\Sms\SmsManagerServiceProvider::class,
         App\Providers\MessageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Chumper\Zipper\ZipperServiceProvider::class
 
     ],
 
@@ -236,6 +238,8 @@ return [
         'PhpSms' => Toplan\PhpSms\Facades\Sms::class,
         'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
         'EasySms' => App\Facades\EasySms::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Zipper' => Chumper\Zipper\Zipper::class
 
 
     ],

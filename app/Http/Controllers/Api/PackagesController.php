@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PackageResource;
-use App\Http\Resources\PackageCollection;
+use App\Http\Resources\{PackageResource, PackageCollection};
 
 class PackagesController extends Controller
 {
@@ -17,7 +16,7 @@ class PackagesController extends Controller
      */
     public function index(Package $package)
     {
-        dd($package);
+        return (new PackageResource($package))->additional(['status' => 200]);
     }
 
     /**
@@ -79,9 +78,16 @@ class PackagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Package $package)
     {
-        //
+        $package->update($request->all());
+        $package->menus()->detach();//先删除关系
+        // 循环对应不同差价
+        for ($i=0; $i < count(explode(',', $request->menu_id)) ; $i++) {
+            $package->menus()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
+        }
+
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -90,8 +96,11 @@ class PackagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Package $package)
     {
-        //
+        $package->menus()->detach();
+        $package->delete();
+
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

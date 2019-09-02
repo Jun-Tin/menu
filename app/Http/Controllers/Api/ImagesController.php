@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Auth, Storage, File};
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ImagesController extends Controller
 {
@@ -113,5 +113,28 @@ class ImagesController extends Controller
         }
 
         return response()->json(['message' => '上传成功', 'success' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
+    }
+
+    /** [生成二维码] */
+    public function createQrcode(Request $request)
+    {
+        $dir = public_path('images/qrcodes/'.$request->store_id);
+        if (!is_dir($dir)) {
+            File::makeDirectory($dir, 0777, true);
+        }
+        // $filename = date('YmdHis').uniqid().'.png';
+        $filename = $request->name . '.png';
+        // 保存二维码
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->color(255,255,255)->backgroundColor(132,212,141)->encoding('UTF-8')->generate('www.baidu.com', $dir. '/'. $filename);
+        // 返回url链接
+        $url = env('APP_URL').'/images/qrcodes/'.$request->store_id.'/'.$filename;
+        // 保存在数据库
+        $image = Image::create([
+            'user_id' => auth()->user()->id,
+            'type' => 'qrcodes/'.$request->store_id,
+            'path' => $url,
+        ]);
+
+        return response()->json(['message' => '上传成功', 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
     }
 }

@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**【 门店 】*/
     // 门店列表
     Route::get('store/index', 'Api\StoresController@index');
+    // 门店详情
+    Route::get('store/show/{store}', 'Api\StoresController@show');
     // 创建门店
     Route::post('store/store', 'Api\StoresController@store');
     // 修改门店
@@ -47,7 +49,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除门店
     Route::delete('store/destroy/{store}', 'Api\StoresController@destroy');
     // 门店菜品列表
-    Route::get('store/show/{store}', 'Api\StoresController@show');
+    Route::get('store/menus/{store}', 'Api\StoresController@menus');
+    // 门店套餐列表
+    Route::get('store/packages/{store}', 'Api\StoresController@packages');
+    // 门店座位列表
+    Route::post('store/places/{store}', 'Api\StoresController@places');
 
     /** 【 标签 】*/
     // 标签列表
@@ -79,10 +85,23 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除套餐
     Route::delete('package/destroy/{package}', 'Api\PackagesController@destroy');
 
+    /**【座位】*/
+    // 创建座位
+    Route::post('place/store', 'Api\PlacesController@store');
+    // 修改座位
+    Route::patch('place/update/{place}', 'Api\PlacesController@update');
+    // 删除座位--单个
+    Route::delete('place/destroy/{place}', 'Api\PlacesController@destroy');
+    // 删除座位--整层
+    Route::delete('place/delete', 'Api\PlacesController@delete');
+    // 测试
+    Route::post('place/makeZip', 'Api\PlacesController@makeZip');
+
     /** 
      * 【 功能类接口 】
      */ 
     /**【 图片管理 】*/ 
     Route::post('img', 'Api\ImagesController@uploadImg');
     Route::post('imgs', 'Api\ImagesController@uploadImgs');
+    Route::post('qrcode', 'Api\ImagesController@createQrcode');
 });
