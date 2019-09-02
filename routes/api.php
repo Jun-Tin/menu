@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user/member', 'Api\UsersController@member');
     /**【 修改密码 /手机号码】*/ 
     Route::patch('user/update', 'Api\UsersController@update');
+    /**【 退出登录 】*/
+    Route::get('user/logout', 'Api\UsersController@logout');
 
 
     /**【 门店 】*/
@@ -57,7 +59,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /** 【 标签 】*/
     // 标签列表
-    Route::post('tags/index', 'Api\TagsController@index');
+    Route::get('tags/index/{pid}/{category}', 'Api\TagsController@index');
     // 创建标签 
     Route::post('tags/store', 'Api\TagsController@store');
     // 修改标签 

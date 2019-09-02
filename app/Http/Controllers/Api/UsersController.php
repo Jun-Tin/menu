@@ -138,4 +138,15 @@ class UsersController extends Controller
     }
 
     /**【 修改密码 / 手机号码 】*/
+
+
+    /** 【 退出登录 】 */
+    public function logout(Request $request)
+    {
+        if (Auth::guard('api')->check()){
+            Auth::guard('api')->user()->token()->revoke();
+        }
+
+        return response()->json(['message' => '退出成功！', 'status' => 200]);
+    }
 }
