@@ -114,9 +114,14 @@ class PlacesController extends Controller
             File::makeDirectory($dir, 0777, true);
         }
         $zipper = new Zipper();
-        $arr = glob(public_path('images/qrcodes/'.$request->store_id));
+        $arr = glob(public_path('images/qrcodes/'. $request->store_id . '/' . $request->floor));
         $zipper->make($dir . '/' . $zipname)->add($arr)->close();
+
+        if (file_exists($dir. '/' .$zipname)) {
+            // return response()->json(['message' => '压缩成功！', 'status' => 200, 'url' => env('APP_URL').'/zips/' .$zipname]);
+            return response()->download($dir . '/' . $zipname)->deleteFileAfterSend(true);
+        }
         
-        return response()->json(['message' => '压缩成功！', 'status' => 200, 'url' => env('APP_URL').'/zips/' .$zipname]);
+        return response()->json(['error' => ['message' => '压缩失败'], 'status' => 201]);
     }
 }

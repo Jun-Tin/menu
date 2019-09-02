@@ -118,16 +118,20 @@ class ImagesController extends Controller
     /** [生成二维码] */
     public function createQrcode(Request $request)
     {
-        $dir = public_path('images/qrcodes/'.$request->store_id);
+        $dir = public_path('images/qrcodes/'.$request->store_id. '/' .$request->floor);
         if (!is_dir($dir)) {
             File::makeDirectory($dir, 0777, true);
         }
         // $filename = date('YmdHis').uniqid().'.png';
         $filename = $request->name . '.png';
+        // 判断图片是否存在
+        if (file_exists($dir. '/' .$filename)) {
+            unlink($dir. '/' .$filename);
+        }
         // 保存二维码
         QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->color(255,255,255)->backgroundColor(132,212,141)->encoding('UTF-8')->generate('www.baidu.com', $dir. '/'. $filename);
         // 返回url链接
-        $url = env('APP_URL').'/images/qrcodes/'.$request->store_id.'/'.$filename;
+        $url = env('APP_URL').'/images/qrcodes/'.$request->store_id. '/' .$request->floor . '/' .$filename;
         // 保存在数据库
         $image = Image::create([
             'user_id' => auth()->user()->id,

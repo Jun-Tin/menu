@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection};
+use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource};
 
 class StoresController extends Controller
 {
@@ -110,12 +110,14 @@ class StoresController extends Controller
     /** 【套餐列表】 */
     public function packages(Store $store)
     {
-        return (new StoreCollection($store->packages))->additional(['status' => 200]);
+        return (new PackageCollection($store->packages))->additional(['status' => 200]);
+        // return PackageResource::collection($store->packages)->additional(['status' => 200]);
     }
 
-    /**【座位列表】*/
+    /** 【座位列表】 */
     public function places(Request $request, Store $store)
-    {   
-        return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
+    {
+        // return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
+        return PlaceResource::collection($store->places()->where('floor', $request->floor)->get())->additional(['status' => 200]);
     } 
 }
