@@ -12,7 +12,7 @@ class StoreObserver
 		
 		// 插入默认值
 		foreach ($class as $key => $value) {
-			Tag::create([
+			Tag::firstOrCreate([
 				'pid' => 0,
 				'user_id' => $store->user_id,
 				'name' => $value,
