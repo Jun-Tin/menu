@@ -14,6 +14,10 @@ class Tag extends Model
         'pid', 'user_id', 'name', 'category'
     ];
 
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     /** [ 一对多标签关联关系 ]*/
     public function menus()
     {

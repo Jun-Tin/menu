@@ -27,14 +27,14 @@ class StoreObserver
 		);
 		// 插入默认值
 		foreach ($perfer as $key => $value) {
-			$tag[$key] = Tag::create([
+			$tag[$key] = Tag::firstOrCreate([
 				'pid' => 0,
 				'user_id' => $store->user_id,
 				'name' => $key,
 				'category' => 'perfer',
 			]);
 			foreach ($value as $k => $v) {
-				Tag::create([
+				Tag::firstOrCreate([
 					'pid' => $tag[$key]->id,
 					'user_id' => $store->user_id,
 					'name' => $v,
