@@ -33,7 +33,7 @@ class UsersController extends Controller
                 // DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->update(['revoked'=>1]);
                 DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->delete();
                 // 获取新的token
-                $success['token'] =  $user->createToken('MyApp',['place-orders'])->accessToken;
+                $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return response()->json(['success' => $success, 'status' => 200, 'message' => '登录成功！']);
             }
             // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
