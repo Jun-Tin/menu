@@ -89,10 +89,16 @@ class TagsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(Request $request, Tag $tag)
     {
-        $tag->menus()->detach();
-        $tag->delete();
+        $ids = $request->ids;
+        $data = explode(',', $ids);
+
+        // 循环删除
+        foreach ($data as $key => $value) {
+            $tag::where('id', $value)->first()->menus()->detach();
+            $tag::where('id', $value)->delete();
+        }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }

@@ -89,10 +89,16 @@ class MenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Menu $menu)
+    public function destroy(Request $request, Menu $menu)
     {
-        $menu->tags()->detach();
-        $menu->delete();
+        $ids = $request->ids;
+        $data = explode(',', $ids);
+
+        // 循环删除
+        foreach ($data as $key => $value) {
+            $menu::where('id', $value)->first()->tags()->detach();
+            $menu::where('id', $value)->delete();
+        }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }

@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 修改标签 
     Route::patch('tags/update/{tag}', 'Api\TagsController@update');
     // 删除标签
-    Route::delete('tags/destroy/{tag}', 'Api\TagsController@destroy');
+    Route::delete('tags/destroy', 'Api\TagsController@destroy');
 
     /**【 菜品 】*/
     // 菜品列表
@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 修改菜品
     Route::patch('menu/update/{menu}', 'Api\MenusController@update');
     // 删除菜品
-    Route::delete('menu/destroy/{menu}', 'Api\MenusController@destroy');
+    Route::delete('menu/destroy', 'Api\MenusController@destroy');
 
     /**【 套餐 】*/
     // 套餐列表
@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 修改套餐
     Route::patch('package/update/{package}', 'Api\PackagesController@update');
     // 删除套餐
-    Route::delete('package/destroy/{package}', 'Api\PackagesController@destroy');
+    Route::delete('package/destroy', 'Api\PackagesController@destroy');
 
     /**【座位】*/
     // 创建座位

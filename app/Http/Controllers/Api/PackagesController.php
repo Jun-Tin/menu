@@ -96,10 +96,16 @@ class PackagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Package $package)
+    public function destroy(Request $request, Package $package)
     {
-        $package->menus()->detach();
-        $package->delete();
+        $ids = $request->ids;
+        $data = explode(',', $ids);
+
+        // 循环删除
+        foreach ($data as $key => $value) {
+            $package::where('id', $value)->first()->menus()->detach();
+            $package::where('id', $value)->delete();
+        }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }

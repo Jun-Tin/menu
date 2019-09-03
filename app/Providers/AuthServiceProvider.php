@@ -31,5 +31,9 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensExpireIn(now()->addDays(15));
         // accessRefushToken有效期
         Passport::refreshTokensExpireIn(now()->addDays(30));
+
+        Passport::tokensCan([
+            'place-orders' => 'Place orders',
+        ]);
     }
 }
