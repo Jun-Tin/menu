@@ -14,8 +14,8 @@ use App\Http\Resources\UserResource;
 class UsersController extends Controller
 {
     /**【 登录 】*/
-    public function login(User $user){
-        $account = request('account');
+    public function login(Request $request, User $user){
+        $account = $request->account;
 
         if (method_exists($user, 'findForPassport')) {
             $user = (new $user)->findForPassport($account);
@@ -27,18 +27,27 @@ class UsersController extends Controller
         if (! $user) {
             // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
             return response()->json(['error'=>['message' =>['用户不存在！']], 'status' => 401]);
-        } else {
-            if(Auth::attempt(['phone' => $user->phone, 'password' => request('password')])){
+        }
+        if(Auth::attempt(['phone' => $user->phone, 'password' => $request->password])){
+            $data = DB::table('oauth_access_tokens')->where('user_id',$user->id)->pluck('scopes');
+            $str = str_replace('"]','',str_replace('["', '',$data[0]));
+            if ($str == $request->identity || $str == 'boss') {
+                if ($str == $request->identity) {
+                    $scopes = $str;
+                } else {
+                    $scopes = 'boss';
+                }
                 // 删除之前的token
                 // DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->update(['revoked'=>1]);
                 DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->delete();
                 // 获取新的token
-                $success['token'] =  $user->createToken('MyApp')->accessToken;
+                $success['token'] =  $user->createToken('MyApp', [$scopes])->accessToken;
                 return response()->json(['success' => $success, 'status' => 200, 'message' => '登录成功！']);
             }
-            // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
-            return response()->json(['error'=>['message' =>['密码错误！']], 'status' => 401]);
+            return response()->json(['error' => ['message' => ['没有权限登录！']],'status' => 203]);
         }
+        // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
+        return response()->json(['error' => ['message' => ['密码错误！']], 'status' => 401]);
     }
  
     /**【 注册 】*/
@@ -79,7 +88,7 @@ class UsersController extends Controller
 
         return response()->json(['success'=> [
                                     'name' => $user->name,
-                                    'token' => $user->createToken('MyApp')->accessToken
+                                    'token' => $user->createToken('MyApp', ['boss'])->accessToken
                                 ], 
                                 'status' => 200 ,
                                 'message' => '注册成功！' ]);
@@ -89,10 +98,11 @@ class UsersController extends Controller
     public function member()
     {
         $user = auth()->user();
+        // dd($user->token()->scopes);
         // dd($user->images());
         // return response()->json(['data' => $user, 'status' => 200]);
         // 数据单个
-        return (new UserResource($user))->additional(['status'=>200]);
+        return (new UserResource($user))->additional(['status' => 200, 'identity' => $user->token()->scopes[0]]);
         // 数据集合
         // return (new UserCollection($user->images()->get()))->additional(['status' => 200]);
         // return (new UserCollection(User::all()))

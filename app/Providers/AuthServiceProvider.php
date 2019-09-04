@@ -34,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'place-orders' => 'Place orders',
+            'waiter' => 'waiter',
+            'chef' => 'chef',
+            'manager' => 'manager',
+            'boss' => 'boss order',
         ]);
     }
 }
