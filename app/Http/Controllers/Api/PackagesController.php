@@ -98,11 +98,10 @@ class PackagesController extends Controller
      */
     public function destroy(Request $request, Package $package)
     {
-        $ids = $request->ids;
-        $data = explode(',', $ids);
+        $ids = json_decode($request->ids);
 
         // 循环删除
-        foreach ($data as $key => $value) {
+        foreach ($ids as $key => $value) {
             $package::where('id', $value)->first()->menus()->detach();
             $package::where('id', $value)->delete();
         }

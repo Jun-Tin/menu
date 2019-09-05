@@ -91,11 +91,10 @@ class MenusController extends Controller
      */
     public function destroy(Request $request, Menu $menu)
     {
-        $ids = $request->ids;
-        $data = explode(',', $ids);
-
+        $ids = json_decode($request->ids);
+        
         // 循环删除
-        foreach ($data as $key => $value) {
+        foreach ($ids as $key => $value) {
             $menu::where('id', $value)->first()->tags()->detach();
             $menu::where('id', $value)->delete();
         }

@@ -56,6 +56,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/packages/{store}', 'Api\StoresController@packages');
     // 门店座位列表
     Route::patch('store/places/{store}', 'Api\StoresController@places');
+    /**【 员工 】*/ 
+    Route::patch('store/staff/{store}', 'Api\StoresController@staff');
 
     /** 【 标签 】*/
     // 标签列表
@@ -87,7 +89,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除套餐
     Route::delete('package/destroy', 'Api\PackagesController@destroy');
 
-    /**【座位】*/
+    /**【 座位 】*/
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
     // 修改座位
@@ -98,6 +100,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('place/delete', 'Api\PlacesController@delete');
     // 获取座位二维码压缩包
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
+
 
     /** 
      * 【 功能类接口 】

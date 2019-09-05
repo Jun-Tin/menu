@@ -91,11 +91,10 @@ class TagsController extends Controller
      */
     public function destroy(Request $request, Tag $tag)
     {
-        $ids = $request->ids;
-        $data = explode(',', $ids);
+        $ids = json_decode($request->ids);
 
         // 循环删除
-        foreach ($data as $key => $value) {
+        foreach ($ids as $key => $value) {
             $tag::where('id', $value)->first()->menus()->detach();
             $tag::where('id', $value)->delete();
         }

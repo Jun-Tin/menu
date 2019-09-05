@@ -12,7 +12,8 @@ class StoreObserver
 		
 		// 插入默认值
 		foreach ($class as $key => $value) {
-			Tag::firstOrCreate([
+			// 获取软删除与正常一起的记录
+			Tag::withTrashed()->updateOrCreate([
 				'pid' => 0,
 				'user_id' => $store->user_id,
 				'name' => $value,
@@ -27,14 +28,14 @@ class StoreObserver
 		);
 		// 插入默认值
 		foreach ($perfer as $key => $value) {
-			$tag[$key] = Tag::firstOrCreate([
+			$tag[$key] = Tag::withTrashed()->updateOrCreate([
 				'pid' => 0,
 				'user_id' => $store->user_id,
 				'name' => $key,
 				'category' => 'perfer',
 			]);
 			foreach ($value as $k => $v) {
-				Tag::firstOrCreate([
+				Tag::withTrashed()->updateOrCreate([
 					'pid' => $tag[$key]->id,
 					'user_id' => $store->user_id,
 					'name' => $v,

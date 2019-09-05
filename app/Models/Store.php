@@ -20,27 +20,33 @@ class Store extends Model
         'deleted_at',
     ];
 
-    /** [ 一对一图片关联关系 ] */ 
+    /**【 一对一图片关联关系 】*/ 
     public function image()
     {
     	return $this->hasOne(Image::class, 'id', 'image_id');
     }
 
-    /** [ 一对多菜品关联关系 ] */
+    /**【 一对多菜品关联关系 】*/
     public function menus()
     {
         return $this->hasMany(Menu::class);
     }
 
-    /** [ 一对多套餐关联关系 ] */ 
+    /**【 一对多套餐关联关系 】*/ 
     public function packages()
     {
         return $this->hasMany(Package::class);
     }
 
-    /** [ 一对多座位关联关系 ] */ 
+    /**【 一对多座位关联关系 】*/ 
     public function places()
     {
         return $this->hasMany(Place::class);
+    }
+
+    /**【 多对多员工关联关系 】*/
+    public function staff()
+    {
+        return $this->belongsToMany(User::class, 'user_store', 'store_id', 'user_id')->withTimestamps();
     }
 }
