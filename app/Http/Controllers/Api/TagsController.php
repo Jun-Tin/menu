@@ -93,10 +93,15 @@ class TagsController extends Controller
     {
         $ids = json_decode($request->ids);
 
-        // 循环删除
-        foreach ($ids as $key => $value) {
-            $tag::where('id', $value)->first()->menus()->detach();
-            $tag::where('id', $value)->delete();
+        if (is_array($ids)) {
+            // 循环删除
+            foreach ($ids as $key => $value) {
+                $tag::where('id', $value)->first()->menus()->detach();
+                $tag::where('id', $value)->delete();
+            }
+        } else {
+            $tag::find($ids)->menus()->detach();
+            $tag::where('id', $ids)->delete();
         }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

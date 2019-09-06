@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User};
+use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource};
 
 class StoresController extends Controller
 {
@@ -121,27 +121,9 @@ class StoresController extends Controller
         return PlaceResource::collection($store->places()->where('floor', $request->floor)->get())->additional(['status' => 200]);
     }
 
-    /** 【设置员工】 */
-    public function  staff(Request $request, Store $store, User $user)
+    /** 【员工列表】 */
+    public function users(Request $request, Store $store)
     {
-
-        // $user->fill($request->all());
-        // $user->password = bcrypt($request->password);
-        // $user->pro_password = $request->pro_password;
-        // $user->save();
-
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'gender' => $request->gender,
-            'birthday' => $request->birthday,
-            'entry_time' => strtotime($request->entry_time),
-            'post' => $request->post,
-            'password' => bcrypt($request->password),
-            'pro_password' => $request->password
-        ]);
-
-        $store->staff()->detach();
-        dd($store);
+        return UserResource::collection($store->users()->get())->additional(['status' => 200]);
     }
 }

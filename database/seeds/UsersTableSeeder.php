@@ -25,6 +25,7 @@ class UsersTableSeeder extends Seeder
         $user->pro_password = 'password';
         $user->coins = '1000';
         $user->image_id = '1';
+        $user->post = 'boss';
         $user->save();
     }
 }

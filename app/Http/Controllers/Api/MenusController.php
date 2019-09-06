@@ -93,10 +93,15 @@ class MenusController extends Controller
     {
         $ids = json_decode($request->ids);
         
-        // 循环删除
-        foreach ($ids as $key => $value) {
-            $menu::where('id', $value)->first()->tags()->detach();
-            $menu::where('id', $value)->delete();
+        if (is_array($ids)) {
+            // 循环删除
+            foreach ($ids as $key => $value) {
+                $menu::where('id', $value)->first()->tags()->detach();
+                $menu::where('id', $value)->delete();
+            }
+        } else {
+            $menu::find($ids)->tags()->detach();
+            $menu::where('id', $ids)->delete();
         }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

@@ -45,8 +45,8 @@ class Store extends Model
     }
 
     /**【 多对多员工关联关系 】*/
-    public function staff()
+    public function users()
     {
-        return $this->belongsToMany(User::class, 'user_store', 'store_id', 'user_id')->withTimestamps();
+        return $this->hasMany(User::class);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use DB;
-use App\Models\User;
+use App\Models\{User, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +29,9 @@ class UsersController extends Controller
             return response()->json(['error'=>['message' =>['用户不存在！']], 'status' => 401]);
         }
         if(Auth::attempt(['phone' => $user->phone, 'password' => $request->password])){
-            $data = DB::table('oauth_access_tokens')->where('user_id',$user->id)->pluck('scopes');
-            $str = str_replace('"]','',str_replace('["', '',$data[0]));
-            if ($str == $request->identity || $str == 'boss') {
-                if ($str == $request->identity) {
-                    $scopes = $str;
+            if ($user->post == $request->identity || $user->post == 'boss') {
+                if ($user->post == $request->identity) {
+                    $scopes = $user->post;
                 } else {
                     $scopes = 'boss';
                 }
@@ -80,7 +78,8 @@ class UsersController extends Controller
             'area_code' => $verifyData['area_code'],
             'phone' => $verifyData['phone'],
             'password' => bcrypt($request->password),
-            'pro_password' => $request->password
+            'pro_password' => $request->password,
+            'post' => 'boss'
         ]);
 
         // 清除验证码缓存
@@ -149,6 +148,58 @@ class UsersController extends Controller
 
     /**【 修改密码 / 手机号码 】*/
 
+
+    /** 【员工详情】 */
+    public function detail(User $user)
+    {
+        return (new UserResource($user))->additional(['status' => 200]);
+    } 
+    /** 【设置员工信息】 */
+    public function staff(Request $request, User $user)
+    {
+        // 验证数据
+        $data = $request->all();
+        $validator = $user->validatorUserRegister($data, 'register');
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+        }
+
+        $store = Store::where('id',$request->store_id)->first();
+
+        $user = User::create([
+            'name' => $request->name,
+            'area_code' => $request->area_code,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'birthday' => $request->birthday,
+            'entry_time' => strtotime($request->entry_time),
+            'post' => $request->post,
+            'password' => bcrypt($request->password),
+            'pro_password' => $request->password,
+            'store_id' => $store->id,
+        ]);
+        
+        return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
+    }
+
+    /** 【修改员工信息】 */ 
+    public function edit(Request $request, User $user)
+    {
+        $user->fill($request->all());
+        $user->entry_time = strtotime($request->entry_time);
+        $user->save();
+
+        return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
+    }
+
+    /** 【删除员工信息】 */
+    public function delete(User $user)
+    {
+        $user->delete();
+
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
+    } 
 
     /** 【 退出登录 】 */
     public function logout(Request $request)

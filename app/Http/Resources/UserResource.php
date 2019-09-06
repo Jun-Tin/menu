@@ -20,10 +20,15 @@ class UserResource extends Resource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'store_id' => $this->store_id,
             'area_code' => $this->area_code,
             'phone' => $this->phone,
             'coins' => $this->coins,
             'image' => new ImageResource($this->image),
+            'gender' => $this->gender?"男生":"女生",
+            'birthday' => $this->birthday,
+            'post' => $this->post,
+            'entry_time' => $this->entry_time?date('Y-m-d',$this->entry_time):'',
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):''
         ];

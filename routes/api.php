@@ -37,6 +37,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('user/update', 'Api\UsersController@update');
     /**【 退出登录 】*/
     Route::get('user/logout', 'Api\UsersController@logout');
+    /**【 员工 】*/ 
+    // 员工信息详情
+    Route::get('user/detail/{user}', 'Api\UsersController@detail');
+    // 添加员工信息
+    Route::post('user/staff', 'Api\UsersController@staff');
+    // 修改员工信息
+    Route::patch('user/edit/{user}', 'Api\UsersController@edit');
+    // 删除员工信息
+    Route::delete('user/delete/{user}', 'Api\UsersController@delete');
 
 
     /**【 门店 】*/
@@ -56,8 +65,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/packages/{store}', 'Api\StoresController@packages');
     // 门店座位列表
     Route::patch('store/places/{store}', 'Api\StoresController@places');
-    /**【 员工 】*/ 
-    Route::patch('store/staff/{store}', 'Api\StoresController@staff');
+    // 门店员工列表
+    Route::get('store/users/{store}', 'Api\StoresController@users');
 
     /** 【 标签 】*/
     // 标签列表
