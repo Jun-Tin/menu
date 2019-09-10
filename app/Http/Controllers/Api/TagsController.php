@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TagResource;
+use App\Http\Resources\{TagResource, TagCollection};
 
 class TagsController extends Controller
 {
@@ -18,7 +18,7 @@ class TagsController extends Controller
     {
         $user = auth()->user();
 
-        return (new TagResource($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
+        return (new TagCollection($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
     }
 
     /**
