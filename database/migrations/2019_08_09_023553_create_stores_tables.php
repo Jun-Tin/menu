@@ -24,7 +24,6 @@ class CreateStoresTables extends Migration
             $table->string('end_time')->nullable()->commit('结束营业时间');
             $table->string('intro')->nullable()->commit('店铺简介');
             $table->string('set_time')->nullable()->commit('限制时间');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

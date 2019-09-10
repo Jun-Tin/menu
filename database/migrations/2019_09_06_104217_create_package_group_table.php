@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePackageMenuTable extends Migration
+class CreatePackageGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreatePackageMenuTable extends Migration
      */
     public function up()
     {
-        Schema::create('package_menu', function (Blueprint $table) {
+        Schema::create('package_group', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('package_id')->nullable()->commit('套餐id');
-            $table->integer('menu_id')->nullable()->commit('菜品id');
-            $table->integer('fill_price')->nullable()->commit('补差价');
+            $table->integer('pid')->nullable()->commit('父级id');
+            $table->integer('target_id')->nullable()->commit('标签id');
+            $table->string('fill_price')->nullable()->commit('补差价');
+            $table->integer('order_number')->nullable()->commit('排序号');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreatePackageMenuTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package_menu');
+        Schema::dropIfExists('package_group');
     }
 }

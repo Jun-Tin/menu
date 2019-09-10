@@ -37,10 +37,13 @@ class MenusController extends Controller
      */
     public function store(Request $request, Menu $menu)
     {
+        $ids = json_decode($request->ids);
         $menu->fill($request->all());
-        
         $menu->save();
-        $menu->tags()->sync(explode(',', $request->tag_id), false);
+        
+        foreach ($ids as $key => $value) {
+            $menu->tags()->sync($value, false);
+        }
         
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '创建成功！']);
     }
@@ -76,9 +79,14 @@ class MenusController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
+        $ids = json_decode($request->ids);
+
         $menu->update($request->all());
         $menu->tags()->detach();//先删除关系
-        $menu->tags()->sync(explode(',', $request->tag_id), false);
+
+        foreach ($ids as $key => $value) {
+            $menu->tags()->sync($value, false);
+        }
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -92,16 +100,15 @@ class MenusController extends Controller
     public function destroy(Request $request, Menu $menu)
     {
         $ids = json_decode($request->ids);
-        
-        if (is_array($ids)) {
-            // 循环删除
-            foreach ($ids as $key => $value) {
-                $menu::where('id', $value)->first()->tags()->detach();
-                $menu::where('id', $value)->delete();
-            }
-        } else {
-            $menu::find($ids)->tags()->detach();
-            $menu::where('id', $ids)->delete();
+        // 循环删除
+        foreach ($ids as $key => $value) {
+            $menu = $menu::find($value);
+            // $menu->tags()->detach();
+            // $menu->delete();
+            // $menu::find($value)->tags()->detach();
+            // $menu->delete();
+            $menu->tags()->detach();
+            $menu->delete();
         }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

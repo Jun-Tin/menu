@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\Api\UserRequest;
 // use App\Http\Requests\UserRequest;
 // use App\Http\Resources\UserCollection;
 
@@ -20,18 +21,18 @@ class UsersController extends Controller
         if (method_exists($user, 'findForPassport')) {
             $user = (new $user)->findForPassport($account);
         } else {
-            // $user = (new $user)->where('email', $account)->first();
             $user = (new $user)->where('name', $account)->first();
         }
 
         if (! $user) {
-            // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
             return response()->json(['error'=>['message' =>['用户不存在！']], 'status' => 401]);
         }
         if(Auth::attempt(['phone' => $user->phone, 'password' => $request->password])){
-            if ($user->post == $request->identity || $user->post == 'boss') {
+            if ($user->post == $request->identity || $user->post == 'manager' || $user->post == 'boss') {
                 if ($user->post == $request->identity) {
                     $scopes = $user->post;
+                } else if($user->post == 'manager') {
+                    $scopes = 'manager';
                 } else {
                     $scopes = 'boss';
                 }
@@ -44,7 +45,6 @@ class UsersController extends Controller
             }
             return response()->json(['error' => ['message' => ['没有权限登录！']],'status' => 203]);
         }
-        // return response()->json(['error'=>'Unauthorised', 'status' => 401]);
         return response()->json(['error' => ['message' => ['密码错误！']], 'status' => 401]);
     }
  
@@ -54,12 +54,10 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            // return response()->json(['message' => '验证码已失效', 'status' => 422]);
             return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            // return response()->json(['message' => '验证码错误' , 'status' => 402]);
             return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
         }
         
@@ -114,12 +112,10 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            // return response()->json(['message' => '验证码已失效', 'status' => 422]);
             return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            // return response()->json(['message' => '验证码错误' , 'status' => 402]);
             return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
         }
 
@@ -133,7 +129,6 @@ class UsersController extends Controller
         $attributes['password'] = bcrypt($request->password);
         
         $user = User::where('phone', $verifyData['phone'])->first();
-        // $user::->update($attributes);
         User::where('phone', $verifyData['phone'])->update($attributes);
 
         // 清除验证码缓存

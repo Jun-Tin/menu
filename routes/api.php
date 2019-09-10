@@ -97,6 +97,14 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('package/update/{package}', 'Api\PackagesController@update');
     // 删除套餐
     Route::delete('package/destroy', 'Api\PackagesController@destroy');
+    /** 【 嵌入标签 】 */ 
+    // 套餐嵌入标签
+    Route::patch('package/addTags/{package}', 'Api\PackagesController@addTags');
+    // 删除嵌入标签
+    Route::delete('package/subTags/{package}/{target_id}', 'Api\PackagesController@subTags');
+    // 嵌入标签排序
+    Route::post('package/orderTags/{package}', 'Api\PackagesController@orderTags');
+
 
     /**【 座位 】*/
     // 创建座位

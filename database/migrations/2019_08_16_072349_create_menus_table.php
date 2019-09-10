@@ -21,7 +21,6 @@ class CreateMenusTable extends Migration
             $table->integer('original_price')->nullable()->commit('菜品原始价格');
             $table->integer('special_price')->nullable()->commit('菜品特别价格');
             $table->integer('level')->nullable()->commit('推荐指数');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

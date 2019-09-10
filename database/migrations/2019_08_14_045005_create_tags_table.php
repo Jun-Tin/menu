@@ -18,7 +18,6 @@ class CreateTagsTable extends Migration
             $table->integer('pid')->nullable()->commit('父级id');
             $table->string('name')->nullable()->commit('标签名称');
             $table->string('category')->nullable()->commit('标签分类');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

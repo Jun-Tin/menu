@@ -20,7 +20,6 @@ class CreatePlacesTable extends Migration
             $table->integer('number')->nullable()->commit('座位人数');
             $table->integer('floor')->nullable()->commit('楼层');
             $table->integer('image_id')->nullable()->commit('图片id');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

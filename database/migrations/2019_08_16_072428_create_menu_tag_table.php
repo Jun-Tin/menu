@@ -17,7 +17,6 @@ class CreateMenuTagTable extends Migration
             $table->increments('id');
             $table->integer('menu_id')->nullable()->commit('菜品id');
             $table->integer('tag_id')->nullable()->commit('标签id');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

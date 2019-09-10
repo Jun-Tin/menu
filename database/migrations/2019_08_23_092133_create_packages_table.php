@@ -21,7 +21,6 @@ class CreatePackagesTable extends Migration
             $table->integer('original_price')->nullable()->commit('套餐原始价格');
             $table->integer('special_price')->nullable()->commit('套餐特别价格');
             $table->integer('level')->nullable()->commit('推荐指数');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
