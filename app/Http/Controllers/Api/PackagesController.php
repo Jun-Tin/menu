@@ -121,6 +121,7 @@ class PackagesController extends Controller
     /** 【 套餐嵌入标签 】 */
     public function addTags(Request $request, Package $package)
     {
+        // dd($package);
         $package->tags()->attach($request->target_id, ['pid' => 0, 'order_number' => $request->order_number]);
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);

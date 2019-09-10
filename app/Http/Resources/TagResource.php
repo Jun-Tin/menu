@@ -22,7 +22,8 @@ class TagResource extends Resource
             'name' => $this->name,
             'category' => $this->category,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):''
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'pivot' => $this->pivot,
         ];
     }
 }

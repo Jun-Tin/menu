@@ -28,7 +28,7 @@ class PackageResource extends Resource
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
             // 'menus' => new MenuCollection($this->menus)
             // 'tags' => new TagCollection($this->tags),
-            // 'tags' => TagResource::collection($this->tags),
+            'tags' => TagResource::collection($this->tags),
         ];
     }
 }
