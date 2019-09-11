@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('user/update', 'Api\UsersController@update');
     /**【 退出登录 】*/
     Route::get('user/logout', 'Api\UsersController@logout');
+
     /**【 员工 】*/ 
     // 员工信息详情
     Route::get('user/detail/{user}', 'Api\UsersController@detail');
@@ -98,12 +99,20 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除套餐
     Route::delete('package/destroy', 'Api\PackagesController@destroy');
     /** 【 嵌入标签 】 */ 
-    // 套餐嵌入标签
+    // 添加标签
     Route::patch('package/addTags/{package}', 'Api\PackagesController@addTags');
-    // 删除嵌入标签
+    // 删除标签
     Route::delete('package/subTags/{package}/{target_id}', 'Api\PackagesController@subTags');
-    // 嵌入标签排序
+    // 排序标签
     Route::post('package/orderTags/{package}', 'Api\PackagesController@orderTags');
+    /** 【 嵌入菜品 】 */
+    // 添加菜品
+    Route::patch('package/addMenus/{id}', 'Api\PackagesController@addMenus');
+    // 删除菜品
+    Route::delete('package/subMenus/{id}', 'Api\PackagesController@subMenus');
+    // 排序菜品
+    Route::post('package/orderMenus/{id}', 'Api\PackagesController@orderMenus');
+
 
 
     /**【 座位 】*/

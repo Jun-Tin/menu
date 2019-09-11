@@ -18,7 +18,7 @@ class CreatePackageGroupTable extends Migration
             $table->integer('package_id')->nullable()->commit('套餐id');
             $table->integer('pid')->nullable()->commit('父级id');
             $table->integer('target_id')->nullable()->commit('标签id');
-            $table->string('fill_price')->nullable()->commit('补差价');
+            $table->integer('fill_price')->nullable()->commit('补差价');
             $table->integer('order_number')->nullable()->commit('排序号');
             $table->timestamps();
         });

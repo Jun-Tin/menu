@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Package;
+use App\Models\{Package, PackageGroup};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{PackageResource, PackageCollection};
@@ -111,41 +111,78 @@ class PackagesController extends Controller
         // 循环删除
         foreach ($ids as $key => $value) {
             $package = $package::find($value);
-            $package->menus()->detach();
+            PackageGroup::where('package_id',$value)->delete();
             $package->delete();
         }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
-    /** 【 套餐嵌入标签 】 */
+    /** 【 添加标签 】 */
     public function addTags(Request $request, Package $package)
     {
-        // dd($package);
         $package->tags()->attach($request->target_id, ['pid' => 0, 'order_number' => $request->order_number]);
 
-        return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
     }
 
-    /** 【 删除嵌入标签 】 */
+    /** 【 删除标签 】 */
     public function subTags(Request $request, Package $package)
     {
-        $package->tags()->detach($request->target_id);
+        $package->allTags()->detach($request->target_id);
     
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
-    /** 【 嵌入标签排序 】 */
+    /** 【 排序标签 】 */
     public function orderTags(Request $request, Package $package)
     {
         $ids = json_decode($request->ids, true);
 
-        $package->tags()->detach(); // 先删除原有关系
+        $package->allTags()->detach(); // 先删除原有关系
         // 循环嵌入
         foreach ($ids as $key => $value) {
             $package->tags()->attach($value['id'], ['pid' => 0, 'order_number' => $value['order_number']]);
         }
 
-        return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);
     }
+
+    /** 【 添加菜品 】 */
+    public function addMenus(Request $request, Package $package)
+    {
+        $packagegroup = PackageGroup::find($request->id);
+        $package = $package::find($packagegroup->package_id);
+
+        $package->menus($request->id)->attach($request->target_id, ['pid' => $request->id, 'order_number' => $request->order_number, 'fill_price' => $request->fill_price]);
+
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
+    }
+
+    /** 【 删除菜品 】 */
+    public function subMenus(Request $request)
+    {
+        $packagegroup = PackageGroup::find($request->id);
+        $packagegroup->delete();
+    
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
+    }
+
+    /** 【 排序菜品 】 */
+    public function orderMenus(Request $request, Package $package)
+    {
+        $ids = json_decode($request->ids, true);
+        
+        $data = PackageGroup::find($request->id);
+        $package = $package::find($data->package_id);
+
+        // 循环修改
+        foreach ($ids as $key => $value) {
+            $packagegroup = PackageGroup::where('target_id', $value['id'])->where('pid', $request->id)->first();
+            $packagegroup->order_number = $value['order_number'];
+            $packagegroup->save();
+        }
+
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);
+    } 
 }

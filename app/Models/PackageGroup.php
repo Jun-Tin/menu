@@ -8,8 +8,7 @@ class PackageGroup extends Model
 {
     protected $table = 'package_group';
 
-
     protected $fillable = [
-        'package_id', 'pid', 'target_id', 'fill_price', 'order_number'
+        'package_id', 'target_id', 'pid', 'fill_price', 'order_number'
     ];
 }
