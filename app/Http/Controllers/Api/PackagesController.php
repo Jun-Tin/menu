@@ -173,12 +173,12 @@ class PackagesController extends Controller
     {
         $ids = json_decode($request->ids, true);
         
-        $data = PackageGroup::find($request->id);
-        $package = $package::find($data->package_id);
+        $packagegroup = PackageGroup::find($request->id);
+        $package = $package::find($packagegroup->package_id);
 
         // 循环修改
         foreach ($ids as $key => $value) {
-            $packagegroup = PackageGroup::where('target_id', $value['id'])->where('pid', $request->id)->first();
+            $packagegroup = PackageGroup::find($value['id']);
             $packagegroup->order_number = $value['order_number'];
             $packagegroup->save();
         }
