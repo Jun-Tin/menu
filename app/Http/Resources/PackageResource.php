@@ -15,7 +15,6 @@ class PackageResource extends Resource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'id' => $this->id,
             'store_id' => $this->store_id,
@@ -26,9 +25,7 @@ class PackageResource extends Resource
             'level' => $this->level,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-            // 'menus' => new MenuCollection($this->menus)
-            // 'tags' => new TagCollection($this->tags),
-            'tags' => TagResource::collection($this->tags),
+            'tags' => TagResource::collection($this->tags()->wherePivot('pid',0)->get()),
         ];
     }
 }

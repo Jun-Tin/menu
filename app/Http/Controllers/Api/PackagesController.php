@@ -39,15 +39,6 @@ class PackagesController extends Controller
     {
         $package->fill($request->all());
         $package->save();
-        // group_concat
-        // $package->save();
-        // dd(json_decode($request->foods,true));
-        // $groups = json_decode($request->foods,true);
-
-        // 循环对应不同差价
-        // for ($i=0; $i < count($groups) ; $i++) {
-        //     $package->groups()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
-        // }
 
         return (new PackageResource($package))->additional(['status' => 200]);
     }
@@ -90,11 +81,6 @@ class PackagesController extends Controller
     public function update(Request $request, Package $package)
     {
         $package->update($request->all());
-        // $package->menus()->detach();//先删除关系
-        // 循环对应不同差价
-        // for ($i=0; $i < count(explode(',', $request->menu_id)) ; $i++) {
-        //     $package->menus()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
-        // }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -121,17 +107,9 @@ class PackagesController extends Controller
     /** 【 添加标签 】 */
     public function addTags(Request $request, Package $package)
     {
-        $package->tags()->attach($request->target_id, ['pid' => 0, 'order_number' => $request->order_number]);
+        $package->tags()->wherePivot('pid',0)->attach($request->target_id, ['pid' => 0, 'order_number' => $request->order_number]);
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
-    }
-
-    /** 【 删除标签 】 */
-    public function subTags(Request $request, Package $package)
-    {
-        $package->allTags()->detach($request->target_id);
-    
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
     /** 【 排序标签 】 */
@@ -139,13 +117,29 @@ class PackagesController extends Controller
     {
         $ids = json_decode($request->ids, true);
 
-        $package->allTags()->detach(); // 先删除原有关系
+        $package->tags()->detach(); // 先删除原有关系
         // 循环嵌入
         foreach ($ids as $key => $value) {
-            $package->tags()->attach($value['id'], ['pid' => 0, 'order_number' => $value['order_number']]);
+            $package->tags()->wherePivot('pid',0)->attach($value['id'], ['pid' => 0, 'order_number' => $value['order_number']]);
         }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);
+    }
+
+    /** 【 删除标签 】 */
+    public function subTags(Request $request, Package $package)
+    {
+        $ids = json_decode($request->ids, true);
+
+        foreach ($ids as $key => $value) {
+            // $package->tags()->wherePivot('pid',0)->detach($value);
+            // $package->tags()->wherePivot('pid',0)->detach($value);
+            PackageGroup::where('id',$value)->delete();
+            PackageGroup::where('pid',$value)->delete();
+        }
+    
+        // return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '删除成功！']);
     }
 
     /** 【 添加菜品 】 */
@@ -159,22 +153,18 @@ class PackagesController extends Controller
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
     }
 
-    /** 【 删除菜品 】 */
-    public function subMenus(Request $request)
-    {
-        $packagegroup = PackageGroup::find($request->id);
-        $packagegroup->delete();
-    
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
-    }
-
     /** 【 排序菜品 】 */
     public function orderMenus(Request $request, Package $package)
     {
         $ids = json_decode($request->ids, true);
+<<<<<<< HEAD
         
         $packagegroup = PackageGroup::find($request->id);
         $package = $package::find($packagegroup->package_id);
+=======
+        // $packagegroup = PackageGroup::find($request->id);
+        // $package = $package::find($packagegroup->package_id);
+>>>>>>> 29618c88ccb89ad319235715ce6ec79563c8f1b8
 
         // 循环修改
         foreach ($ids as $key => $value) {
@@ -184,5 +174,18 @@ class PackagesController extends Controller
         }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);
-    } 
+    }
+
+    /** 【 删除菜品 】 */
+    public function subMenus(Request $request, Package $package)
+    {
+        $ids = json_decode($request->ids, true);
+
+        foreach ($ids as $key => $value) {
+            PackageGroup::where('id',$value)->delete();
+        }
+    
+        // return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '删除成功！']);
+    }
 }

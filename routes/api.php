@@ -40,78 +40,78 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**【 员工 】*/ 
     // 员工信息详情
-    Route::get('user/detail/{user}', 'Api\UsersController@detail');
+    Route::get('user/{user}/detail', 'Api\UsersController@detail');
     // 添加员工信息
     Route::post('user/staff', 'Api\UsersController@staff');
     // 修改员工信息
-    Route::patch('user/edit/{user}', 'Api\UsersController@edit');
+    Route::patch('user/{user}/edit', 'Api\UsersController@edit');
     // 删除员工信息
-    Route::delete('user/delete/{user}', 'Api\UsersController@delete');
+    Route::delete('user/{user}/delete', 'Api\UsersController@delete');
 
 
     /**【 门店 】*/
     // 门店列表
     Route::get('store/index', 'Api\StoresController@index');
     // 门店详情
-    Route::get('store/show/{store}', 'Api\StoresController@show');
+    Route::get('store/{store}/show', 'Api\StoresController@show');
     // 创建门店
     Route::post('store/store', 'Api\StoresController@store');
     // 修改门店
-    Route::patch('store/update/{store}', 'Api\StoresController@update');
+    Route::patch('store/{store}/update', 'Api\StoresController@update');
     // 删除门店
-    Route::delete('store/destroy/{store}', 'Api\StoresController@destroy');
+    Route::delete('store/{store}/destroy', 'Api\StoresController@destroy');
     // 门店菜品列表
-    Route::get('store/menus/{store}', 'Api\StoresController@menus');
+    Route::get('store/{store}/menus', 'Api\StoresController@menus');
     // 门店套餐列表
-    Route::get('store/packages/{store}', 'Api\StoresController@packages');
+    Route::get('store/{store}/packages', 'Api\StoresController@packages');
     // 门店座位列表
-    Route::patch('store/places/{store}', 'Api\StoresController@places');
+    Route::get('store/{store}/places/{floor}', 'Api\StoresController@places');
     // 门店员工列表
-    Route::get('store/users/{store}', 'Api\StoresController@users');
+    Route::get('store/{store}/users', 'Api\StoresController@users');
 
     /** 【 标签 】*/
     // 标签列表
-    Route::get('tags/index/{pid}/{category}', 'Api\TagsController@index');
+    Route::get('tags/{pid}/index/{category}', 'Api\TagsController@index');
     // 创建标签 
     Route::post('tags/store', 'Api\TagsController@store');
     // 修改标签 
-    Route::patch('tags/update/{tag}', 'Api\TagsController@update');
+    Route::patch('tags/{tag}/update', 'Api\TagsController@update');
     // 删除标签
     Route::delete('tags/destroy', 'Api\TagsController@destroy');
 
     /**【 菜品 】*/
-    // 菜品列表
-    Route::get('menu/index/{menu}', 'Api\MenusController@index');
+    // 菜品详情
+    Route::get('menu/{menu}/index', 'Api\MenusController@index');
     // 创建菜品
     Route::post('menu/store', 'Api\MenusController@store');
     // 修改菜品
-    Route::patch('menu/update/{menu}', 'Api\MenusController@update');
+    Route::patch('menu/{menu}/update', 'Api\MenusController@update');
     // 删除菜品
     Route::delete('menu/destroy', 'Api\MenusController@destroy');
 
     /**【 套餐 】*/
     // 套餐列表
-    Route::get('package/index/{package}', 'Api\PackagesController@index');
+    Route::get('package/{package}/index', 'Api\PackagesController@index');
     // 创建套餐
     Route::post('package/store', 'Api\PackagesController@store');
     // 修改套餐
-    Route::patch('package/update/{package}', 'Api\PackagesController@update');
+    Route::patch('package/{package}/update', 'Api\PackagesController@update');
     // 删除套餐
     Route::delete('package/destroy', 'Api\PackagesController@destroy');
     /** 【 嵌入标签 】 */ 
     // 添加标签
-    Route::patch('package/addTags/{package}', 'Api\PackagesController@addTags');
-    // 删除标签
-    Route::delete('package/subTags/{package}/{target_id}', 'Api\PackagesController@subTags');
+    Route::post('package/{package}/addTags', 'Api\PackagesController@addTags');
     // 排序标签
-    Route::post('package/orderTags/{package}', 'Api\PackagesController@orderTags');
+    Route::post('package/{package}/orderTags', 'Api\PackagesController@orderTags');
+    // 删除标签
+    Route::delete('package/{package}/subTags', 'Api\PackagesController@subTags');
     /** 【 嵌入菜品 】 */
     // 添加菜品
-    Route::patch('package/addMenus/{id}', 'Api\PackagesController@addMenus');
-    // 删除菜品
-    Route::delete('package/subMenus/{id}', 'Api\PackagesController@subMenus');
+    Route::post('package/{id}/addMenus', 'Api\PackagesController@addMenus');
     // 排序菜品
-    Route::post('package/orderMenus/{id}', 'Api\PackagesController@orderMenus');
+    Route::post('package/{package}/orderMenus', 'Api\PackagesController@orderMenus');
+    // 删除菜品
+    Route::delete('package/{package}/subMenus', 'Api\PackagesController@subMenus');
 
 
 
@@ -119,11 +119,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
     // 修改座位
-    Route::patch('place/update/{place}', 'Api\PlacesController@update');
+    Route::patch('place/{place}/update', 'Api\PlacesController@update');
     // 删除座位--单个
-    Route::delete('place/destroy/{place}', 'Api\PlacesController@destroy');
+    Route::delete('place/{place}/destroy', 'Api\PlacesController@destroy');
     // 删除座位--整层
-    Route::delete('place/delete', 'Api\PlacesController@delete');
+    Route::delete('place/{floor}/delete', 'Api\PlacesController@delete');
     // 获取座位二维码压缩包
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
 

@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ImageResource;
-use App\Http\Resources\MenuCollection;
+use App\Http\Resources\{ImageResource, MenuResource, MenuCollection};
 use Illuminate\Http\Resources\Json\Resource;
 
 class MenuResource extends Resource
@@ -16,8 +15,7 @@ class MenuResource extends Resource
      */
     public function toArray($request)
     {
-        // dd($this->tags);
-        // return parent::toArray($request);
+        // dd(array_pluck($this->tags,'id'));
         return [
             'id' => $this->id,
             'store_id' => $this->store_id,
@@ -28,7 +26,9 @@ class MenuResource extends Resource
             'level' => $this->level,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-            'tags' => new MenuCollection($this->tags)
+            'tags' => new MenuCollection($this->tags),
+            'class' => $this->tags->where('category','class')->pluck('id'),
+            'perfer' => $this->tags->where('category','perfer')->pluck('id'),
         ];
     }
 }

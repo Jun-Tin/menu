@@ -25,13 +25,8 @@ class Package extends Model
     /** 【 多对多标签关联关系 】 */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'package_group', 'package_id', 'target_id')->withPivot('id', 'order_number')->wherePivot('pid', 0)->withTimestamps()->orderBy('order_number');
-    }
-
-    /** 【 解除所有多对多关联关系】 */
-    public function allTags()
-    {
-        return $this->belongsToMany(Tag::class, 'package_group', 'package_id', 'target_id');
+        // return $this->belongsToMany(Tag::class, 'package_group', 'package_id', 'target_id')->withPivot('id', 'order_number')->wherePivot('pid', 0)->withTimestamps()->orderBy('order_number');
+        return $this->belongsToMany(Tag::class, 'package_group', 'package_id', 'target_id')->withPivot('id', 'order_number')->withTimestamps()->orderBy('order_number');
     }
 
     /** 【 多对多标签嵌入菜品关联关系 】 */
