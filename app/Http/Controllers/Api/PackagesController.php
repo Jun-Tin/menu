@@ -39,15 +39,6 @@ class PackagesController extends Controller
     {
         $package->fill($request->all());
         $package->save();
-        // group_concat
-        // $package->save();
-        // dd(json_decode($request->foods,true));
-        // $groups = json_decode($request->foods,true);
-
-        // 循环对应不同差价
-        // for ($i=0; $i < count($groups) ; $i++) {
-        //     $package->groups()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
-        // }
 
         return (new PackageResource($package))->additional(['status' => 200]);
     }
@@ -90,11 +81,6 @@ class PackagesController extends Controller
     public function update(Request $request, Package $package)
     {
         $package->update($request->all());
-        // $package->menus()->detach();//先删除关系
-        // 循环对应不同差价
-        // for ($i=0; $i < count(explode(',', $request->menu_id)) ; $i++) {
-        //     $package->menus()->attach([explode(',', $request->menu_id)[$i] => ['fill_price' => explode(',', $request->fill_price)[$i]]]);
-        // }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -173,12 +159,12 @@ class PackagesController extends Controller
     {
         $ids = json_decode($request->ids, true);
         
-        $data = PackageGroup::find($request->id);
-        $package = $package::find($data->package_id);
+        $packagegroup = PackageGroup::find($request->id);
+        $package = $package::find($packagegroup->package_id);
 
         // 循环修改
         foreach ($ids as $key => $value) {
-            $packagegroup = PackageGroup::where('target_id', $value['id'])->where('pid', $request->id)->first();
+            $packagegroup = PackageGroup::find($value['id']);
             $packagegroup->order_number = $value['order_number'];
             $packagegroup->save();
         }
