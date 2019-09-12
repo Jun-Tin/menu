@@ -181,6 +181,7 @@ class UsersController extends Controller
     /** 【修改员工信息】 */ 
     public function edit(Request $request, User $user)
     {
+        dd($user);
         $user->fill($request->all());
         $user->entry_time = strtotime($request->entry_time);
         $user->save();
