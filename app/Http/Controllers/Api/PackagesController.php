@@ -40,7 +40,7 @@ class PackagesController extends Controller
         $package->fill($request->all());
         $package->save();
 
-        return (new PackageResource($package))->additional(['status' => 200]);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /** 【套餐菜品设置】 */

@@ -39,6 +39,9 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapWaiterRoutes();
+
+        $this->mapChefRoutes();
         //
     }
 
@@ -69,5 +72,21 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /** 【服务端路由】 */
+    protected function mapWaiterRoutes()
+    {
+        Route::prefix('waiter')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/waiter.php'));
+    }
+
+    /** 【厨师端路由】 */
+    protected function mapChefRoutes()
+    {
+        Route::prefix('chef')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/chef.php'));
     }
 }
