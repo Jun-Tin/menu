@@ -24,17 +24,9 @@ class TagResource extends Resource
             'category' => $this->category,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-<<<<<<< HEAD
-            // 'pivot' => $this->pivot,
             'pivot' => $this->whenPivotLoaded('package_group', function(){
                 return $this->pivot;
             }),
-            // 'menus' => Package::find($this->pivot->package_id)->menus($this->pivot->id)->get(),
-=======
-            'pivot' => $this->whenPivotLoaded('package_group', function(){
-                return $this->pivot;
-            }),
->>>>>>> 29618c88ccb89ad319235715ce6ec79563c8f1b8
             'menus' => $this->whenPivotLoaded('package_group', function(){
                 return new MenuCollection(Package::find($this->pivot->package_id)->menus($this->pivot->id)->get());
             }), 

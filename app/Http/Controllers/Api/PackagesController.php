@@ -157,14 +157,8 @@ class PackagesController extends Controller
     public function orderMenus(Request $request, Package $package)
     {
         $ids = json_decode($request->ids, true);
-<<<<<<< HEAD
-        
-        $packagegroup = PackageGroup::find($request->id);
-        $package = $package::find($packagegroup->package_id);
-=======
         // $packagegroup = PackageGroup::find($request->id);
         // $package = $package::find($packagegroup->package_id);
->>>>>>> 29618c88ccb89ad319235715ce6ec79563c8f1b8
 
         // 循环修改
         foreach ($ids as $key => $value) {
