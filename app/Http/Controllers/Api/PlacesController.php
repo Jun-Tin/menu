@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Place;
+use App\Models\{Place, Image};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlaceResource;
 use Chumper\Zipper\Zipper;
@@ -92,6 +92,10 @@ class PlacesController extends Controller
      */
     public function destroy(Place $place)
     {
+        $images = Image::find($place->image_id);
+        $pos = strpos($images->path, 'images');
+        $path = substr($images->path,$pos,strlen($images->path));
+        unlink($path);
         $place->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
@@ -100,6 +104,14 @@ class PlacesController extends Controller
     /**【删除座位--整层】*/
     public function delete(Request $request, Place $place)
     {
+        // dd(public_path('/images/uploads/201909'));
+        // $file = Storage::delete('/uploads/201909/');
+        Storage::disk('upload_img')->deleteDirectory('/test');
+        // \File::delete(public_path('/images/uploads/201909/'));
+        // $file = File::delete();
+        // dd($disk);
+        dd(123);
+
         $place->where('floor', $request->floor)->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

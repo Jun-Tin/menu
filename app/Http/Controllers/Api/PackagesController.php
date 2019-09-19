@@ -117,10 +117,11 @@ class PackagesController extends Controller
     {
         $ids = json_decode($request->ids, true);
 
-        $package->tags()->detach(); // 先删除原有关系
+        // $package->tags()->detach(); // 先删除原有关系
         // 循环嵌入
         foreach ($ids as $key => $value) {
-            $package->tags()->wherePivot('pid',0)->attach($value['id'], ['pid' => 0, 'order_number' => $value['order_number']]);
+            // $package->tags()->wherePivot('pid',0)->attach($value['id'], ['pid' => 0, 'order_number' => $value['order_number']]);
+            PackageGroup::where('id',$value['id'])->update(['order_number' => $value['order_number']]);
         }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);

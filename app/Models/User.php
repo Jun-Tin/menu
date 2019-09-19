@@ -29,37 +29,43 @@ class User extends Authenticatable
         'password', 'pro_password', 'remember_token',
     ];
 
-    /** [ 多字段验证 ]*/ 
+    /** 【 多字段验证 】 */ 
     public function findForPassport($username)
     {
         return $this->orWhere('email', $username)->orWhere('phone', $username)->orWhere('name',$username)->first();
     }
 
-    /** [ 一对一图片关联关系 ] */
+    /** 【 一对一图片关联关系 】 */
     public function image()
     {
         return $this->hasOne(Image::class);
     } 
 
-    /** [ 一对多图片关联关系 ] */ 
+    /** 【 一对多图片关联关系 】 */ 
     public function images()
     {
         return $this->hasMany(Image::class);
     }
 
-    /** [ 一对多门店关联关系 ] */
+    /** 【 一对多门店关联关系 】 */
     public function stores()
     {
         return $this->hasMany(Store::class);
     }
 
-    /** [ 一对多标签关联关系 ] */
+    /** 【 一对一门店关联关系 】 */ 
+    public function store()
+    {
+        return $this->hasOne(Store::class);
+    }
+
+    /** 【 一对多标签关联关系 】 */
     public function tags()
     {
         return $this->hasMany(Tag::class);
     } 
 
-    /** [ 自定义验证规则 ] */ 
+    /** 【 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
         switch ($type) {

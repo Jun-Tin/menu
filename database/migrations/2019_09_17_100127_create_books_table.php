@@ -22,6 +22,7 @@ class CreateBooksTable extends Migration
             $table->integer('date')->nullable()->commit('预约日期');
             $table->integer('meal_time')->nullable()->commit('就餐时间');
             $table->integer('meal_number')->nullable()->commit('就餐人数');
+            $table->integer('status')->nullable()->commit('使用情况');
             $table->timestamps();
         });
     }

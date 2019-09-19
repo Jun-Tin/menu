@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Store;
+use App\Models\{Store, Business};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource};
@@ -45,7 +45,14 @@ class StoresController extends Controller
 
         $store->fill($request->all());
         $store->user_id = $user->id;
+        // 获取营业时间段
+        $timeArr = $store->getTime($request->morning_start, $request->morning_end, $request->afternoon_start, $request->afternoon_end, $request->night_start, $request->night_end);
+        $store->start_time = date('H:i',$timeArr['start_time']);
+        $store->end_time = date('H:i',$timeArr['end_time']);
+
         $store->save();
+        // 添加营业时间
+        $store->addBusiness($request->morning_start, $request->morning_end, $request->afternoon_start, $request->afternoon_end, $request->night_start, $request->night_end, $store->id);
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
 
@@ -83,7 +90,31 @@ class StoresController extends Controller
      */
     public function update(Request $request, Store $store)
     {
-        $store->update($request->all());
+        $store->fill($request->all());
+        // 获取营业时间段
+        $timeArr = $store->getTime($request->morning_start, $request->morning_end, $request->afternoon_start, $request->afternoon_end, $request->night_start, $request->night_end);
+        $store->start_time = date('H:i',$timeArr['start_time']);
+        $store->end_time = date('H:i',$timeArr['end_time']);
+ 
+        $store->save();
+
+        if ($request->has('morning_start')) {
+            $data['start_time'] = strtotime($request->morning_start);
+            $data['end_time'] = strtotime($request->morning_end);
+            Business::where('store_id',$store->id)->where('category',1)->update($data);
+        }
+
+        if ($request->has('afternoon_start')) {
+            $data['start_time'] = strtotime($request->afternoon_start);
+            $data['end_time'] = strtotime($request->afternoon_end);
+            Business::where('store_id',$store->id)->where('category',2)->update($data);
+        }
+        
+        if ($request->has('night_start')) {
+            $data['start_time'] = strtotime($request->night_start);
+            $data['end_time'] = strtotime($request->night_end);
+            Business::where('store_id',$store->id)->where('category',3)->update($data);
+        }
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -96,6 +127,7 @@ class StoresController extends Controller
      */
     public function destroy(Store $store)
     {
+        $store->business()->delete();
         $store->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

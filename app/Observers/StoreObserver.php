@@ -1,7 +1,7 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Store, Tag};
+use App\Models\{Store, Tag, Business};
 
 class StoreObserver
 {
@@ -42,7 +42,14 @@ class StoreObserver
 					'category' => 'perfer',
 				]);
 			}
-			
+		}
+
+		// 添加默认早中晚市
+		for ($i=1; $i <= 3; $i++) { 
+			Business::updateOrCreate([
+				'store_id' => $store->id,
+				'category' => $i,
+			]);
 		}
 	}
 } 
