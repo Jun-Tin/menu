@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/places/{floor}', 'Api\StoresController@places');
     // 门店员工列表
     Route::get('store/{store}/users', 'Api\StoresController@users');
+    // 删除座位--整层
+    Route::delete('store/{store}/delete/{floor}', 'Api\StoresController@delete');
 
     /** 【 标签 】*/
     // 标签列表
@@ -114,7 +116,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('package/{package}/subMenus', 'Api\PackagesController@subMenus');
 
 
-
     /**【 座位 】*/
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
@@ -123,7 +124,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除座位--单个
     Route::delete('place/{place}/destroy', 'Api\PlacesController@destroy');
     // 删除座位--整层
-    Route::delete('place/{floor}/delete', 'Api\PlacesController@delete');
+    // Route::delete('place/{store_id}/delete/{floor}', 'Api\PlacesController@delete');
     // 获取座位二维码压缩包
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
 

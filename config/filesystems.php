@@ -68,6 +68,11 @@ return [
             'url'    => env('APP_URL').'/uploads',
             'root'   => public_path('images').'/uploads/'.date('Ym',time()),
         ],
+
+        'qrcodes' => [
+            'driver' => 'local',
+            'root' => public_path('images').'/qrcodes/',
+        ]
     ],
 
 ];

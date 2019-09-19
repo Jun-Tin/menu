@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\{Store, Business};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource};
 
@@ -157,5 +158,15 @@ class StoresController extends Controller
     public function users(Request $request, Store $store)
     {
         return UserResource::collection($store->users()->get())->additional(['status' => 200]);
+    }
+
+    /**【删除座位--整层】*/
+    public function delete(Request $request, Store $store)
+    {
+        Storage::disk('qrcodes')->deleteDirectory($store->id.'/'.$request->floor);
+
+        $store->places()->where('floor', $request->floor)->delete();
+
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

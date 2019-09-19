@@ -101,21 +101,23 @@ class PlacesController extends Controller
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
-    /**【删除座位--整层】*/
-    public function delete(Request $request, Place $place)
-    {
-        // dd(public_path('/images/uploads/201909'));
-        // $file = Storage::delete('/uploads/201909/');
-        Storage::disk('upload_img')->deleteDirectory('/test');
-        // \File::delete(public_path('/images/uploads/201909/'));
-        // $file = File::delete();
-        // dd($disk);
-        dd(123);
+    // /**【删除座位--整层】*/
+    // public function delete(Request $request, Place $place)
+    // {
+    //     // dd($request->store_id);
+    //     // dd(Storage::disk('qrcodes'));
+    //     // dd(public_path('/images/uploads/201909'));
+    //     // $file = Storage::delete('/uploads/201909/');
+    //     Storage::disk('qrcodes')->deleteDirectory('1/1');
+    //     // \File::delete(public_path('/images/uploads/201909/'));
+    //     // $file = File::delete();
+    //     // dd($disk);
+    //     dd(123);
 
-        $place->where('floor', $request->floor)->delete();
+    //     $place->where('floor', $request->floor)->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
-    }
+    //     return response()->json(['message' => '删除成功！', 'status' => 200]);
+    // }
 
     /**【获取压缩包】*/
     public function makeZip(Request $request)
