@@ -6,7 +6,7 @@ use App\Models\{Store, Business};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource, PlaceCollection};
 
 class StoresController extends Controller
 {
@@ -153,12 +153,16 @@ class StoresController extends Controller
     /** 【 座位列表 】 */
     public function places(Request $request, Store $store)
     {
+        $floor = $store->places()->where('floor', 0)->get();
+        foreach ($floor as $key => $value) {
+            $value['places'] = $store->places()->where('floor', $value->id)->get();
+        }
         // return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
-        return PlaceResource::collection($store->places()->where('floor', $request->floor)->get())->additional(['status' => 200]);
+        return (new PlaceCollection($floor))->additional(['status' => 200]);
     }
 
     /** 【 员工列表 】 */
-    public function users(Request $request, Store $store)
+    public function users(Store $store)
     {
         return UserResource::collection($store->users()->get())->additional(['status' => 200]);
     }
@@ -168,6 +172,7 @@ class StoresController extends Controller
     {
         Storage::disk('qrcodes')->deleteDirectory($store->id.'/'.$request->floor);
 
+        $store->places()->where('id', $request->floor)->delete();
         $store->places()->where('floor', $request->floor)->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);

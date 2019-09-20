@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 门店套餐列表
     Route::get('store/{store}/packages', 'Api\StoresController@packages');
     // 门店座位列表
-    Route::get('store/{store}/places/{floor}', 'Api\StoresController@places');
+    Route::get('store/{store}/places', 'Api\StoresController@places');
     // 门店员工列表
     Route::get('store/{store}/users', 'Api\StoresController@users');
     // 删除座位--整层
@@ -124,7 +124,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**【 座位 】*/
     // 创建楼层
-    Route::post('place/floor', 'Api\PlacesController@floor');
+    Route::post('place/addFloor', 'Api\PlacesController@addFloor');
+    // 修改楼层
+    Route::patch('place/{place}/editFloor', 'Api\PlacesController@editFloor');
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
     // 修改座位

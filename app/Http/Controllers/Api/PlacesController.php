@@ -138,11 +138,20 @@ class PlacesController extends Controller
     }
 
     /** 【 创建楼层 】 */
-    public function floor(Request $request)
+    public function addFloor(Request $request, Place $place)
     {
         $place->fill($request->all());
+        $place->floor = 0;
         $place->save();
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
+    }
+
+    /** 【 修改楼层 】 */
+    public function editFloor(Request $request, Place $place)
+    {
+        $place->update($request->all());
+
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
     } 
 }
