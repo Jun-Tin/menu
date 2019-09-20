@@ -146,10 +146,15 @@ class PackagesController extends Controller
     /** 【 添加菜品 】 */
     public function addMenus(Request $request, Package $package)
     {
+        $data = json_decode($request->data, true);
         $packagegroup = PackageGroup::find($request->id);
         $package = $package::find($packagegroup->package_id);
 
-        $package->menus($request->id)->attach($request->target_id, ['pid' => $request->id, 'fill_price' => $request->fill_price]);
+        // 先解除原有数据
+        $package->menus($request->id)->detach();
+        foreach ($data as $key => $value) {
+            $package->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+        }
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
     }

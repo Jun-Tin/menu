@@ -73,13 +73,15 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /** 【 标签 】*/
     // 标签列表
-    Route::get('tags/{pid}/index/{category}', 'Api\TagsController@index');
+    Route::get('tags/{store_id}/index/{pid}/{category}', 'Api\TagsController@index');
     // 创建标签 
     Route::post('tags/store', 'Api\TagsController@store');
     // 修改标签 
     Route::patch('tags/{tag}/update', 'Api\TagsController@update');
     // 删除标签
     Route::delete('tags/destroy', 'Api\TagsController@destroy');
+    // 门店菜品列表--标签
+    Route::get('tags/{tag}/menus', 'Api\TagsController@menus');
 
     /**【 菜品 】*/
     // 菜品详情

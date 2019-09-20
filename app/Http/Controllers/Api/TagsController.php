@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Tag;
+use App\Models\{Tag, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{TagResource, TagCollection};
@@ -16,9 +16,10 @@ class TagsController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
+        $store = Store::find($request->store_id);
 
-        return (new TagCollection($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
+        // return (new TagCollection($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
     }
 
     /**
@@ -39,9 +40,7 @@ class TagsController extends Controller
      */
     public function store(Request $request, Tag $tag)
     {
-        $user = auth()->user();
         $tag->fill($request->all());
-        $tag->user_id = $user->id;
         $tag->save();
 
         return (new TagResource($tag))->additional(['status' => 200, 'message' => '创建成功！']);
@@ -100,5 +99,10 @@ class TagsController extends Controller
         }
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
+    }
+
+    public function menus(Request $request, Tag $tag)
+    {
+        return (new TagCollection($tag->menus))->additional(['status' => 200, 'message' => '获取成功！']);
     }
 }

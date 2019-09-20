@@ -17,6 +17,11 @@ class CreateBookPlaceTable extends Migration
             $table->increments('id');
             $table->integer('book_id')->nullable()->commit('预约id');
             $table->integer('place_id')->nullable()->commit('座位id');
+            $table->string('date')->nullable()->commit('日期');
+            $table->integer('time')->nullable()->commit('时刻');
+            $table->integer('type')->nullable()->commit('时刻段；1：早市，2：午市，3：晚市');
+            $table->integer('meal_number')->nullable()->commit('就餐人数');
+            $table->integer('status')->nullable()->commit('使用情况；0：未开始，1：正在使用，2：已结束，3：取消、没到');
             $table->timestamps();
         });
     }

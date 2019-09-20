@@ -137,33 +137,33 @@ class StoresController extends Controller
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
-    /** 【菜品列表】 */
+    /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
         return (new StoreCollection($store->menus))->additional(['status' => 200]);
     }
 
-    /** 【套餐列表】 */
+    /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
         return (new PackageCollection($store->packages))->additional(['status' => 200]);
         // return PackageResource::collection($store->packages)->additional(['status' => 200]);
     }
 
-    /** 【座位列表】 */
+    /** 【 座位列表 】 */
     public function places(Request $request, Store $store)
     {
         // return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
         return PlaceResource::collection($store->places()->where('floor', $request->floor)->get())->additional(['status' => 200]);
     }
 
-    /** 【员工列表】 */
+    /** 【 员工列表 】 */
     public function users(Request $request, Store $store)
     {
         return UserResource::collection($store->users()->get())->additional(['status' => 200]);
     }
 
-    /**【删除座位--整层】*/
+    /** 【 删除座位--整层 】 */
     public function delete(Request $request, Store $store)
     {
         Storage::disk('qrcodes')->deleteDirectory($store->id.'/'.$request->floor);

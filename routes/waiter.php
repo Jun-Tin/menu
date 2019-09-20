@@ -20,5 +20,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**【 个人信息 】*/ 
     Route::get('book/index', 'Waiter\BooksController@index');
     /** 【 创建预约 】 */
-    Route::post('book/store', 'Waiter\BooksController@store'); 
+    Route::post('book/store', 'Waiter\BooksController@store');
+
+    Route::get('store/{store}/index', 'Waiter\StoreController@index');
 });

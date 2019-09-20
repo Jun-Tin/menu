@@ -47,6 +47,12 @@ class Store extends Model
         return $this->hasMany(Business::class);
     }
 
+    /** 【 一对多标签关联关系 】 */
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    } 
+
     /** 【 获取营业时间段 】 */
     public function getTime($morning_start, $morning_end, $afternoon_start, $afternoon_end, $night_start, $night_end)
     {

@@ -14,7 +14,7 @@ class AddUserIdToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->integer('user_id')->nullable()->after('pid')->comment('用户id');
+            $table->integer('store_id')->nullable()->after('pid')->comment('门店id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddUserIdToTagsTable extends Migration
     public function down()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropColumn('store_id');
         });
     }
 }
