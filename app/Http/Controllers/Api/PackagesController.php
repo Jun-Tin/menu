@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\{Package, PackageGroup};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{PackageResource, PackageCollection};
+use App\Http\Resources\{PackageResource, PackageCollection, MenuCollection};
 
 class PackagesController extends Controller
 {
@@ -149,7 +149,7 @@ class PackagesController extends Controller
         $packagegroup = PackageGroup::find($request->id);
         $package = $package::find($packagegroup->package_id);
 
-        $package->menus($request->id)->attach($request->target_id, ['pid' => $request->id, 'order_number' => $request->order_number, 'fill_price' => $request->fill_price]);
+        $package->menus($request->id)->attach($request->target_id, ['pid' => $request->id, 'fill_price' => $request->fill_price]);
 
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
     }
@@ -171,6 +171,20 @@ class PackagesController extends Controller
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '排序成功！']);
     }
 
+    /** 【 修改菜品 】 */
+    public function editMenus(Request $request, Package $package)
+    {
+        $packagegroup = PackageGroup::find($request->id);
+        $package = Package::find($packagegroup->package_id);
+
+        PackageGroup::where('id',$request->id)->update([
+            'target_id' => $request->target_id,
+            'fill_price' => $request->fill_price,
+        ]);
+
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
+    }
+
     /** 【 删除菜品 】 */
     public function subMenus(Request $request, Package $package)
     {
@@ -182,5 +196,14 @@ class PackagesController extends Controller
     
         // return response()->json(['message' => '删除成功！', 'status' => 200]);
         return (new PackageResource($package))->additional(['status' => 200, 'message' => '删除成功！']);
+    }
+
+    /** 【 获取菜品列表 】 */ 
+    public function getMenus(Request $request, Package $package)
+    {
+        $packagegroup = PackageGroup::find($request->id);
+        $menus = Package::find($packagegroup->package_id)->menus($request->id)->get();
+
+        return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
     }
 }

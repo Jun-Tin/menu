@@ -100,21 +100,24 @@ class StoresController extends Controller
         $store->save();
 
         if ($request->has('morning_start')) {
-            $data['start_time'] = strtotime($request->morning_start);
-            $data['end_time'] = strtotime($request->morning_end);
-            Business::where('store_id',$store->id)->where('category',1)->update($data);
+            Business::where('store_id',$store->id)->where('category',1)->update([
+                'start_time' => strtotime($request->morning_start),
+                'end_time' => strtotime($request->morning_end)
+            ]);
         }
 
         if ($request->has('afternoon_start')) {
-            $data['start_time'] = strtotime($request->afternoon_start);
-            $data['end_time'] = strtotime($request->afternoon_end);
-            Business::where('store_id',$store->id)->where('category',2)->update($data);
+            Business::where('store_id',$store->id)->where('category',2)->update([
+                'start_time' => strtotime($request->afternoon_start),
+                'end_time' => strtotime($request->afternoon_end)
+            ]);
         }
         
         if ($request->has('night_start')) {
-            $data['start_time'] = strtotime($request->night_start);
-            $data['end_time'] = strtotime($request->night_end);
-            Business::where('store_id',$store->id)->where('category',3)->update($data);
+            Business::where('store_id',$store->id)->where('category',3)->update([
+                'start_time' => strtotime($request->night_start),
+                'end_time' => strtotime($request->night_end)
+            ]);
         }
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '修改成功！']);

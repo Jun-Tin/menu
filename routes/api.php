@@ -114,6 +114,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('package/{package}/orderMenus', 'Api\PackagesController@orderMenus');
     // 删除菜品
     Route::delete('package/{package}/subMenus', 'Api\PackagesController@subMenus');
+    // 修改菜品
+    Route::patch('package/{id}/editMenus', 'Api\PackagesController@editMenus');
+    // 获取菜品列表
+    Route::get('package/{id}/getMenus', 'Api\PackagesController@getMenus');
 
 
     /**【 座位 】*/
