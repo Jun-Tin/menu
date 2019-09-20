@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**【 座位 】*/
+    // 创建楼层
+    Route::post('place/floor', 'Api\PlacesController@floor');
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
     // 修改座位
