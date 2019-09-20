@@ -38,9 +38,7 @@ class PlacesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request,Place $place)
-    {
-        $user_id = auth()->user()->id;
-        
+    {        
         $place->fill($request->all());
         $place->save();
 
@@ -119,7 +117,7 @@ class PlacesController extends Controller
     //     return response()->json(['message' => '删除成功！', 'status' => 200]);
     // }
 
-    /**【获取压缩包】*/
+    /** 【 获取压缩包 】 */
     public function makeZip(Request $request)
     {
         $zipname = date('YmdHis') . uniqid() . '.zip';
@@ -138,4 +136,13 @@ class PlacesController extends Controller
         
         return response()->json(['error' => ['message' => '压缩失败'], 'status' => 201]);
     }
+
+    /** 【 创建楼层 】 */
+    public function floor(Request $request)
+    {
+        $place->fill($request->all());
+        $place->save();
+
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
+    } 
 }

@@ -15,7 +15,7 @@ class StoreObserver
 			// 获取软删除与正常一起的记录
 			Tag::updateOrCreate([
 				'pid' => 0,
-				'user_id' => $store->user_id,
+				'store_id' => $store->id,
 				'name' => $value,
 				'category' => 'class',
 			]);
@@ -30,14 +30,14 @@ class StoreObserver
 		foreach ($perfer as $key => $value) {
 			$tag[$key] = Tag::updateOrCreate([
 				'pid' => 0,
-				'user_id' => $store->user_id,
+				'store_id' => $store->id,
 				'name' => $key,
 				'category' => 'perfer',
 			]);
 			foreach ($value as $k => $v) {
 				Tag::updateOrCreate([
 					'pid' => $tag[$key]->id,
-					'user_id' => $store->user_id,
+					'store_id' => $store->id,
 					'name' => $v,
 					'category' => 'perfer',
 				]);
