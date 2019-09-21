@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ImageResource;
+use App\Http\Resources\{ImageResource, BookResource};
 use Illuminate\Http\Resources\Json\Resource;
 
 class StoreResource extends Resource
@@ -28,7 +28,8 @@ class StoreResource extends Resource
             'intro' => $this->intro,
             'set_time' => $this->set_time,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):''
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'booking' => BookResource::collection($this->bookings),
         ];
     }
 }

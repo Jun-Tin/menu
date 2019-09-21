@@ -159,6 +159,7 @@ class StoresController extends Controller
         }
         // return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
         return (new PlaceCollection($floor))->additional(['status' => 200]);
+        // return PlaceResource::collection($floor)->additional(['status' => 200]);
     }
 
     /** 【 员工列表 】 */

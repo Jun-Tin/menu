@@ -51,6 +51,18 @@ class Store extends Model
     public function tags()
     {
         return $this->hasMany(Tag::class);
+    }
+
+    /** 【 一对多预约关联关系 】 */ 
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    /** 【 多对多预约关联关系 】 */
+    public function bookings()
+    {
+        return $this->belongsToMany(Place::class, 'books', 'store_id', 'place_id')->withPivot('id')->withTimestamps();
     } 
 
     /** 【 获取营业时间段 】 */
@@ -99,4 +111,18 @@ class Store extends Model
             ]);
         }
     }
+
+    /** 【 检测时间段属于哪个区间 】 */
+    public function checkTimeArea($meal_time)
+    {
+        $business = $this->business;
+
+        foreach ($business as $key => $value) {
+            if ($meal_time >= $value['start_time'] && $meal_time < $value['end_time']) {
+                $type = $value['category'];
+            }
+        }
+
+        return $type;
+    } 
 }

@@ -153,10 +153,12 @@ class PackagesController extends Controller
         // 先解除原有数据
         $package->menus($request->id)->detach();
         foreach ($data as $key => $value) {
-            $package->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+            if ($value['id']) {
+                $package->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+            }
         }
 
-        return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '保存成功！']);
     }
 
     /** 【 排序菜品 】 */
@@ -179,15 +181,28 @@ class PackagesController extends Controller
     /** 【 修改菜品 】 */
     public function editMenus(Request $request, Package $package)
     {
+        // $packagegroup = PackageGroup::find($request->id);
+        // $package = Package::find($packagegroup->package_id);
+
+        // PackageGroup::where('id',$request->id)->update([
+        //     'target_id' => $request->target_id,
+        //     'fill_price' => $request->fill_price,
+        // ]);
+
+        // return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
+        $data = json_decode($request->data, true);
         $packagegroup = PackageGroup::find($request->id);
-        $package = Package::find($packagegroup->package_id);
+        $package = $package::find($packagegroup->package_id);
 
-        PackageGroup::where('id',$request->id)->update([
-            'target_id' => $request->target_id,
-            'fill_price' => $request->fill_price,
-        ]);
+        // 先解除原有数据
+        $package->menus($request->id)->detach();
+        foreach ($data as $key => $value) {
+            if ($value['id']) {
+                $package->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+            }
+        }
 
-        return (new PackageResource($package))->additional(['status' => 200, 'message' => '添加成功！']);
+        return (new PackageResource($package))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /** 【 删除菜品 】 */

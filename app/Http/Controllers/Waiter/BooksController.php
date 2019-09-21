@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Waiter;
 
-use App\Models\{Book};
+use App\Models\{Book, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookResource;
 
 class BooksController extends Controller
 {
@@ -34,9 +35,27 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Book $book)
+    public function store(Request $request, Book $book, Store $store)
     {
-        dd($book);
+        $book->fill($request->all());
+        $book->date      = strtotime($request->date);
+        $book->meal_time = strtotime($request->meal_time);
+        $book->lock_in   = strtotime($request->lock_in);
+        $book->lock_out  = strtotime($request->lock_out);
+
+        $store = Store::find($request->store_id);
+        $book->type  = $store->checkTimeArea($book->meal_time);
+
+        $first = $book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first();
+
+        if ($first) {
+            return response()->json(['error' => ['message' => ['预约已存在！']], 'status' => 401]);
+        }
+
+        $book->save();
+
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+
     }
 
     /**

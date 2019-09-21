@@ -2,7 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ImageResource;
+use App\Models\Store;
+use App\Http\Resources\{ImageResource, PlaceResource};
 use Illuminate\Http\Resources\Json\Resource;
 
 class PlaceResource extends Resource
@@ -25,6 +26,7 @@ class PlaceResource extends Resource
             'floor' => $this->floor,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'booking' => Post::collection($this->whenLoaded('posts')),
         ];
     }
 }
