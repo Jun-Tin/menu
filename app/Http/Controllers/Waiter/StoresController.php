@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Waiter;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection};
+use App\Http\Resources\{PlaceResource, BookResource};
 
-class StoreController extends Controller
+class StoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,13 +18,8 @@ class StoreController extends Controller
     {
         $store = Store::find($request->store);
         $floor = $store->places()->where('floor',0)->get();
-        foreach ($floor as $key => $value) {
-            $value['places'] = $store->places()->where('floor', $value->id)->get();
-        }
-        dd($store->bookings);
-        // dd($store->bookings($request->date)->get());
-        return new StoreCollection($store->bookings);
-        // return StoreResource::collection($store->bookings);
+
+        return PlaceResource::collection($floor);
     }
 
     /**
@@ -92,4 +87,12 @@ class StoreController extends Controller
     {
         //
     }
+
+    /** 【 预约列表 】 */
+    public function book(Request $request, Store $store)
+    {
+        $store = Store::find($request->store);
+        
+        return BookResource::collection($store->books)->additional(['status' => 200]);
+    } 
 }

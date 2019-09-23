@@ -14,9 +14,9 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Book $book)
     {
-        
+
     }
 
     /**
@@ -35,7 +35,7 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Book $book, Store $store)
+    public function store(Request $request, Book $book)
     {
         $book->fill($request->all());
         $book->date      = strtotime($request->date);
@@ -55,7 +55,6 @@ class BooksController extends Controller
         $book->save();
 
         return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
-
     }
 
     /**
@@ -87,9 +86,27 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $book->fill($request->all());
+        $book->date      = strtotime($request->date);
+        $book->meal_time = strtotime($request->meal_time); 
+        $book->lock_in   = strtotime($request->lock_in);
+        $book->lock_out  = strtotime($request->lock_out);
+
+        $store = Store::find($request->store_id);
+        $book->type  = $store->checkTimeArea($book->meal_time);
+
+        $first = $book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first();
+
+        if ($first) {
+            return response()->json(['error' => ['message' => ['预约已存在！']], 'status' => 401]);
+        }
+
+dd($book);
+        $book->update($book);
+
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**

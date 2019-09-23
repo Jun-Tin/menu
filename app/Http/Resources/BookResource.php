@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\PlaceResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class BookResource extends Resource
@@ -17,7 +18,8 @@ class BookResource extends Resource
         return [
             'id' => $this->id,
             'store_id' => $this->store_id,
-            'place_id' => $this->place_id,
+            // 'place_id' => $this->place_id,
+            'place' => new PlaceResource($this->place),
             'name' => $this->name,
             'area_code' => $this->area_code,
             'phone' => $this->phone,

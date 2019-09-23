@@ -154,12 +154,8 @@ class StoresController extends Controller
     public function places(Request $request, Store $store)
     {
         $floor = $store->places()->where('floor', 0)->get();
-        foreach ($floor as $key => $value) {
-            $value['places'] = $store->places()->where('floor', $value->id)->get();
-        }
-        // return (new StoreCollection($store->places()->where('floor', $request->floor)->get()))->additional(['status' => 200]);
-        return (new PlaceCollection($floor))->additional(['status' => 200]);
-        // return PlaceResource::collection($floor)->additional(['status' => 200]);
+
+        return PlaceResource::collection($floor)->additional(['status' => 200]);
     }
 
     /** 【 员工列表 】 */
