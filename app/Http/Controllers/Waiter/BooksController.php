@@ -88,6 +88,7 @@ class BooksController extends Controller
      */
     public function update(Request $request, Book $book)
     {
+        $book = Book::find($request->book);
         $book->fill($request->all());
         $book->date      = strtotime($request->date);
         $book->meal_time = strtotime($request->meal_time); 
@@ -102,11 +103,10 @@ class BooksController extends Controller
         if ($first) {
             return response()->json(['error' => ['message' => ['预约已存在！']], 'status' => 401]);
         }
+        
+        $book->update();
 
-dd($book);
-        $book->update($book);
-
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -115,8 +115,11 @@ dd($book);
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Book $book)
     {
-        //
+        $book = Book::find($request->book);
+        $book->delete();
+
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }
