@@ -182,8 +182,8 @@ class UsersController extends Controller
     public function edit(Request $request, User $user)
     {
         $user->fill($request->all());
-        $user->password = bcrypt($request->password),
-        $user->pro_password = $request->password,
+        $user->password = bcrypt($request->password);
+        $user->pro_password = $request->password;
         $user->entry_time = strtotime($request->entry_time);
         $user->save();
 
