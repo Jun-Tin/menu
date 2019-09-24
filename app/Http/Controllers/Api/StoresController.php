@@ -48,8 +48,8 @@ class StoresController extends Controller
         $store->user_id = $user->id;
         // 获取营业时间段
         $timeArr = $store->getTime($request->morning_start, $request->morning_end, $request->afternoon_start, $request->afternoon_end, $request->night_start, $request->night_end);
-        $store->start_time = date('H:i',$timeArr['start_time']);
-        $store->end_time = date('H:i',$timeArr['end_time']);
+        $store->start_time = $timeArr['start_time'];
+        $store->end_time = $timeArr['end_time'];
 
         $store->save();
         // 添加营业时间
@@ -94,29 +94,29 @@ class StoresController extends Controller
         $store->fill($request->all());
         // 获取营业时间段
         $timeArr = $store->getTime($request->morning_start, $request->morning_end, $request->afternoon_start, $request->afternoon_end, $request->night_start, $request->night_end);
-        $store->start_time = date('H:i',$timeArr['start_time']);
-        $store->end_time = date('H:i',$timeArr['end_time']);
+        $store->start_time = $timeArr['start_time'];
+        $store->end_time = $timeArr['end_time'];
  
         $store->save();
 
         if ($request->has('morning_start')) {
             Business::where('store_id',$store->id)->where('category',1)->update([
-                'start_time' => strtotime($request->morning_start),
-                'end_time' => strtotime($request->morning_end)
+                'start_time' => $request->morning_start,
+                'end_time' => $request->morning_end
             ]);
         }
 
         if ($request->has('afternoon_start')) {
             Business::where('store_id',$store->id)->where('category',2)->update([
-                'start_time' => strtotime($request->afternoon_start),
-                'end_time' => strtotime($request->afternoon_end)
+                'start_time' => $request->afternoon_start,
+                'end_time' => $request->afternoon_end
             ]);
         }
         
         if ($request->has('night_start')) {
             Business::where('store_id',$store->id)->where('category',3)->update([
-                'start_time' => strtotime($request->night_start),
-                'end_time' => strtotime($request->night_end)
+                'start_time' => $request->night_start,
+                'end_time' => $request->night_end
             ]);
         }
 

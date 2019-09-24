@@ -17,7 +17,7 @@ class PlaceResource extends Resource
     public function toArray($request)
     {
         $this->date = strtotime($request->date);
-        $this->meal_time = strtotime($request->meal_time);
+        $this->meal_time = $request->meal_time;
         return [
             'id' => $this->id,
             'store_id' => $this->store_id,

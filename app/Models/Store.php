@@ -69,19 +69,19 @@ class Store extends Model
     public function getTime($morning_start, $morning_end, $afternoon_start, $afternoon_end, $night_start, $night_end)
     {
         if ($morning_start) {
-            $data['start_time'] = strtotime($morning_start);
+            $data['start_time'] = $morning_start;
         } else if ($afternoon_start){
-            $data['start_time'] = strtotime($afternoon_start);
+            $data['start_time'] = $afternoon_start;
         } else {
-            $data['start_time'] = strtotime($night_start);
+            $data['start_time'] = $night_start;
         }
 
         if ($night_end) {
-            $data['end_time'] = strtotime($night_end);
+            $data['end_time'] = $night_end;
         } else if ($afternoon_end) {
-            $data['end_time'] = strtotime($afternoon_end);
+            $data['end_time'] = $afternoon_end;
         } else {
-            $data['end_time'] = strtotime($morning_end);
+            $data['end_time'] = $morning_end;
         }
 
         return $data;
@@ -92,22 +92,22 @@ class Store extends Model
     {
         if ($morning_start || $morning_end) {
             Business::where('store_id',$store_id)->where('category',1)->update([
-                'start_time' => strtotime($morning_start),
-                'end_time' => strtotime($morning_end)
+                'start_time' => $morning_start,
+                'end_time' => $morning_end
             ]);
         }
 
         if ($afternoon_start || $afternoon_end) {
             Business::where('store_id',$store_id)->where('category',2)->update([
-                'start_time' => strtotime($afternoon_start),
-                'end_time' => strtotime($afternoon_end)
+                'start_time' => $afternoon_start,
+                'end_time' => $afternoon_end
             ]);
         }
 
         if ($night_start || $night_end) {
             Business::where('store_id',$store_id)->where('category',3)->update([
-                'start_time' => strtotime($night_start),
-                'end_time' => strtotime($night_end)
+                'start_time' => $night_start,
+                'end_time' => $night_end
             ]);
         }
     }

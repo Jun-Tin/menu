@@ -22,7 +22,7 @@ class CreateBooksTable extends Migration
             $table->string('phone')->nullable()->commit('预约电话');
             $table->integer('gender')->nullable()->commit('预约性别');
             $table->integer('date')->nullable()->commit('预约日期');
-            $table->integer('meal_time')->nullable()->commit('就餐时刻');
+            $table->string('meal_time')->nullable()->commit('就餐时刻');
             $table->integer('meal_number')->nullable()->commit('就餐人数');
             $table->integer('type')->nullable()->commit('时刻段；1：早市，2：午市，3：晚市');
             $table->integer('lock_in')->nullable()->commit('锁定开始时间');

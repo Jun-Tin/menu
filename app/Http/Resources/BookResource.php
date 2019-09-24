@@ -25,7 +25,7 @@ class BookResource extends Resource
             'phone' => $this->phone,
             'gender' => $this->gender?'男生':'女生',
             'date' => $this->date?date('Y-m-d',$this->date):'',
-            'meal_time' => $this->meal_time?date('H:i',$this->meal_time):'',
+            'meal_time' => $this->meal_time,
             'meal_number' => $this->meal_number,
             'lock_in' => $this->lock_in?date('Y-m-d H:i:s', $this->lock_in):'',
             'lock_out' => $this->lock_out?date('Y-m-d H:i:s', $this->lock_out):'',

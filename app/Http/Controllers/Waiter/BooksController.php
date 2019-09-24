@@ -39,15 +39,17 @@ class BooksController extends Controller
     {
         $book->fill($request->all());
         $book->date      = strtotime($request->date);
-        $book->meal_time = strtotime($request->meal_time);
+        $book->meal_time = $request->meal_time;
         $book->lock_in   = strtotime($request->lock_in);
         $book->lock_out  = strtotime($request->lock_out);
 
         $store = Store::find($request->store_id);
         $book->type  = $store->checkTimeArea($book->meal_time);
+        if (!$book->type) {
+            return response()->json(['error' => ['message' => ['不在营业时间内！']], 'status' => 404]);
+        }
 
-        $first = $book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first();
-
+        $first = Book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first();
         if ($first) {
             return response()->json(['error' => ['message' => ['预约已存在！']], 'status' => 401]);
         }
@@ -91,19 +93,21 @@ class BooksController extends Controller
         $book = Book::find($request->book);
         $book->fill($request->all());
         $book->date      = strtotime($request->date);
-        $book->meal_time = strtotime($request->meal_time); 
+        $book->meal_time = $request->meal_time; 
         $book->lock_in   = strtotime($request->lock_in);
         $book->lock_out  = strtotime($request->lock_out);
 
         $store = Store::find($request->store_id);
-        $book->type  = $store->checkTimeArea($book->meal_time);
+        $book->type = $store->checkTimeArea($book->meal_time);
+        if (!$book->type) {
+            return response()->json(['error' => ['message' => ['不在营业时间内！']], 'status' => 404]);
+        }
 
-        $first = $book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first();
-
+        $first = Book::where('date',$book->date)->where('type',$book->type)->where('place_id',$request->place_id)->first(); 
         if ($first) {
             return response()->json(['error' => ['message' => ['预约已存在！']], 'status' => 401]);
         }
-        
+
         $book->update();
 
         return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
