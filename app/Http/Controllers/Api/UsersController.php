@@ -153,14 +153,11 @@ class UsersController extends Controller
     public function staff(Request $request, User $user)
     {
         // 验证数据
-        $data = $request->all();
-        $validator = $user->validatorUserRegister($data, 'register');
+        $validator = $user->validatorUserRegister($request->all(), 'register');
 
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
         }
-
-        $store = Store::where('id',$request->store_id)->first();
 
         $user = User::create([
             'name' => $request->name,
@@ -172,7 +169,7 @@ class UsersController extends Controller
             'post' => $request->post,
             'password' => bcrypt($request->password),
             'pro_password' => $request->password,
-            'store_id' => $store->id,
+            'store_id' => $request->store_id,
         ]);
         
         return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
@@ -181,11 +178,19 @@ class UsersController extends Controller
     /** 【修改员工信息】 */ 
     public function edit(Request $request, User $user)
     {
+        $data = $request->all();
+        $data['id'] = $request->user->id;
+        $validator = $user->validatorUserRegister($data, 'update');
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+        }
+
         $user->fill($request->all());
         $user->password = bcrypt($request->password);
         $user->pro_password = $request->password;
         $user->entry_time = strtotime($request->entry_time);
-        $user->save();
+        $user->update();
 
         return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
     }

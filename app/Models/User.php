@@ -5,6 +5,7 @@ namespace App\Models;
 use Validator;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -68,6 +69,10 @@ class User extends Authenticatable
     /** 【 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
+        // $id = $this->route('user');
+        // dd($data);
+        // Rule::unique('users')->ignore($user->id);
+        // dd($id);
         switch ($type) {
             case 'register':
                 return Validator::make($data, [
@@ -92,6 +97,13 @@ class User extends Authenticatable
                     'password.required' => '密码不能为空',
                     'comfirmPassword.required' => '确认密码不能为空',
                     'comfirmPassword.same' => '密码与确认密码不匹配',
+                ]);
+                break;
+            case 'update':
+                return Validator::make($data, [
+                    'phone' => 'unique:users,phone,' .$data['id'],
+                ], [
+                    'phone.unique' => '手机号码已存在'
                 ]);
                 break;
         }
