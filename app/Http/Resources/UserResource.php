@@ -25,7 +25,7 @@ class UserResource extends Resource
             'phone' => $this->phone,
             'coins' => $this->coins,
             'image' => new ImageResource($this->image),
-            'gender' => $this->gender?"男生":"女生",
+            'gender' => $this->gender,
             'birthday' => $this->birthday,
             'post' => $this->post,
             'entry_time' => $this->entry_time?date('Y-m-d',$this->entry_time):'',
