@@ -5,7 +5,6 @@ namespace App\Models;
 use Validator;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -69,10 +68,6 @@ class User extends Authenticatable
     /** 【 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
-        // $id = $this->route('user');
-        // dd($data);
-        // Rule::unique('users')->ignore($user->id);
-        // dd($id);
         switch ($type) {
             case 'register':
                 return Validator::make($data, [
