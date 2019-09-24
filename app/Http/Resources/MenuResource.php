@@ -24,6 +24,7 @@ class MenuResource extends Resource
             'original_price' => $this->original_price,
             'special_price' => $this->special_price,
             'level' => $this->level,
+            'type' => $this->type,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
             'tags' => new MenuCollection($this->tags),
