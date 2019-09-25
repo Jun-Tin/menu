@@ -107,34 +107,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 获取菜品列表
     Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
 
-    /**【 套餐 】*/
-    // 套餐列表
-    Route::get('package/{package}/index', 'Api\PackagesController@index');
-    // 创建套餐
-    Route::post('package/store', 'Api\PackagesController@store');
-    // 修改套餐
-    Route::patch('package/{package}/update', 'Api\PackagesController@update');
-    // 删除套餐
-    Route::delete('package/destroy', 'Api\PackagesController@destroy');
-    /** 【 嵌入标签 】 */ 
-    // 添加标签
-    Route::post('package/{package}/addTags', 'Api\PackagesController@addTags');
-    // 排序标签
-    Route::post('package/{package}/orderTags', 'Api\PackagesController@orderTags');
-    // 删除标签
-    Route::delete('package/{package}/subTags', 'Api\PackagesController@subTags');
-    /** 【 嵌入菜品 】 */
-    // 添加菜品
-    Route::post('package/{id}/addMenus', 'Api\PackagesController@addMenus');
-    // 排序菜品
-    Route::post('package/{package}/orderMenus', 'Api\PackagesController@orderMenus');
-    // 删除菜品
-    Route::delete('package/{package}/subMenus', 'Api\PackagesController@subMenus');
-    // 修改菜品
-    Route::patch('package/{id}/editMenus', 'Api\PackagesController@editMenus');
-    // 获取菜品列表
-    Route::get('package/{id}/getMenus', 'Api\PackagesController@getMenus');
-
+    
 
     /**【 座位 】*/
     // 创建楼层

@@ -146,8 +146,7 @@ class StoresController extends Controller
     /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
-        return (new PackageCollection($store->packages))->additional(['status' => 200]);
-        // return PackageResource::collection($store->packages)->additional(['status' => 200]);
+        return (new StoreCollection($store->packages))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 】 */
