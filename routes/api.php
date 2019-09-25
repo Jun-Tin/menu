@@ -83,15 +83,29 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 门店菜品列表--标签
     Route::get('tags/{tag}/menus', 'Api\TagsController@menus');
 
-    /**【 菜品 】*/
-    // 菜品详情
+    /**【 菜品 、 套餐 】*/
+    // 菜品、套餐详情
     Route::get('menu/{menu}/index', 'Api\MenusController@index');
-    // 创建菜品
+    // 创建菜品、套餐
     Route::post('menu/store', 'Api\MenusController@store');
-    // 修改菜品
+    // 修改菜品、套餐
     Route::patch('menu/{menu}/update', 'Api\MenusController@update');
-    // 删除菜品
+    // 删除菜品、套餐
     Route::delete('menu/destroy', 'Api\MenusController@destroy');
+    /** 【 套餐嵌入标签 】 */ 
+    // 添加标签
+    Route::post('menu/{menu}/addTags', 'Api\MenusController@addTags');
+    // 排序标签
+    Route::post('menu/{menu}/orderTags', 'Api\MenusController@orderTags');
+    // 删除标签
+    Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
+    /** 【 套餐嵌入菜品 】 */
+    // 添加、修改菜品
+    Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
+    // 删除菜品
+    Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
+    // 获取菜品列表
+    Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
 
     /**【 套餐 】*/
     // 套餐列表

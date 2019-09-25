@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Package;
+use App\Models\Menu;
 use Illuminate\Http\Resources\Json\Resource;
 use App\Http\Resources\MenuCollection;
 
@@ -24,11 +24,11 @@ class TagResource extends Resource
             'category' => $this->category,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-            'pivot' => $this->whenPivotLoaded('package_group', function(){
+            'pivot' => $this->whenPivotLoaded('menu_tag', function(){
                 return $this->pivot;
             }),
-            'menus' => $this->whenPivotLoaded('package_group', function(){
-                return new MenuCollection(Package::find($this->pivot->package_id)->menus($this->pivot->id)->get());
+            'menus' => $this->whenPivotLoaded('menu_tag', function(){
+                return new MenuCollection(Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get());
             }), 
         ];
     }
