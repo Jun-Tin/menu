@@ -16,9 +16,9 @@ class PlacesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request,Place $place)
+    public function index()
     {
-        return new 
+        
     }
 
     /**

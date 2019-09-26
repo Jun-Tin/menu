@@ -129,7 +129,8 @@ class ImagesController extends Controller
             unlink($dir. '/' .$filename);
         }
         // 保存二维码
-        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->color(255,255,255)->backgroundColor(132,212,141)->encoding('UTF-8')->generate('www.baidu.com', $dir. '/'. $filename);
+        // QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->color(255,255,255)->backgroundColor(132,212,141)->encoding('UTF-8')->generate('www.baidu.com', $dir. '/'. $filename);
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate('www.baidu.com', $dir. '/'. $filename);
         // 返回url链接
         $url = env('APP_URL').'/images/qrcodes/'. $request->store_id. '/' .$request->floor. '/' .$filename;
         // 保存在数据库

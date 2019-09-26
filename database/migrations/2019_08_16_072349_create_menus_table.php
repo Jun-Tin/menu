@@ -23,7 +23,6 @@ class CreateMenusTable extends Migration
             $table->integer('level')->nullable()->commit('推荐指数');
             $table->enum('type', ['o', 's'])->commit('价格类型');
             $table->enum('category', ['m', 'p'])->commit('数据类型');
-            $table->string('tag_id')->nullable()->commit('标签组');
             $table->timestamps();
         });
     }
