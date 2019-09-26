@@ -18,7 +18,7 @@ class PlacesController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -37,7 +37,7 @@ class PlacesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,Place $place)
+    public function store(Request $request, Place $place)
     {        
         $place->fill($request->all());
         $place->save();
@@ -93,7 +93,9 @@ class PlacesController extends Controller
         $images = Image::find($place->image_id);
         $pos = strpos($images->path, 'images');
         $path = substr($images->path,$pos,strlen($images->path));
-        unlink($path);
+        if (file_exists($path)) {
+            unlink($path);
+        }
         $place->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
