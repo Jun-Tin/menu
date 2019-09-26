@@ -32,7 +32,7 @@ class User extends Authenticatable
     /** 【 多字段验证 】 */ 
     public function findForPassport($username)
     {
-        return $this->orWhere('email', $username)->orWhere('phone', $username)->orWhere('name',$username)->first();
+        return $this->orWhere('email', $username)->orWhere('phone', $username)->orWhere('name',$username)->orWhere('account',$username)->first();
     }
 
     /** 【 一对一图片关联关系 】 */
