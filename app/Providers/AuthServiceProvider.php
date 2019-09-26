@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
             'waiter' => 'waiter',
             'chef' => 'chef',
             'manager' => 'manager',
-            'boss' => 'boss order',
+            'boss' => 'boss',
         ]);
     }
 }

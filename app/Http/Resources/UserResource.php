@@ -21,6 +21,7 @@ class UserResource extends Resource
             'name' => $this->name,
             'email' => $this->email,
             'store_id' => $this->store_id,
+            'account' => $this->account,
             'area_code' => $this->area_code,
             'phone' => $this->phone,
             'coins' => $this->coins,

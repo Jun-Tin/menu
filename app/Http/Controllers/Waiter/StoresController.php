@@ -90,9 +90,7 @@ class StoresController extends Controller
 
     /** 【 预约列表 】 */
     public function book(Request $request, Store $store)
-    {
-        $store = Store::find($request->store);
-        
+    {        
         return BookResource::collection($store->books)->additional(['status' => 200]);
     } 
 }

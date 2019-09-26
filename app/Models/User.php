@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'store_id', 'area_code', 'phone', 'pro_password', 'image_id', 'gender', 'birthday', 'post', 'entry_time'
+        'name', 'email', 'password', 'store_id', 'account', 'area_code', 'phone', 'pro_password', 'image_id', 'gender', 'birthday', 'post', 'entry_time'
     ];
 
     /**
@@ -74,14 +74,10 @@ class User extends Authenticatable
                     'name' => 'required',
                     'password' => 'required',
                     'phone' => 'unique:users'
-                    // 'email' => 'required|email|unique:users',
                 ], [
                     'name.required' => '姓名不能为空',
                     'password.required' => '密码不能为空',
                     'phone.unique' => '手机号码已存在'
-                    // 'email.required' => '邮箱不能为空',
-                    // 'email.email' => '请输入有效邮箱',
-                    // 'email.unique' => '此邮箱已被注册',
                 ]);
                 break;
             case 'password':
@@ -102,5 +98,11 @@ class User extends Authenticatable
                 ]);
                 break;
         }
+    }
+
+    /** 【 生成随机数 】 */ 
+    public function random()
+    {
+        return str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT);
     }
 }

@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
-use App\Http\Requests\Api\UserRequest;
-// use App\Http\Requests\UserRequest;
-// use App\Http\Resources\UserCollection;
 
 class UsersController extends Controller
 {
@@ -72,12 +69,12 @@ class UsersController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            // 'email' => $request->email,
             'area_code' => $verifyData['area_code'],
             'phone' => $verifyData['phone'],
             'password' => bcrypt($request->password),
             'pro_password' => $request->password,
-            'post' => 'boss'
+            'post' => 'boss',
+            'account' => $user->random(),
         ]);
 
         // 清除验证码缓存
@@ -95,15 +92,8 @@ class UsersController extends Controller
     public function member()
     {
         $user = auth()->user();
-        // dd($user->token()->scopes);
-        // dd($user->images());
-        // return response()->json(['data' => $user, 'status' => 200]);
-        // 数据单个
+
         return (new UserResource($user))->additional(['status' => 200, 'identity' => $user->token()->scopes[0]]);
-        // 数据集合
-        // return (new UserCollection($user->images()->get()))->additional(['status' => 200]);
-        // return (new UserCollection(User::all()))
-                // ->additional(['meta' => ['key' => 'value']]);
     }
 
     /**【 忘记密码 】*/ 
@@ -149,16 +139,10 @@ class UsersController extends Controller
     {
         return (new UserResource($user))->additional(['status' => 200]);
     } 
+    
     /** 【设置员工信息】 */
     public function staff(Request $request, User $user)
     {
-        // 验证数据
-        $validator = $user->validatorUserRegister($request->all(), 'register');
-
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
-        }
-
         $user = User::create([
             'name' => $request->name,
             'area_code' => $request->area_code,
@@ -170,6 +154,7 @@ class UsersController extends Controller
             'password' => bcrypt($request->password),
             'pro_password' => $request->password,
             'store_id' => $request->store_id,
+            'account' => $user->random(),
         ]);
         
         return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);

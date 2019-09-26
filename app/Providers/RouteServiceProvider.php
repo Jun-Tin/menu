@@ -78,6 +78,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWaiterRoutes()
     {
         Route::prefix('waiter')
+             ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/waiter.php'));
     }
@@ -86,6 +87,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapChefRoutes()
     {
         Route::prefix('chef')
+             ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/chef.php'));
     }
