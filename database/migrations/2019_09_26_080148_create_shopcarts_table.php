@@ -17,6 +17,7 @@ class CreateShopcartsTable extends Migration
             $table->increments('id');
             $table->integer('place_id')->nullable()->commit('座位id');
             $table->integer('menu_id')->nullable()->commit('菜品id');
+            $table->integer('comm_id')->nullable()->commit('内容id');
             $table->integer('number')->nullable()->commit('数量');
             $table->integer('price')->nullable()->commit('价格');
             $table->timestamps();

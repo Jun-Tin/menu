@@ -23,6 +23,7 @@ class PlaceResource extends Resource
             'image' => new ImageResource($this->image),
             'number' => $this->number,
             'floor' => $this->floor,
+            'status' => $this->status,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
             'place' => PlaceResource::collection($this->where('floor',$this->id)->get()),

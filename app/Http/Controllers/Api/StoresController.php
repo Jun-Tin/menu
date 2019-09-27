@@ -48,8 +48,6 @@ class StoresController extends Controller
         $store->save();
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
-
-
     }
 
     /**

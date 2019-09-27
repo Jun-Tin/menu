@@ -103,6 +103,6 @@ class TagsController extends Controller
 
     public function menus(Request $request, Tag $tag)
     {
-        return (new TagCollection($tag->menus))->additional(['status' => 200]);
+        return (new TagCollection($tag->menus()->where('category','m')->get()))->additional(['status' => 200]);
     }
 }

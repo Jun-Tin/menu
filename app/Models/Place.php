@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Place extends Model
 {
     protected $fillable = [
-        'store_id', 'name', 'number', 'floor', 'image_id'
+        'store_id', 'name', 'number', 'floor', 'image_id', 'status'
     ];
 
     /** 【 一对一图片关联关系 】 */

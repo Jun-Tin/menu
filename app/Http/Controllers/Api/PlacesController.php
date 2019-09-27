@@ -43,7 +43,6 @@ class PlacesController extends Controller
         $place->save();
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
-
     }
 
     /**

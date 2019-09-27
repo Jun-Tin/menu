@@ -16,7 +16,6 @@ class StoresController extends Controller
      */
     public function index(Request $request, Store $store)
     {
-        $store = Store::find($request->store);
         $floor = $store->places()->where('floor',0)->get();
 
         return PlaceResource::collection($floor);
