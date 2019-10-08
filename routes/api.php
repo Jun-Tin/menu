@@ -138,6 +138,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('store/{store}/index', 'Api\StoresController@index');
     // 预约列表 
     Route::get('store/{store}/book', 'Api\StoresController@book');
+    // 预约详情
+    Route::get('book/{book}/index', 'Api\BooksController@index');
 
     /** 【 购物车 】 */ 
     Route::post('shopcart/store', 'Api\shopcartsController@store');

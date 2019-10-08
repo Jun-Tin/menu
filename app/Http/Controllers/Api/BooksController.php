@@ -17,7 +17,7 @@ class BooksController extends Controller
      */
     public function index(Book $book)
     {
-
+        return (new BookResource($book))->additional(['status' => 200]);
     }
 
     /**
