@@ -135,4 +135,10 @@ class StoresController extends Controller
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
+
+    /** 【 预约列表 】 */
+    public function book(Request $request, Store $store)
+    {        
+        return BookResource::collection($store->books)->additional(['status' => 200]);
+    }
 }
