@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToPlacesTable extends Migration
+class AddStatusToMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToPlacesTable extends Migration
      */
     public function up()
     {
-        Schema::table('places', function (Blueprint $table) {
-            $table->integer('status')->nullable()->after('image_id')->default(0)->commit('使用情况');
+        Schema::table('menus', function (Blueprint $table) {
+            $table->integer('status')->nullable()->after('category')->default(1)->commit('菜品情况');
         });
     }
 
@@ -25,7 +25,7 @@ class AddStatusToPlacesTable extends Migration
      */
     public function down()
     {
-        Schema::table('places', function (Blueprint $table) {
+        Schema::table('menus', function (Blueprint $table) {
             $table->dropColumn('status');
         });
     }

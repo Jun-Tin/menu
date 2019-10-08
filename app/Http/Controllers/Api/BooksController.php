@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Waiter;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Place;
+use App\Models\{Book, Store};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{PlaceResource, PlaceCollection};
+use App\Http\Resources\BookResource;
 
-class PlacesController extends Controller
+class BooksController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Place $place)
+    public function index(Book $book)
     {
-        // dd($place->map());
+
     }
 
     /**
@@ -35,9 +36,14 @@ class PlacesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Book $book)
     {
-        //
+        $book->fill($request->all());
+        $book->date = strtotime($request->date);
+        $book->create_by = auth()->id();
+        $book->save();
+
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**
@@ -69,9 +75,13 @@ class PlacesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $book->fill($request->all());
+        $book->date = strtotime($request->date);
+        $book->update();
+
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -80,8 +90,10 @@ class PlacesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Book $book)
     {
-        //
+        $book->delete();
+
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 }

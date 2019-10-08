@@ -63,6 +63,12 @@ class User extends Authenticatable
     public function tags()
     {
         return $this->hasMany(Tag::class);
+    }
+
+    /** 【 一对多预约关联关系 】 */
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'create_by', 'id');
     } 
 
     /** 【 自定义验证规则 ] */ 

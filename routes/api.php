@@ -106,6 +106,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
     // 获取菜品列表
     Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
+    // 菜品售罄
+    Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
 
     
 
@@ -125,6 +127,20 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 获取座位二维码压缩包
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
 
+    /** 【 预约 】 */ 
+    // 创建预约 
+    Route::post('book/store', 'Api\BooksController@store');
+    // 修改预约
+    Route::patch('book/{book}/update', 'Api\BooksController@update');
+    // 删除预约 
+    Route::delete('book/{book}/destroy', 'Api\BooksController@destroy');
+    // 预约选位 
+    Route::post('store/{store}/index', 'Api\StoresController@index');
+    // 预约列表 
+    Route::get('store/{store}/book', 'Api\StoresController@book');
+
+    /** 【 购物车 】 */ 
+    Route::post('shopcart/store', 'Api\shopcartsController@store');
 
     /** 
      * 【 功能类接口 】

@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Waiter;
+namespace App\Http\Controllers\Api;
 
-use App\Models\{Book, Store};
+use App\Models\{Shopcart, Menu};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BookResource;
+use App\Http\Resources\ShopcartResource;
 
-class BooksController extends Controller
+class ShopcartsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Book $book)
+    public function index()
     {
-
+        //
     }
 
     /**
@@ -36,13 +35,34 @@ class BooksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Book $book)
+    public function store(Request $request, Shopcart $shopcart)
     {
-        $book->fill($request->all());
-        $book->date = strtotime($request->date);
-        $book->save();
+        $menu = Menu::find($request->menu_id);
 
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+        if (!$menu->status) {
+            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+        }
+        switch ($menu->category) {
+            case 'o':
+                $menu_price = $menu->original_price;
+                break;
+            default:
+                $menu_price = $menu->special_price;
+                break;
+        }
+
+        $shopcart->fill($request->all());
+        $shopcart->number = 1;
+        if ($request->has('fill_price')) {
+            $data = json_decode($request->fill_price);
+            foreach ($data as $key => $value) {
+                $shopcart->price += $value;
+            }
+        }
+        $shopcart->price = $shopcart->price+$menu_price;        
+        $shopcart->save();
+
+        return new ShopcartResource($shopcart);
     }
 
     /**
@@ -74,13 +94,9 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book)
+    public function update(Request $request, $id)
     {
-        $book->fill($request->all());
-        $book->date = strtotime($request->date);
-        $book->update();
-
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
+        //
     }
 
     /**
@@ -89,10 +105,8 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Book $book)
+    public function destroy($id)
     {
-        $book->delete();
-
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        //
     }
 }

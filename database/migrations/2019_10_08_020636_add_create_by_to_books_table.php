@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToPlacesTable extends Migration
+class AddCreateByToBooksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToPlacesTable extends Migration
      */
     public function up()
     {
-        Schema::table('places', function (Blueprint $table) {
-            $table->integer('status')->nullable()->after('image_id')->default(0)->commit('使用情况');
+        Schema::table('books', function (Blueprint $table) {
+            $table->integer('create_by')->nullable()->after('place_id')->commit('创建人');
         });
     }
 
@@ -25,8 +25,8 @@ class AddStatusToPlacesTable extends Migration
      */
     public function down()
     {
-        Schema::table('places', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('books', function (Blueprint $table) {
+            $table->dropColumn('create_by');
         });
     }
 }
