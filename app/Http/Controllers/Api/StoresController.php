@@ -6,7 +6,7 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource, PlaceCollection};
+use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource, PlaceCollection, BookResource};
 
 class StoresController extends Controller
 {
