@@ -157,7 +157,7 @@ class PlacesController extends Controller
     }
 
     /** 【 购物车详情 】 */
-    public function shopcart(Request $request, Place $place, $total)
+    public function shopcart(Request $request, Place $place)
     {
         $shopcarts = $place->shopcarts;
         $new = $shopcarts->map(function ($item, $key){
@@ -174,14 +174,15 @@ class PlacesController extends Controller
                 }
             }
             $item->tags_name = $name;
-
             $item->fill_price = json_decode($item->fill_price);
 
-            $total += $item->price; 
-            dd($total);
             return $item;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts)]);
+        $total = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->price;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
     } 
 }

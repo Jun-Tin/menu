@@ -27,7 +27,7 @@ class PlaceResource extends Resource
                 'status' => $this->status,
                 'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                 'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                'place' => PlaceResource::collection($this->where('floor',$this->id)->where('number',$request->number)->get()),
+                'place' => PlaceResource::collection($this->where('floor',$this->id)->where('number', '>=',$request->number)->get()),
             ];
         } else {
             return [
