@@ -120,12 +120,12 @@ class StoresController extends Controller
     }
 
     /** 【 座位列表--按人数筛选 】 */
-    // public function places(Request $request, Store $store)
-    // {
-    //     $floor = $store->places()->where('floor', 0)->get();
+    public function scrPlaces(Request $request, Store $store)
+    {
+        $floor = $store->places()->where('floor', 0)->get();
 
-    //     return PlaceResource::collection($floor)->additional(['status' => 200]);
-    // }
+        return PlaceResource::collection($floor)->additional(['status' => 200]);
+    }
 
     /** 【 员工列表 】 */
     public function users(Store $store)
@@ -159,7 +159,7 @@ class StoresController extends Controller
     /** 【 菜品列表--全部 】 */ 
     public function totalMenus(Request $request, Store $store)
     {
-        $all = $store->tags()->where('pid',0)->get();
+        $all = $store->tags()->where('pid',0)->where('category', 'class')->get();
         $new = $all->map(function ($item, $key){
             $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get();
             return $item;
