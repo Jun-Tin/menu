@@ -6,7 +6,7 @@ use App\Models\{Place, Image, Menu, Tag};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{PlaceResource, ShopcartResource, ShopcartCollection};
+use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
 
 class PlacesController extends Controller
@@ -157,7 +157,7 @@ class PlacesController extends Controller
     }
 
     /** 【 购物车详情 】 */
-    public function shopcart(Request $request, Place $place)
+    public function shopcart(Request $request, Place $place, $total)
     {
         $shopcarts = $place->shopcarts;
         $new = $shopcarts->map(function ($item, $key){
@@ -177,8 +177,8 @@ class PlacesController extends Controller
 
             $item->fill_price = json_decode($item->fill_price);
 
-            $item->total += $item->price; 
-            dd($item->total);
+            $total += $item->price; 
+            dd($total);
             return $item;
         });
 

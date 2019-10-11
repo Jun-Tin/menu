@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, Tag};
+use App\Models\{Store, Tag, Image};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -162,6 +162,9 @@ class StoresController extends Controller
         $all = $store->tags()->where('pid',0)->where('category', 'class')->get();
         $new = $all->map(function ($item, $key){
             $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get();
+            $item->menus->map(function ($item){
+                $item->image = Image::find($item->image_id);
+            });
             return $item;
         });
 
