@@ -66,10 +66,16 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/packages', 'Api\StoresController@packages');
     // 门店座位列表
     Route::get('store/{store}/places', 'Api\StoresController@places');
+    // 门店座位列表--按人数筛选
+    Route::get('store/{store}/scrPlaces/{number}', 'Api\StoresController@scrPlaces');
     // 门店员工列表
     Route::get('store/{store}/users', 'Api\StoresController@users');
     // 删除座位--整层
     Route::delete('store/{store}/delete/{floor}', 'Api\StoresController@delete');
+    // 售罄菜品列表
+    Route::get('store/{store}/saleOut', 'Api\StoresController@saleOut');
+    // 门店菜品列表--全部
+    Route::get('store/{store}/totalMenus', 'Api\StoresController@totalMenus');
 
     /** 【 标签 】*/
     // 标签列表
@@ -126,6 +132,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     // Route::delete('place/{store_id}/delete/{floor}', 'Api\PlacesController@delete');
     // 获取座位二维码压缩包
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
+    // 获取座位下购物车详情
+    Route::get('place/{place}/shopcart', 'Api\PlacesController@shopcart');
 
     /** 【 预约 】 */ 
     // 创建预约 
@@ -142,7 +150,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('book/{book}/index', 'Api\BooksController@index');
 
     /** 【 购物车 】 */ 
-    Route::post('shopcart/store', 'Api\shopcartsController@store');
+    Route::post('shopcart/store', 'Api\ShopcartsController@store');
+    /** 【 购物车增加、减少商品 】 */
+    Route::patch('shopcart/{shopcart}/update', 'Api\ShopcartsController@update'); 
 
     /** 
      * 【 功能类接口 】

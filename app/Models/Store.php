@@ -19,13 +19,7 @@ class Store extends Model
     /**【 一对多菜品关联关系 】*/
     public function menus()
     {
-        return $this->hasMany(Menu::class)->where('category','m');
-    }
-
-    /**【 一对多套餐关联关系 】*/ 
-    public function packages()
-    {
-        return $this->hasMany(Menu::class)->where('category','p');
+        return $this->hasMany(Menu::class);
     }
 
     /**【 一对多座位关联关系 】*/ 

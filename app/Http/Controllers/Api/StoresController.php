@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Store;
+use App\Models\{Store, Tag};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PackageResource, PackageCollection, PlaceResource, UserResource, PlaceCollection, BookResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceResource, UserResource, BookResource, MenuCollection};
 
 class StoresController extends Controller
 {
@@ -102,13 +102,13 @@ class StoresController extends Controller
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category','m')->where('status',1)->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
-        return (new StoreCollection($store->packages))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category','p')->where('status',1)->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 】 */
@@ -118,6 +118,14 @@ class StoresController extends Controller
 
         return PlaceResource::collection($floor)->additional(['status' => 200]);
     }
+
+    /** 【 座位列表--按人数筛选 】 */
+    // public function places(Request $request, Store $store)
+    // {
+    //     $floor = $store->places()->where('floor', 0)->get();
+
+    //     return PlaceResource::collection($floor)->additional(['status' => 200]);
+    // }
 
     /** 【 员工列表 】 */
     public function users(Store $store)
@@ -140,5 +148,23 @@ class StoresController extends Controller
     public function book(Request $request, Store $store)
     {        
         return BookResource::collection($store->books)->additional(['status' => 200]);
+    }
+
+    /** 【 售罄菜品列表 】 */
+    public function saleOut(Request $request, Store $store)
+    {
+        return (new MenuCollection($store->menus()->where('status',0)->get()))->additional(['status' => 200]);
+    }
+
+    /** 【 菜品列表--全部 】 */ 
+    public function totalMenus(Request $request, Store $store)
+    {
+        $all = $store->tags()->where('pid',0)->get();
+        $new = $all->map(function ($item, $key){
+            $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get();
+            return $item;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200]);
     }
 }

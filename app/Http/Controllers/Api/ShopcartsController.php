@@ -62,7 +62,7 @@ class ShopcartsController extends Controller
         $shopcart->price = $shopcart->price+$menu_price;        
         $shopcart->save();
 
-        return new ShopcartResource($shopcart);
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
     }
 
     /**
@@ -94,9 +94,28 @@ class ShopcartsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Shopcart $shopcart)
     {
-        //
+        switch ($request->type) {
+            case 'add':
+                $shopcart->update([
+                    'number' => $shopcart->number+1,
+                    'price' => $shopcart->price*2
+                ]);
+                break;
+            default:
+                if ($shopcart->number == 1) {
+                    $shopcart->delete();
+                }
+
+                $shopcart->update([
+                    'number' => $shopcart->number-1,
+                    'price' => $shopcart->price/2
+                ]);
+                break;
+        }
+
+        return response()->json(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**

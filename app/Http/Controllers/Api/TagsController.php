@@ -98,11 +98,12 @@ class TagsController extends Controller
             $tag::where('id', $value)->delete();
         }
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['status' => 200, 'message' => '删除成功！']);
     }
 
+    /** 【 菜品列表--标签 】 */ 
     public function menus(Request $request, Tag $tag)
     {
-        return (new TagCollection($tag->menus()->where('category','m')->get()))->additional(['status' => 200]);
+        return (new TagCollection($tag->menus()->where('category','m')->where('status',1)->get()))->additional(['status' => 200]);
     }
 }

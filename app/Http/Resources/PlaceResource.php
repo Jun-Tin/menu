@@ -16,6 +16,7 @@ class PlaceResource extends Resource
      */
     public function toArray($request)
     {
+        dd($request);
         return [
             'id' => $this->id,
             'store_id' => $this->store_id,

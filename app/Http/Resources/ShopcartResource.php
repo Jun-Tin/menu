@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Menu;
+use App\Http\Resources\{ShopcartCollection, MenuCollection};
 use Illuminate\Http\Resources\Json\Resource;
 
 class ShopcartResource extends Resource
@@ -20,6 +22,8 @@ class ShopcartResource extends Resource
             'menu_id' => $this->menu_id,
             'menus_id' => $this->menus_id,
             'tags_id' => $this->tags_id,
+            // 'menus_id' => json_decode($this->menus_id),
+            // 'tags_id' => json_decode($this->tags_id),
             'number' => $this->number,
             'price' => $this->price,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',

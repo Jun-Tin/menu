@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Place, Image};
+use App\Models\{Place, Image, Menu, Tag};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PlaceResource;
+use App\Http\Resources\{PlaceResource, ShopcartResource, ShopcartCollection};
 use Chumper\Zipper\Zipper;
 
 class PlacesController extends Controller
@@ -154,5 +154,34 @@ class PlacesController extends Controller
         $place->update($request->all());
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
+    }
+
+    /** 【 购物车详情 】 */
+    public function shopcart(Request $request, Place $place)
+    {
+        $shopcarts = $place->shopcarts;
+        $new = $shopcarts->map(function ($item, $key){
+            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
+            $item->menus_id = json_decode($item->menus_id);
+            if ($item->menus_id) {
+                $item->menus_name = Menu::find($item->menus_id)->pluck('name');
+            }
+
+            $item->tags_id = json_decode($item->tags_id);
+            if ($item->tags_id) {
+                foreach ($item->tags_id as $k => $value) {
+                    $name[] = Tag::find($value)->pluck('name');
+                }
+            }
+            $item->tags_name = $name;
+
+            $item->fill_price = json_decode($item->fill_price);
+
+            $item->total += $item->price; 
+            dd($item->total);
+            return $item;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts)]);
     } 
 }

@@ -15,4 +15,10 @@ class Place extends Model
     {
     	return $this->hasOne(Image::class, 'id', 'image_id');
     }
+
+    /** 【 一对多购物车关联关系 】 */
+    public function shopcarts()
+    {
+    	return $this->hasMany(Shopcart::class);
+    } 
 }
