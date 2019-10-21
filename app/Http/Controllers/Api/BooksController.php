@@ -40,7 +40,6 @@ class BooksController extends Controller
     {
         $book->fill($request->all());
         $book->date = strtotime($request->date);
-        $book->create_by = auth()->id();
         $book->save();
 
         return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);

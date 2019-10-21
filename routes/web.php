@@ -11,23 +11,29 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/auth/password', function (\Illuminate\Http\Request $request){
-    $http = new \GuzzleHttp\Client();
+// Route::get('/auth/password', function (\Illuminate\Http\Request $request){
+//     $http = new \GuzzleHttp\Client();
 
-    $response = $http->post('http://menu.test/oauth/token', [
-        'form_params' => [
-            'grant_type' => 'password',
-            'client_id' => '2',
-            'client_secret' => 'myvid08Ru6Wmn4aLbIFVhrewzABRDUvUty2Pbpec',
-            'username' => 'admin@163.com',
-            'password' => 'password',
-            'scope' => '*', //令牌授权支持的所有域进行
-        ],
-    ]);
+//     $response = $http->post('http://menu.test/oauth/token', [
+//         'form_params' => [
+//             'grant_type' => 'password',
+//             'client_id' => '2',
+//             'client_secret' => 'myvid08Ru6Wmn4aLbIFVhrewzABRDUvUty2Pbpec',
+//             'username' => 'admin@163.com',
+//             'password' => 'password',
+//             'scope' => '*', //令牌授权支持的所有域进行
+//         ],
+//     ]);
 
-    return json_decode((string)$response->getBody(), true);
+//     return json_decode((string)$response->getBody(), true);
+// });
+
+/**【 验证类接口 】*/ 
+Route::group(['middleware' => 'web'], function(){
+    
+
 });

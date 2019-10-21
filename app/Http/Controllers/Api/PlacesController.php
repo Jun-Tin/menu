@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Place, Image, Menu, Tag};
+use App\Models\{Place, Image, Menu, Tag, Order, User, OrderDetail, Shopcart, Behavior};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
@@ -162,14 +162,12 @@ class PlacesController extends Controller
         $shopcarts = $place->shopcarts;
         $new = $shopcarts->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
-            $item->menus_id = json_decode($item->menus_id);
             if ($item->menus_id) {
-                $item->menus_name = Menu::find($item->menus_id)->pluck('name');
+                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
             }
 
-            $item->tags_id = json_decode($item->tags_id);
             if ($item->tags_id) {
-                foreach ($item->tags_id as $k => $value) {
+                foreach (json_decode($item->tags_id) as $k => $value) {
                     $name[] = Tag::find($value)->pluck('name');
                 }
             }
@@ -184,5 +182,71 @@ class PlacesController extends Controller
         });
 
         return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
+    } 
+
+    /** 【 创建订单 】 */
+    public function order(Request $request, Place $place, User $user)
+    {
+        $shopcarts = $place->shopcarts;
+        if ($shopcarts->isEmpty()) {
+            return response()->json(['error' => ['message' => ['购物车为空！']], 'status' => 404]);
+        }
+
+        $total = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->price;
+        });
+
+        if ($request->id) {
+            $order = Order::find($request->id);
+            // 修改订单金额
+            $order->update([
+                'price' => $order->price+$total,
+                'final_price' => $order->price+$total,
+                'number' => $order->number+count($shopcarts),
+                'final_number' => $order->number+count($shopcarts)
+            ]);
+            $only_order = $order->order;
+        } else {
+            $only_order = date('YmdHis').$user->random();
+            // 创建订单信息
+            $order = Order::create([
+                'order' => $only_order,
+                'store_id' => $place->store_id,
+                'place_id' => $place->id,
+                'price' => $total,
+                'final_price' => $total,
+                'number' => count($shopcarts),
+                'final_number' => count($shopcarts),
+                'status' => 0,
+            ]);
+        }
+        // 循环创建订单详情
+        $new = $shopcarts->map(function ($item, $key) use ($only_order){
+            OrderDetail::create([
+                'order_order' => $only_order,
+                'menu_id' => $item->menu_id,
+                'menus_id' => $item->menus_id,
+                'tags_id' => $item->tags_id,
+                'fill_price' => $item->fill_price,
+                'number' => $item->number,
+                'price' => $item->price,
+                'status' => 0,
+            ]);
+            
+            // 删除购物车记录
+            Shopcart::where('id',$item->id)->delete();    
+        });
+
+        // 修改座位状态
+        $place->update(['status'=>1]);
+        // 记录员工行为
+        Behavior::create([
+            'user_id' => auth()->id(),
+            'target_id' => $order->id,
+            'category' => 'order',
+            'status' => 1,
+        ]);
+
+        return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
 }

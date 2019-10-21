@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class ShopcartResource extends Resource
+class BehaviorResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,14 +16,10 @@ class ShopcartResource extends Resource
     {
         return [
             'id' => $this->id,
-            'place_id' => $this->place_id,
-            'menu_id' => $this->menu_id,
-            'menus_id' => $this->menus_id,
-            'tags_id' => $this->tags_id,
-            // 'menus_id' => json_decode($this->menus_id),
-            // 'tags_id' => json_decode($this->tags_id),
-            'number' => $this->number,
-            'price' => $this->price,
+            'user_id' => $this->user_id,
+            'target_id' => $this->target_id,
+            'category' => $this->category,
+            'status' => $this->status,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
         ];

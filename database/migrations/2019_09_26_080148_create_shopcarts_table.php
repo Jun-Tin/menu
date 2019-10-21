@@ -20,7 +20,7 @@ class CreateShopcartsTable extends Migration
             $table->string('menus_id')->nullable()->commit('内容id');
             $table->string('tags_id')->nullable()->commit('标签组id');
             $table->string('fill_price')->nullable()->commit('差价集合');
-            $table->integer('number')->commit('数量');
+            $table->integer('number')->nullable()->default(1)->commit('数量');
             $table->integer('price')->nullable()->commit('总价格');
             $table->timestamps();
         });

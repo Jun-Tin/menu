@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Menu;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ShopcartCollection extends ResourceCollection
+class OrderCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

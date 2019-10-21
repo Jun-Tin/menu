@@ -20,7 +20,6 @@ class BookResource extends Resource
             'store_id' => $this->store_id,
             // 'place_id' => $this->place_id,
             // 'place' => new PlaceResource($this->place),
-            'create_by' => $this->create_by,
             'name' => $this->name,
             'area_code' => $this->area_code,
             'phone' => $this->phone,

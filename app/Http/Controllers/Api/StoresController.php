@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, Tag, Image};
+use App\Models\{Store, Tag, Image, Place, Order};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -127,6 +127,23 @@ class StoresController extends Controller
         return PlaceResource::collection($floor)->additional(['status' => 200]);
     }
 
+    /** 【 座位列表--退菜 】 */
+    public function retreatPlaces(Request $request, Store $store)
+    {
+        $floor = $store->places()->where('floor', 0)->get();
+
+        $new = $floor->map(function ($item,$key){
+            $item->place = Place::where('floor',$item->id)->get();
+            $item->place->map(function ($item){
+                $item->order = Order::where('place_id',$item->id)->where('status',0)->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
+
+            });
+            return $item;
+        });
+        // dd($new->all());
+        return response()->json(['data' => $new->all(), 'status' => 200]);
+    } 
+
     /** 【 员工列表 】 */
     public function users(Store $store)
     {
@@ -170,4 +187,6 @@ class StoresController extends Controller
 
         return response()->json(['data' => $new->all(), 'status' => 200]);
     }
+
+    /** 【  】 */ 
 }

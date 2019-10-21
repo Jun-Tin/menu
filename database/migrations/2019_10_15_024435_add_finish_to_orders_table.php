@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCreateByToBooksTable extends Migration
+class AddFinishToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCreateByToBooksTable extends Migration
      */
     public function up()
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->integer('create_by')->nullable()->after('place_id')->commit('创建人');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('finish')->default(0)->after('status')->commit('是否打扫');
         });
     }
 
@@ -25,8 +25,8 @@ class AddCreateByToBooksTable extends Migration
      */
     public function down()
     {
-        Schema::table('books', function (Blueprint $table) {
-            $table->dropColumn('create_by');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('finish');
         });
     }
 }

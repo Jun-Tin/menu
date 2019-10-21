@@ -21,4 +21,10 @@ class Place extends Model
     {
     	return $this->hasMany(Shopcart::class);
     } 
+
+    /** 【 一对一订单关联关系 】 */
+    public function order()
+    {
+        return $this->hasOne(Order::class);
+    } 
 }

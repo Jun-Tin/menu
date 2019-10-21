@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToPlacesTable extends Migration
+class AddStoreIdToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToPlacesTable extends Migration
      */
     public function up()
     {
-        Schema::table('places', function (Blueprint $table) {
-            $table->integer('status')->nullable()->after('image_id')->default(0)->commit('使用情况;0：未使用,1：已使用,2：未打扫');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('store_id')->after('order')->commit('门店id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddStatusToPlacesTable extends Migration
      */
     public function down()
     {
-        Schema::table('places', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('store_id');
         });
     }
 }

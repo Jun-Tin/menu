@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ImageResource;
-use App\Http\Resources\BookResource;
+use App\Http\Resources\{ImageResource, BehaviorResource};
 use Illuminate\Http\Resources\Json\Resource;
 
 class UserResource extends Resource
@@ -31,9 +30,9 @@ class UserResource extends Resource
             'post' => $this->post,
             'entry_time' => $this->entry_time?date('Y-m-d',$this->entry_time):'',
             'password' => $this->pro_password,
+            'behavior' => BehaviorResource::collection($this->behaviors()->orderBy('created_at','desc')->get()),
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-            'book' => BookResource::collection($this->books),
         ];
     }
 }

@@ -64,10 +64,12 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/menus', 'Api\StoresController@menus');
     // 门店套餐列表
     Route::get('store/{store}/packages', 'Api\StoresController@packages');
-    // 门店座位列表
+    // 门店座位列表、加菜
     Route::get('store/{store}/places', 'Api\StoresController@places');
     // 门店座位列表--按人数筛选
     Route::get('store/{store}/scrPlaces/{number}', 'Api\StoresController@scrPlaces');
+    // 门店座位列表--退菜
+    Route::get('store/{store}/retreatPlaces', 'Api\StoresController@retreatPlaces');
     // 门店员工列表
     Route::get('store/{store}/users', 'Api\StoresController@users');
     // 删除座位--整层
@@ -134,6 +136,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('place/makeZip/{store_id}/{floor}', 'Api\PlacesController@makeZip');
     // 获取座位下购物车详情
     Route::get('place/{place}/shopcart', 'Api\PlacesController@shopcart');
+    /** 【 订单 】 */
+    Route::patch('place/{place}/order', 'Api\PlacesController@order'); 
 
     /** 【 预约 】 */ 
     // 创建预约 
@@ -151,8 +155,23 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /** 【 购物车 】 */ 
     Route::post('shopcart/store', 'Api\ShopcartsController@store');
-    /** 【 购物车增加、减少商品 】 */
+    // 购物车增加、减少商品
     Route::patch('shopcart/{shopcart}/update', 'Api\ShopcartsController@update'); 
+
+    /** 【 订单】 */
+    // 订单详情
+    Route::put('order/{order}/index', 'Api\OrdersController@index'); 
+    // 确认支付（修改订单状态）
+    Route::patch('order/{order}/update', 'Api\OrdersController@update');
+
+    /** 【 员工表现 】 */
+    /**
+    * 点击打扫
+    @ 预约->book，下单->order，上菜->serving，打扫->clean，结账->settle，退菜->retreat
+    */
+    Route::post('behavior/store', 'Api\BehaviorsController@store');
+    // 打扫完成
+    Route::patch('behavior/{behavior}/update', 'Api\BehaviorsController@update');
 
     /** 
      * 【 功能类接口 】
