@@ -37,20 +37,7 @@ class PlaceResource extends Resource
                     'order' => $this->order()->whereIn('status',[0,2])->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first(),
                 ];
                 break;
-            case 'PUT':
-                return [
-                    'id' => $this->id,
-                    'store_id' => $this->store_id,
-                    'name' => $this->name,
-                    'image' => new ImageResource($this->image),
-                    'number' => $this->number,
-                    'floor' => $this->floor,
-                    'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                ];
-                break;
-            case 'POST':
+            default :
                 return [
                     'id' => $this->id,
                     'store_id' => $this->store_id,
