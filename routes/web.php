@@ -34,6 +34,6 @@
 
 /**【 验证类接口 】*/ 
 Route::group(['middleware' => 'web'], function(){
-    
+    Route::get('areacode', 'Api\AreacodesController@index');
 
 });

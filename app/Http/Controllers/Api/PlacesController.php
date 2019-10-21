@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
+use Illuminate\Support\Facades\Redis;
 
 class PlacesController extends Controller
 {
@@ -40,7 +41,11 @@ class PlacesController extends Controller
     public function store(Request $request, Place $place)
     {        
         $place->fill($request->all());
+        $place->status = 0;
         $place->save();
+
+        // 设置redis缓存
+        Redis::set('name', 'Taylor');
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
     }
