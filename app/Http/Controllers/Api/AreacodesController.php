@@ -18,7 +18,7 @@ class AreacodesController extends Controller
      */
     public function index(Areacode $areacode)
     {
-    	dd(Redis::get('name'));
+    	// dd(Redis::get('name'));
         return (new AreacodeResource($areacode::where('show',1)->orderBy('order_number','desc')->get()))->additional(['status' => 200]);
     }
 }

@@ -45,7 +45,7 @@ class PlacesController extends Controller
         $place->save();
 
         // 设置redis缓存
-        Redis::set('name', 'Taylor');
+        // Redis::set('name', 'Taylor');
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
     }
