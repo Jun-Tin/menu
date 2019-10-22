@@ -102,13 +102,13 @@ class StoresController extends Controller
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category','m')->where('status',1)->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category','m')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category','p')->where('status',1)->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 】 */

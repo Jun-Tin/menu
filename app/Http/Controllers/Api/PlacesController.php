@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
-use Illuminate\Support\Facades\Redis;
 
 class PlacesController extends Controller
 {
@@ -38,14 +37,12 @@ class PlacesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Place $place)
+    public function store(Request $request, Place $place, Image $image)
     {        
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
-
-        // 设置redis缓存
-        // Redis::set('name', 'Taylor');
+        $place->updateQrcode($request->all(),$place->id);
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
     }
@@ -81,6 +78,7 @@ class PlacesController extends Controller
      */
     public function update(Request $request, Place $place)
     {
+        $place->updateQrcode($request->all(),$place->id);
         $place->update($request->all());
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);

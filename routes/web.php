@@ -33,7 +33,7 @@
 // });
 
 /**【 验证类接口 】*/ 
-Route::group(['middleware' => 'web'], function(){
-    Route::get('areacode', 'Api\AreacodesController@index');
+Route::group(['middleware' => 'Code'], function(){
+    Route::get('test', 'Web\StoresController@index');
 
 });
