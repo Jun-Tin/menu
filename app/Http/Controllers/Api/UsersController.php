@@ -7,7 +7,7 @@ use App\Models\{User, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\{UserResource, BehaviorResource};
 
 class UsersController extends Controller
 {
@@ -134,13 +134,13 @@ class UsersController extends Controller
     /**【 修改密码 / 手机号码 】*/
 
 
-    /** 【员工详情】 */
+    /** 【 员工详情 】 */
     public function detail(User $user)
     {
         return (new UserResource($user))->additional(['status' => 200]);
     } 
     
-    /** 【设置员工信息】 */
+    /** 【 设置员工信息 】 */
     public function staff(Request $request, User $user)
     {
         $user = User::create([
@@ -160,7 +160,7 @@ class UsersController extends Controller
         return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
     }
 
-    /** 【修改员工信息】 */ 
+    /** 【 修改员工信息 】 */ 
     public function edit(Request $request, User $user)
     {
         $data = $request->all();
@@ -180,13 +180,19 @@ class UsersController extends Controller
         return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
-    /** 【删除员工信息】 */
+    /** 【 删除员工信息 】 */
     public function delete(User $user)
     {
         $user->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
-    } 
+    }
+
+    /** 【 员工表现 】 */ 
+    public function behavior(Request $request, User $user)
+    {
+        return (BehaviorResource::collection($user->behaviors()->orderBy('created_at','desc')->get()))->additional(['status'=>200]);
+    }
 
     /** 【 退出登录 】 */
     public function logout(Request $request)

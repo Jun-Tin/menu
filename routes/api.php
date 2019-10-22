@@ -47,6 +47,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('user/{user}/edit', 'Api\UsersController@edit');
     // 删除员工信息
     Route::delete('user/{user}/delete', 'Api\UsersController@delete');
+    // 员工表现
+    Route::get('user/{user}/behavior', 'Api\UsersController@behavior');
 
 
     /**【 门店 】*/
