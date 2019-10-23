@@ -2,7 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\{ImageResource, MenuResource, MenuCollection};
+use App\Models\Tag;
+use App\Http\Resources\{ImageResource, MenuResource, MenuCollection, TagCollection};
 use Illuminate\Http\Resources\Json\Resource;
 
 class MenuResource extends Resource
@@ -30,9 +31,13 @@ class MenuResource extends Resource
                     'status' => $this->status,
                     'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                    'tags' => new MenuCollection($this->tags),
-                    'class' => $this->tags->where('category','class')->pluck('id'),
-                    'perfer' => $this->tags->where('category','perfer')->pluck('id'),
+                    'class' => new MenuCollection($this->tags()->where('category','class')->get()),
+                    'perfer' => new MenuCollection($this->tags()->where('category','perfer')->get()->map(function ($item, $key){
+                        $item->category = new TagCollection(Tag::where('pid',$item->pivot->target_id)->get());
+                        return $item;
+                    })),
+                    'class_id' => $this->tags->where('category','class')->pluck('id'),
+                    'perfer_id' => $this->tags->where('category','perfer')->pluck('id'),
                 ];
                 break;
             
