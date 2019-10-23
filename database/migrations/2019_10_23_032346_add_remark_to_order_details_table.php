@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStoreIdToOrdersTable extends Migration
+class AddRemarkToOrderDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStoreIdToOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->integer('store_id')->nullable()->after('order')->commit('门店id');
+        Schema::table('order_details', function (Blueprint $table) {
+            $table->string('remark')->nullable()->after('price')->commit('备注');
         });
     }
 
@@ -25,8 +25,8 @@ class AddStoreIdToOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('store_id');
+        Schema::table('order_details', function (Blueprint $table) {
+            $table->dropColumn('remark');
         });
     }
 }

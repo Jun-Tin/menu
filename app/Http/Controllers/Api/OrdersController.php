@@ -41,6 +41,34 @@ class OrdersController extends Controller
         return (new OrderResource($order))->additional(['status'=>200]);
     }
 
+    /** 【 客户端--订单详情 】 */ 
+    public function customerIndex(Request $request, Order $order)
+    {
+        $orders = $order->orders;
+        $order->set_time = (Store::find($order->store_id))->set_time;
+        $order->details = $orders->map(function ($item, $key){
+            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
+            $item->category = (Menu::find($item->menu_id, ['category']))->category;
+
+            if ($item->menus_id) {
+                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+            }
+
+            if ($item->tags_id) {
+                foreach (json_decode($item->tags_id) as $k => $value) {
+                    $name[] = Tag::find($value)->pluck('name');
+                }
+                $item->tags_name = $name;
+            }
+            $item->fill_price = json_decode($item->fill_price);
+
+            return $item;
+        });
+
+        return (new OrderResource($order))->additional(['status'=>200]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\{Store, Tag, Image, Menu};
+use App\Models\{Shopcart, Menu};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, ShopcartResource};
+use App\Http\Resources\ShopcartResource;
 
-class StoresController extends Controller
+class ShopcartsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Store $store)
+    public function index()
     {
-        dd($store);
+        //
     }
 
     /**
@@ -35,9 +35,35 @@ class StoresController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Shopcart $shopcart)
     {
-        //
+        dd($request);
+        $menu = Menu::find($request->menu_id);
+
+        if (!$menu->status) {
+            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+        }
+        switch ($menu->category) {
+            case 'o':
+                $menu_price = $menu->original_price;
+                break;
+            default:
+                $menu_price = $menu->special_price;
+                break;
+        }
+
+        $shopcart->fill($request->all());
+        $shopcart->number = 1;
+        if ($request->has('fill_price')) {
+            $data = json_decode($request->fill_price);
+            foreach ($data as $key => $value) {
+                $shopcart->price += $value;
+            }
+        }
+        $shopcart->price = $shopcart->price+$menu_price;        
+        $shopcart->save();
+
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
     }
 
     /**
@@ -46,9 +72,9 @@ class StoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function customerShow(Store $store)
+    public function show($id)
     {
-        return (new StoreResource($store))->additional(['status'=>200]);
+        //
     }
 
     /**
@@ -83,20 +109,5 @@ class StoresController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /** 【 菜品列表--全部 】 */ 
-    public function menus(Request $request, Store $store)
-    {
-        $all = $store->tags()->where('pid',0)->where('category', 'class')->get();
-        $new = $all->map(function ($item, $key){
-            $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get();
-            $item->menus->map(function ($item){
-                $item->image = Image::find($item->image_id);
-            });
-            return $item;
-        });
-
-        return response()->json(['data' => $new->all(), 'status' => 200]);
     }
 }

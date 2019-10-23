@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 获取座位下购物车详情
     Route::get('place/{place}/shopcart', 'Api\PlacesController@shopcart');
     /** 【 订单 】 */
+    // 生成订单
     Route::patch('place/{place}/order', 'Api\PlacesController@order'); 
 
     /** 【 预约 】 */ 
@@ -156,6 +157,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('book/{book}/index', 'Api\BooksController@index');
 
     /** 【 购物车 】 */ 
+    // 创建购物车（加入商品）
     Route::post('shopcart/store', 'Api\ShopcartsController@store');
     // 购物车增加、减少商品
     Route::patch('shopcart/{shopcart}/update', 'Api\ShopcartsController@update'); 
@@ -182,4 +184,35 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('img', 'Api\ImagesController@uploadImg');
     Route::post('imgs', 'Api\ImagesController@uploadImgs');
     Route::post('qrcode', 'Api\ImagesController@createQrcode');
+});
+
+
+/** 【 门店详情 】 */
+Route::get('store/{store}/customerShow', 'Api\StoresController@customerShow'); 
+/** 【 座位状态 】 */
+Route::get('place/{place}/customerStatus', 'Api\PlacesController@customerStatus'); 
+
+/** 【 自定义验证类接口 】 */ 
+Route::group(['middleware' => 'Code'], function(){
+    // Route::get('store/index/{store}/{place}/{code}', 'Api\StoresController@index');
+    // 
+    /** 【 菜品列表--全部】 */ 
+    Route::get('store/{store}/customerMenus', 'Api\StoresController@customerMenus');
+
+    /** 【 购物车 】 */ 
+    // 创建购物车（加入商品）
+    Route::post('shopcart/customerStore', 'Api\ShopcartsController@customerStore');
+    // 购物车增加、减少商品
+    Route::patch('shopcart/{shopcart}/customerUpdate', 'Api\ShopcartsController@customerUpdate'); 
+
+    /**【 座位 】*/
+    // 获取座位下购物车详情
+    Route::get('place/{place}/customerShopcart', 'Api\PlacesController@customerShopcart');
+
+    /** 【 订单 】 */
+    // 生成订单
+    Route::patch('place/{place}/customerOrder', 'Api\PlacesController@customerOrder'); 
+    // 订单详情
+    Route::put('order/{order}/customerIndex', 'Api\OrdersController@customerIndex'); 
+
 });

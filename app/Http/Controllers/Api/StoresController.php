@@ -188,5 +188,24 @@ class StoresController extends Controller
         return response()->json(['data' => $new->all(), 'status' => 200]);
     }
 
-    /** 【  】 */ 
+    /** 【 客户端--门店详情 】 */ 
+    public function customerShow(Store $store)
+    {
+        return (new StoreResource($store))->additional(['status'=>200]);
+    }
+
+    /** 【 客户端--菜品列表--全部 】 */ 
+    public function customerMenus(Request $request, Store $store)
+    {
+        $all = $store->tags()->where('pid',0)->where('category', 'class')->get();
+        $new = $all->map(function ($item, $key){
+            $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get();
+            $item->menus->map(function ($item){
+                $item->image = Image::find($item->image_id);
+            });
+            return $item;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200]);
+    }
 }

@@ -14,8 +14,8 @@ class AddFinalPriceAndFinalNumberToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('final_price')->after('price')->commit('最终价格');
-            $table->integer('final_number')->after('number')->commit('最终数量');
+            $table->integer('final_price')->nullable()->after('price')->commit('最终价格');
+            $table->integer('final_number')->nullable()->after('number')->commit('最终数量');
         });
     }
 

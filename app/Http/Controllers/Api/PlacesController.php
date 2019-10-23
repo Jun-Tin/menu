@@ -187,8 +187,103 @@ class PlacesController extends Controller
         return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
     } 
 
+    /** 【 客户端--购物车详情 】 */
+    public function customerShopcart(Request $request, Place $place)
+    {
+        $shopcarts = $place->shopcarts;
+        $new = $shopcarts->map(function ($item, $key){
+            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
+            if ($item->menus_id) {
+                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+            }
+
+            if ($item->tags_id) {
+                foreach (json_decode($item->tags_id) as $k => $value) {
+                    $name[] = Tag::find($value)->pluck('name');
+                }
+            }
+            $item->tags_name = $name;
+            $item->fill_price = json_decode($item->fill_price);
+
+            return $item;
+        });
+
+        $total = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->price;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
+    } 
+
     /** 【 创建订单 】 */
     public function order(Request $request, Place $place, User $user)
+    {
+        $shopcarts = $place->shopcarts;
+        if ($shopcarts->isEmpty()) {
+            return response()->json(['error' => ['message' => ['购物车为空！']], 'status' => 404]);
+        }
+
+        $total = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->price;
+        });
+
+        if ($request->id) {
+            $order = Order::find($request->id);
+            // 修改订单金额
+            $order->update([
+                'price' => $order->price+$total,
+                'final_price' => $order->price+$total,
+                'number' => $order->number+count($shopcarts),
+                'final_number' => $order->number+count($shopcarts)
+            ]);
+            $only_order = $order->order;
+        } else {
+            $only_order = date('YmdHis').$user->random();
+            // 创建订单信息
+            $order = Order::create([
+                'order' => $only_order,
+                'store_id' => $place->store_id,
+                'place_id' => $place->id,
+                'price' => $total,
+                'final_price' => $total,
+                'number' => count($shopcarts),
+                'final_number' => count($shopcarts),
+                'status' => 0,
+            ]);
+        }
+        // 循环创建订单详情
+        $new = $shopcarts->map(function ($item, $key) use ($only_order){
+            OrderDetail::create([
+                'order_order' => $only_order,
+                'menu_id' => $item->menu_id,
+                'menus_id' => $item->menus_id,
+                'tags_id' => $item->tags_id,
+                'fill_price' => $item->fill_price,
+                'number' => $item->number,
+                'price' => $item->price,
+                'status' => 0,
+                'remark' => $item->remark
+            ]);
+            
+            // 删除购物车记录
+            Shopcart::where('id',$item->id)->delete();    
+        });
+
+        // 修改座位状态
+        $place->update(['status'=>1]);
+        // 记录员工行为
+        Behavior::create([
+            'user_id' => auth()->id(),
+            'target_id' => $order->id,
+            'category' => 'order',
+            'status' => 1,
+        ]);
+
+        return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
+    } 
+
+    /** 【 客户端--创建订单 】 */
+    public function customerOrder(Request $request, Place $place, User $user)
     {
         $shopcarts = $place->shopcarts;
         if ($shopcarts->isEmpty()) {
@@ -242,14 +337,16 @@ class PlacesController extends Controller
 
         // 修改座位状态
         $place->update(['status'=>1]);
-        // 记录员工行为
-        Behavior::create([
-            'user_id' => auth()->id(),
-            'target_id' => $order->id,
-            'category' => 'order',
-            'status' => 1,
-        ]);
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
+
+    /** 【 客户端--座位状态 】*/
+    public function customerStatus(Request $request, Place $place)
+    {
+        $place->order = Order::where('place_id',$place->id)->where('status',0)->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
+
+        return response()->json(['data'=>$place, 'status'=>200]);
+        dd($place);
+    }
 }

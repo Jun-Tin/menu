@@ -31,13 +31,13 @@ class Place extends Model
     } 
 
     /** 【 更新二维码信息 】 */
-    public function updateQrcode($data, $id)
+    public function updateQrcode($data, $placeid)
     {
-        $encrypted = Crypt::encryptString($data['name'].'_'.$id.'_code');
+        $encrypted = Crypt::encryptString($data['name'].'_'.$placeid.'_code');
         $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
         $filename = $data['name'] . '.png';
-        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_DOMAIN_NAME').'/menu/#/'.$id.'/'.$encrypted, $dir. '/'. $filename);
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_DOMAIN_NAME').'/menu/#/'.$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
         // 设置redis缓存
-        Redis::set($data['name'].'_'.$id, $encrypted);
+        Redis::set($data['name'].'_'.$placeid, $encrypted);
     } 
 }
