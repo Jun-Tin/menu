@@ -17,7 +17,7 @@ class CreateBehaviorsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->nullable()->commit('用户id');
             $table->integer('target_id')->nullable()->commit('目标id');
-            $table->enum('category', ['book','order','serving','clean','settle','retreat','cooking'])->commit('工作分类');
+            $table->enum('category', ['book','order','serving','clean','settle','retreat','cooking','backout'])->commit('工作分类');
             $table->integer('status')->nullable()->default(0)->commit('完成情况;0：未完成,1:完成');
             $table->timestamps();
         });

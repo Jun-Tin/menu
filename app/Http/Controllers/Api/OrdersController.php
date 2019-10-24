@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\{Order, Menu, Tag, Behavior, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\{OrderResource, OrderCollection};
 
 class OrdersController extends Controller
 {
@@ -17,6 +17,7 @@ class OrdersController extends Controller
     public function index(Request $request, Order $order)
     {
         $orders = $order->orders;
+        dd($orders);
         $order->set_time = (Store::find($order->store_id))->set_time;
         $order->details = $orders->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
@@ -143,4 +144,38 @@ class OrdersController extends Controller
     {
         //
     }
+
+    /** 【 所有未完成订单 】 */
+    public function orders(Request $request)
+    {
+        // 制作时间
+        $set_time = (Store::find(auth()->user()->store_id))->set_time;
+        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        $order = $order->map(function ($item, $key){
+            $item->details = $item->orders;
+            return $item->only(['details']);
+        });
+        // 合并成一维数组
+        $data = $order->flatten();
+        $data->map(function ($item, $key){
+            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
+            $item->category = (Menu::find($item->menu_id, ['category']))->category;
+
+            if ($item->menus_id) {
+                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+            }
+
+            if ($item->tags_id) {
+                foreach (json_decode($item->tags_id) as $k => $value) {
+                    $name[] = Tag::find($value)->pluck('name');
+                }
+                $item->tags_name = $name;
+            }
+            $item->fill_price = json_decode($item->fill_price);
+
+            return $item;
+        });
+
+        return response()->json(['data'=>$data->all(), 'status'=>200, 'set_time'=>$set_time]);
+    } 
 }

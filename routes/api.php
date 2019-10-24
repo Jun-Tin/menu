@@ -167,6 +167,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('order/{order}/index', 'Api\OrdersController@index'); 
     // 确认支付（修改订单状态）
     Route::patch('order/{order}/update', 'Api\OrdersController@update');
+    /** 【 后厨 】 */
+    // 出菜 / 未出菜 所有列表
+    Route::get('order/orders', 'Api\OrdersController@orders');
 
     /** 【 员工表现 】 */
     /**

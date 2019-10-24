@@ -184,7 +184,7 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total]);
     } 
 
     /** 【 客户端--购物车详情 】 */
@@ -212,7 +212,7 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => count($shopcarts), 'total' => $total]);
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total]);
     } 
 
     /** 【 创建订单 】 */
@@ -233,8 +233,8 @@ class PlacesController extends Controller
             $order->update([
                 'price' => $order->price+$total,
                 'final_price' => $order->price+$total,
-                'number' => $order->number+count($shopcarts),
-                'final_number' => $order->number+count($shopcarts)
+                'number' => $order->number+$shopcarts->count(),
+                'final_number' => $order->number+$shopcarts->count()
             ]);
             $only_order = $order->order;
         } else {
@@ -246,8 +246,8 @@ class PlacesController extends Controller
                 'place_id' => $place->id,
                 'price' => $total,
                 'final_price' => $total,
-                'number' => count($shopcarts),
-                'final_number' => count($shopcarts),
+                'number' => $shopcarts->count(),
+                'final_number' => $shopcarts->count(),
                 'status' => 0,
             ]);
         }
@@ -300,8 +300,8 @@ class PlacesController extends Controller
             $order->update([
                 'price' => $order->price+$total,
                 'final_price' => $order->price+$total,
-                'number' => $order->number+count($shopcarts),
-                'final_number' => $order->number+count($shopcarts)
+                'number' => $order->number+$shopcarts->count(),
+                'final_number' => $order->number+$shopcarts->count()
             ]);
             $only_order = $order->order;
         } else {
@@ -313,8 +313,8 @@ class PlacesController extends Controller
                 'place_id' => $place->id,
                 'price' => $total,
                 'final_price' => $total,
-                'number' => count($shopcarts),
-                'final_number' => count($shopcarts),
+                'number' => $shopcarts->count(),
+                'final_number' => $shopcarts->count(),
                 'status' => 0,
             ]);
         }
@@ -347,6 +347,5 @@ class PlacesController extends Controller
         $place->order = Order::where('place_id',$place->id)->where('status',0)->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
 
         return response()->json(['data'=>$place, 'status'=>200]);
-        dd($place);
     }
 }
