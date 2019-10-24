@@ -79,6 +79,10 @@ class BehaviorsController extends Controller
                 $order->final_number = $order->final_number - 1;
                 $order->save();
                 break;
+            case 'cooking':
+                // 修改菜单内容状态--做菜状态
+                OrderDetail::where('id',$request->target_id)->update(['status'=>1]);
+                break;
         }
         $behavior->save();
 

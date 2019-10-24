@@ -19,6 +19,9 @@ class BehaviorObserver
 			case 'serving':
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
 				break;
+			case 'cooking':
+				OrderDetail::where('id',$behavior->target_id)->update(['status'=>2]);
+				break;
 		}
 	}
 } 
