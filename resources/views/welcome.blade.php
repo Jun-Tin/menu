@@ -91,5 +91,18 @@
                 </div>
             </div>
         </div>
+        <script>
+
+            ws = new WebSocket("ws://192.168.10.10:7272");
+            console.log(ws);
+            ws.onmessage = function(e){
+                console.log("收到服务端的消息：" + e.data);
+            };
+
+            ws.onopen = function() {
+                ws.send('{"mode":"say","order_id":"375","type":1,"content":"你好","user_id":100036}');
+                // ws.send('{"mode":"chats","order_id":"375"}');
+            };
+        </script>
     </body>
 </html>

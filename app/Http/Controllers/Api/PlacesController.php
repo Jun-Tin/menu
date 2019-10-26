@@ -176,6 +176,7 @@ class PlacesController extends Controller
             }
             $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
 
             return $item;
         });
@@ -204,6 +205,7 @@ class PlacesController extends Controller
             }
             $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
 
             return $item;
         });
@@ -260,6 +262,7 @@ class PlacesController extends Controller
                 'tags_id' => $item->tags_id,
                 'fill_price' => $item->fill_price,
                 'number' => $item->number,
+                'original_price' => $item->original_price,
                 'price' => $item->price,
                 'status' => 0,
                 'remark' => $item->remark
@@ -327,8 +330,10 @@ class PlacesController extends Controller
                 'tags_id' => $item->tags_id,
                 'fill_price' => $item->fill_price,
                 'number' => $item->number,
+                'original_price' => $item->original_price,
                 'price' => $item->price,
                 'status' => 0,
+                'remark' => $item->remark
             ]);
             
             // 删除购物车记录

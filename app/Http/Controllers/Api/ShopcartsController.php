@@ -59,6 +59,8 @@ class ShopcartsController extends Controller
                 $shopcart->price += $value;
             }
         }
+
+        $shopcart->original_price = $menu_price;
         $shopcart->price = $shopcart->price+$menu_price;        
         $shopcart->save();
 
@@ -90,6 +92,8 @@ class ShopcartsController extends Controller
                 $shopcart->price += $value;
             }
         }
+        
+        $shopcart->original_price = $menu_price;
         $shopcart->price = $shopcart->price+$menu_price;        
         $shopcart->save();
 

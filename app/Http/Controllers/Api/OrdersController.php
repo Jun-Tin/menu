@@ -17,7 +17,6 @@ class OrdersController extends Controller
     public function index(Request $request, Order $order)
     {
         $orders = $order->orders;
-        dd($orders);
         $order->set_time = (Store::find($order->store_id))->set_time;
         $order->details = $orders->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
@@ -34,6 +33,7 @@ class OrdersController extends Controller
                 $item->tags_name = $name;
             }
             $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
 
             return $item;
         });
