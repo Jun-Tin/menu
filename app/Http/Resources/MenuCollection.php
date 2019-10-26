@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Image;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MenuCollection extends ResourceCollection
@@ -14,12 +15,11 @@ class MenuCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
-        // return [
-        //     'data' => $this->collection,
-        //     'links' => [
-        //         'self' => 'link-value',
-        //     ],
-        // ];
+        return [
+            'data' => $this->collection->map(function ($item, $key){
+                $item->image = Image::find($item->image_id);
+                return $item;
+            }),
+        ];
     }
 }

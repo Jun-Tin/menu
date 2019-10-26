@@ -97,6 +97,7 @@
             console.log(ws);
             ws.onmessage = function(e){
                 console.log("收到服务端的消息：" + e.data);
+                console.log(123);
             };
 
             ws.onopen = function() {

@@ -6,7 +6,7 @@ use App\Models\{Store, Tag, Image, Place, Order};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceResource, UserResource, BookResource, MenuCollection};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceResource, UserResource, BookResource, MenuCollection, MenuResource};
 
 class StoresController extends Controller
 {
@@ -108,7 +108,7 @@ class StoresController extends Controller
     /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 】 */
@@ -140,7 +140,6 @@ class StoresController extends Controller
             });
             return $item;
         });
-        // dd($new->all());
         return response()->json(['data' => $new->all(), 'status' => 200]);
     } 
 
