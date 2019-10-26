@@ -42,7 +42,7 @@ class ShopcartsController extends Controller
         if (!$menu->status) {
             return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
         }
-        switch ($menu->category) {
+        switch ($menu->type) {
             case 'o':
                 $menu_price = $menu->original_price;
                 break;
@@ -50,7 +50,6 @@ class ShopcartsController extends Controller
                 $menu_price = $menu->special_price;
                 break;
         }
-        dd($menu_price);
 
         $shopcart->fill($request->all());
         $shopcart->number = 1;
