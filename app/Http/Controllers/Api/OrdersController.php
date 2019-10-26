@@ -62,6 +62,7 @@ class OrdersController extends Controller
                 $item->tags_name = $name;
             }
             $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
 
             return $item;
         });
@@ -172,6 +173,7 @@ class OrdersController extends Controller
                 $item->tags_name = $name;
             }
             $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
 
             return $item;
         });

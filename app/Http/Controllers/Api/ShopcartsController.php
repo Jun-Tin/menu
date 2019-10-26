@@ -50,6 +50,7 @@ class ShopcartsController extends Controller
                 $menu_price = $menu->special_price;
                 break;
         }
+        dd($menu->category);
 
         $shopcart->fill($request->all());
         $shopcart->number = 1;

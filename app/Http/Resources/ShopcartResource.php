@@ -23,6 +23,7 @@ class ShopcartResource extends Resource
             // 'menus_id' => json_decode($this->menus_id),
             // 'tags_id' => json_decode($this->tags_id),
             'number' => $this->number,
+            'original_price' => $this->original_price,
             'price' => $this->price,
             'remark' => $this->remark,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
