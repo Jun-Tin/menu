@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Menu;
+use App\Models\{Menu, Tag, Image};
 use Illuminate\Http\Resources\Json\Resource;
-use App\Http\Resources\MenuCollection;
+use App\Http\Resources\{MenuCollection, TagCollection};
 
 class TagResource extends Resource
 {
@@ -28,11 +28,14 @@ class TagResource extends Resource
                 return $this->pivot;
             }),
             'menus' => $this->whenPivotLoaded('menu_tag', function(){
-                return new MenuCollection(Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get());
-                // Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get()->map(function ($item, $key){
-                //     $item->perfer = $item->tags()->where('category','perfer')->get();
-                //     return $item;
-                // });
+                return Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get()->map(function ($item, $key){
+                    $item->image = Image::find($item->image_id);
+                    $item->perfer = $item->tags()->where('category','perfer')->get()->map(function ($item, $key){
+                        $item->category = new TagCollection(Tag::where('pid',$item->pivot->target_id)->get());
+                        return $item;
+                    });
+                    return $item;
+                });
             }), 
         ];
     }
