@@ -28,6 +28,12 @@ Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
 /**【 获取区号 】*/ 
 Route::get('areacode', 'Api\AreacodesController@index');
 
+/** 【 socket通讯 】 */
+// 加入端口
+Route::post('socket/join', 'Api\SocketsController@join');
+// 离开端口
+Route::post('socket/leave', 'Api\SocketsController@leave');
+
 
 /**【 验证类接口 】*/ 
 Route::group(['middleware' => 'auth:api'], function(){
@@ -169,7 +175,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('order/{order}/update', 'Api\OrdersController@update');
     /** 【 后厨 】 */
     // 出菜 / 未出菜 所有列表
-    Route::get('order/orders', 'Api\OrdersController@orders');
+    Route::get('order/{status}/orders', 'Api\OrdersController@orders');
 
     /** 【 员工表现 】 */
     /**

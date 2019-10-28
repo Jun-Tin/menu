@@ -93,17 +93,22 @@
         </div>
         <script>
 
-            ws = new WebSocket("ws://192.168.10.10:7272");
+            ws = new WebSocket("ws://192.168.10.10:23460");
             console.log(ws);
             ws.onmessage = function(e){
+                // alert(e);
                 console.log("收到服务端的消息：" + e.data);
-                console.log(123);
+                // console.log(123);
             };
 
             ws.onopen = function() {
-                ws.send('{"mode":"say","order_id":"375","type":1,"content":"你好","user_id":100036}');
-                // ws.send('{"mode":"chats","order_id":"375"}');
+                
             };
+
+            ws.onerror = function(e) {
+                console.log(e.data);
+            };
+
         </script>
     </body>
 </html>

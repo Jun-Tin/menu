@@ -28,7 +28,11 @@ class TagResource extends Resource
                 return $this->pivot;
             }),
             'menus' => $this->whenPivotLoaded('menu_tag', function(){
-                return new MenuCollection(Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get());
+                // return new MenuCollection(Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get());
+                Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get()->map(function ($item, $key){
+                    $item->perfer = $item->tags()->where('category','perfer')->get();
+                    return $item;
+                });
             }), 
         ];
     }

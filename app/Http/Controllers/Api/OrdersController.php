@@ -152,8 +152,8 @@ class OrdersController extends Controller
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = $order->map(function ($item, $key){
-            $item->details = $item->orders;
+        $order = $order->map(function ($item, $key) use ($request){
+            $item->details = $item->orders()->where('status',$request->status)->get();
             return $item->only(['details']);
         });
         // 合并成一维数组

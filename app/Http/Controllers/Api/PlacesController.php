@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\{Auth, Storage, File};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
+use GatewayWorker\Lib\Gateway;
+
 
 class PlacesController extends Controller
 {
@@ -233,10 +235,10 @@ class PlacesController extends Controller
             $order = Order::find($request->id);
             // 修改订单金额
             $order->update([
-                'price' => $order->price+$total,
-                'final_price' => $order->price+$total,
-                'number' => $order->number+$shopcarts->count(),
-                'final_number' => $order->number+$shopcarts->count()
+                'price' => $order->price + $total,
+                'final_price' => $order->price + $total,
+                'number' => $order->number + $shopcarts->count(),
+                'final_number' => $order->number + $shopcarts->count()
             ]);
             $only_order = $order->order;
         } else {
@@ -282,6 +284,8 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
+        Gateway::sendToGroup('chef', json_encode(array('type'=>'call','message'=>'来活了！'),JSON_UNESCAPED_UNICODE));
+
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
 
@@ -301,10 +305,10 @@ class PlacesController extends Controller
             $order = Order::find($request->id);
             // 修改订单金额
             $order->update([
-                'price' => $order->price+$total,
-                'final_price' => $order->price+$total,
-                'number' => $order->number+$shopcarts->count(),
-                'final_number' => $order->number+$shopcarts->count()
+                'price' => $order->price + $total,
+                'final_price' => $order->price + $total,
+                'number' => $order->number + $shopcarts->count(),
+                'final_number' => $order->number + $shopcarts->count()
             ]);
             $only_order = $order->order;
         } else {
@@ -342,6 +346,8 @@ class PlacesController extends Controller
 
         // 修改座位状态
         $place->update(['status'=>1]);
+
+        Gateway::sendToGroup('chef', json_encode(array('type'=>'call','message'=>'来活了！'),JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 

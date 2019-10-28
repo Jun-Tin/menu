@@ -62,10 +62,13 @@ php artisan passport:install --force
 php artisan passport:keys --force
 
 <!-- 记录数据库状态值（status） -->
-<!-- 格式：表名，字段，注释 
+格式：表名，字段，注释 
 	menu,		status,		0：售罄，1：正常
 	place, 		status,		0：没人，1：有人，2：在打扫
 	order, 		status,		0：未支付，2：已支付，3：已取消
 	order,		finish,		0：未打扫，1：已打扫
 	order_detail, status,	0：未完成，1：正在做，2：已做完，3：准备上菜，4：已上菜，5：退菜，
--->
+
+
+<!-- 设置socket registerAddress -->
+修改vendor->workerman->gateway-worker->src->Lib->Gateway.php

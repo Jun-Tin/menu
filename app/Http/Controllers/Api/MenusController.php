@@ -81,16 +81,7 @@ class MenusController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        $ids = json_decode($request->ids);
-
         $menu->update($request->all());
-        $menu->tags()->detach();//先删除关系
-
-        if ($ids) {
-            foreach ($ids as $key => $value) {
-                $menu->tags()->sync($value, false);
-            }
-        }
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
     }
