@@ -82,8 +82,9 @@ class PlacesController extends Controller
     {
         $place->updateQrcode($request->all(),$place->id);
         $place->update($request->all());
+        $code = Redis::get($place->name.'_'.$place->id);
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
     }
 
     /**
