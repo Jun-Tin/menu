@@ -6,6 +6,7 @@ use App\Models\{Behavior, Place, Order, OrderDetail};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BehaviorResource;
+use GatewayWorker\Lib\Gateway;
 
 class BehaviorsController extends Controller
 {
@@ -78,6 +79,9 @@ class BehaviorsController extends Controller
                 $order->final_price = $order->final_price - $OrderDetail->price;
                 $order->final_number = $order->final_number - 1;
                 $order->save();
+
+                $store_id = (User::find($behavior->user_id))->store_id;
+                Gateway::sendToGroup('chef_'.$store_id, json_encode(array('type'=>'retreat','message'=>'退菜了！'), JSON_UNESCAPED_UNICODE));
                 break;
             // 做菜
             case 'cooking':

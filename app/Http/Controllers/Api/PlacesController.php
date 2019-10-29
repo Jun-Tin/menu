@@ -170,14 +170,14 @@ class PlacesController extends Controller
                 foreach (json_decode($item->menus_id) as $key => $value) {
                     $menus_name[] = Menu::where('id',$value)->first()->value('name');
                 }
+                $item->menus_name = $menus_name;
             }
             if ($item->tags_id) {
                 foreach (json_decode($item->tags_id) as $k => $value) {
                     $name[] = Tag::find($value)->pluck('name');
                 }
+                $item->tags_name = $name;
             }
-            $item->menus_name = $menus_name;
-            $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
             $item->remark = json_decode($item->remark);
 
@@ -202,15 +202,15 @@ class PlacesController extends Controller
                 foreach (json_decode($item->menus_id) as $key => $value) {
                     $menus_name[] = Menu::where('id',$value)->first()->value('name');
                 }
+                $item->menus_name = $menus_name;
             }
 
             if ($item->tags_id) {
                 foreach (json_decode($item->tags_id) as $k => $value) {
                     $name[] = Tag::find($value)->pluck('name');
                 }
+                $item->tags_name = $name;
             }
-            $item->menus_name = $menus_name;
-            $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
             $item->remark = json_decode($item->remark);
 
