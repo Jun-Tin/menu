@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Store;
-use App\Http\Resources\{ImageResource, PlaceResource,OrderResource};
+use App\Http\Resources\{ImageResource, PlaceResource};
 use Illuminate\Http\Resources\Json\Resource;
 
 class PlaceResource extends Resource

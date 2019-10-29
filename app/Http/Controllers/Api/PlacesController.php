@@ -10,7 +10,6 @@ use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
 use GatewayWorker\Lib\Gateway;
 
-
 class PlacesController extends Controller
 {
     /**
@@ -168,14 +167,16 @@ class PlacesController extends Controller
         $new = $shopcarts->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
             if ($item->menus_id) {
-                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->first()->value('name');
+                }
             }
-
             if ($item->tags_id) {
                 foreach (json_decode($item->tags_id) as $k => $value) {
                     $name[] = Tag::find($value)->pluck('name');
                 }
             }
+            $item->menus_name = $menus_name;
             $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
             $item->remark = json_decode($item->remark);
@@ -187,7 +188,7 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total]);
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total?:0]);
     } 
 
     /** 【 客户端--购物车详情 】 */
@@ -197,7 +198,10 @@ class PlacesController extends Controller
         $new = $shopcarts->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
             if ($item->menus_id) {
-                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->first()->value('name');
+                }
             }
 
             if ($item->tags_id) {
@@ -205,6 +209,7 @@ class PlacesController extends Controller
                     $name[] = Tag::find($value)->pluck('name');
                 }
             }
+            $item->menus_name = $menus_name;
             $item->tags_name = $name;
             $item->fill_price = json_decode($item->fill_price);
             $item->remark = json_decode($item->remark);
@@ -216,7 +221,7 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total]);
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total?:0]);
     } 
 
     /** 【 创建订单 】 */
@@ -284,7 +289,7 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
-        Gateway::sendToGroup('chef', json_encode(array('type'=>'call','message'=>'来活了！'),JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
@@ -347,7 +352,7 @@ class PlacesController extends Controller
         // 修改座位状态
         $place->update(['status'=>1]);
 
-        Gateway::sendToGroup('chef', json_encode(array('type'=>'call','message'=>'来活了！'),JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 

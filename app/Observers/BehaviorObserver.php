@@ -1,7 +1,8 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Behavior, Place, Order, OrderDetail};
+use App\Models\{Behavior, Place, Order, OrderDetail, User};
+use GatewayWorker\Lib\Gateway;
 
 class BehaviorObserver
 {
@@ -21,6 +22,9 @@ class BehaviorObserver
 				break;
 			case 'cooking':
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>2]);
+				$store_id = (User::find($behavior->user_id))->store_id;
+
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
 				break;
 		}
 	}

@@ -15,7 +15,7 @@ class GatewayWorkerServer extends Command
      *
      * @var string
      */
-    protected $signature = 'workman {action} {--d}';
+    protected $signature = 'workerman {action} {--d}';
 
     /**
      * The console command description.
@@ -46,7 +46,7 @@ class GatewayWorkerServer extends Command
             exit;
         }
 
-        $argv[0] = 'workman';
+        $argv[0] = 'workerman';
         $argv[1] = $action;
         $argv[2] = $this->option('d') ? '-d' : '';
 
