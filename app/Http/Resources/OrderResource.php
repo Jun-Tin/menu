@@ -24,6 +24,7 @@ class OrderResource extends Resource
             'final_price' => $this->final_price,
             'number' => $this->number,
             'final_number' => $this->final_number,
+            'sitter' => $this->sitter,
             'status' => $this->status,
             'finish' => $this->finish,
             'details' => $this->details,

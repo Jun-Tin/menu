@@ -188,7 +188,11 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total?:0]);
+        $number = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->number;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
     } 
 
     /** 【 客户端--购物车详情 】 */
@@ -221,7 +225,11 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $shopcarts->count(), 'total' => $total?:0]);
+        $number = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->number;
+        });
+
+        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
     } 
 
     /** 【 创建订单 】 */
@@ -236,14 +244,18 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
+        $number = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->number;
+        });
+
         if ($request->id) {
             $order = Order::find($request->id);
             // 修改订单金额
             $order->update([
                 'price' => $order->price + $total,
                 'final_price' => $order->price + $total,
-                'number' => $order->number + $shopcarts->count(),
-                'final_number' => $order->number + $shopcarts->count()
+                'number' => $order->number + $number,
+                'final_number' => $order->number + $number
             ]);
             $only_order = $order->order;
         } else {
@@ -255,9 +267,10 @@ class PlacesController extends Controller
                 'place_id' => $place->id,
                 'price' => $total,
                 'final_price' => $total,
-                'number' => $shopcarts->count(),
-                'final_number' => $shopcarts->count(),
+                'number' => $number,
+                'final_number' => $number,
                 'status' => 0,
+                'sitter' => $shopcarts[0]['sitter']
             ]);
         }
         // 循环创建订单详情
@@ -306,14 +319,18 @@ class PlacesController extends Controller
             return $sum + $value->price;
         });
 
+        $number = $shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->number;
+        });
+
         if ($request->id) {
             $order = Order::find($request->id);
             // 修改订单金额
             $order->update([
                 'price' => $order->price + $total,
                 'final_price' => $order->price + $total,
-                'number' => $order->number + $shopcarts->count(),
-                'final_number' => $order->number + $shopcarts->count()
+                'number' => $order->number + $number,
+                'final_number' => $order->number + $number
             ]);
             $only_order = $order->order;
         } else {
@@ -325,9 +342,10 @@ class PlacesController extends Controller
                 'place_id' => $place->id,
                 'price' => $total,
                 'final_price' => $total,
-                'number' => $shopcarts->count(),
-                'final_number' => $shopcarts->count(),
+                'number' => $number,
+                'final_number' => $number,
                 'status' => 0,
+                'sitter' => $shopcarts[0]['sitter']
             ]);
         }
         // 循环创建订单详情
