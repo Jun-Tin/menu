@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\{Place, Image, Menu, Tag, Order, User, OrderDetail, Shopcart, Behavior};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, Storage, File};
+use Illuminate\Support\Facades\{Auth, Storage, File, Redis};
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{PlaceResource, ShopcartResource};
 use Chumper\Zipper\Zipper;
@@ -44,8 +44,9 @@ class PlacesController extends Controller
         $place->status = 0;
         $place->save();
         $place->updateQrcode($request->all(),$place->id);
+        $code = Redis::get($place->name.'_'.$place->id);
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！', 'code' => $code]);
     }
 
     /**
