@@ -302,7 +302,7 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        // Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
@@ -370,7 +370,7 @@ class PlacesController extends Controller
         // 修改座位状态
         $place->update(['status'=>1]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        // Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
