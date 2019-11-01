@@ -57,14 +57,14 @@ class BehaviorsController extends Controller
                 break;
             // 上菜
             case 'serving':
-                // 修改菜单内容状态--打扫状态
+                // 修改订单菜品状态--上菜状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>3]);
                 break;
             // 退菜
             case 'retreat':
                 // 修改状态
                 Behavior::where('id',$behavior->id)->update(['status'=>1]);
-                // 修改订单菜品状态
+                // 修改订单菜品状态--退菜状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>5]);
                 // 修改原订单价格，数量
                 $OrderDetail = OrderDetail::where('id',$request->target_id)->first();
@@ -85,7 +85,7 @@ class BehaviorsController extends Controller
                 break;
             // 做菜
             case 'cooking':
-                // 修改菜单内容状态--做菜状态
+                // 修改订单菜品状态--做菜状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>1]);
                 break;
             // 撤销

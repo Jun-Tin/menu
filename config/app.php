@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -184,7 +184,8 @@ return [
         App\Providers\MessageServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-        Chumper\Zipper\ZipperServiceProvider::class
+        Chumper\Zipper\ZipperServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
 
     ],
 

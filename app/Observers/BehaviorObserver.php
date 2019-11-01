@@ -22,9 +22,22 @@ class BehaviorObserver
 				break;
 			case 'cooking':
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>2]);
-				$store_id = (User::find($behavior->user_id))->store_id;
+				// 获取原订单号
+				$order = (OrderDetail::find($behavior->target_id))->order_order;
+				// 
+				$data = Order::where('order',$order)->find();
+				if ($data->finish_number + 1 == $data->final_number) {
+					Order::where('order',$order)->update([
+						'finish_number' => $data->finish_number + 1,
+						'status' => 1 
+					]);
+				} else {
+					Order::where('order',$order)->increment('finish_number');
+				}
 
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
+
+				$store_id = (User::find($behavior->user_id))->store_id;
+				// Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
 				break;
 		}
 	}

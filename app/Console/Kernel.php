@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         GatewayWorkerServer::class,
+        \App\Console\Commands\ESInit::class,
     ];
 
     /**

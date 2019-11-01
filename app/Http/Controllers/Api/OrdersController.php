@@ -23,7 +23,11 @@ class OrdersController extends Controller
             $item->category = (Menu::find($item->menu_id, ['category']))->category;
 
             if ($item->menus_id) {
-                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->value('name');
+                }
+                $item->menus_name = $menus_name;
             }
 
             if ($item->tags_id) {
@@ -52,7 +56,11 @@ class OrdersController extends Controller
             $item->category = (Menu::find($item->menu_id, ['category']))->category;
 
             if ($item->menus_id) {
-                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->value('name');
+                }
+                $item->menus_name = $menus_name;
             }
 
             if ($item->tags_id) {
@@ -151,9 +159,17 @@ class OrdersController extends Controller
     {
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
         $order = $order->map(function ($item, $key) use ($request){
-            $item->details = $item->orders()->where('status',$request->status)->get();
+            switch ($request->status) {
+                case '3':
+                    $item->details = $item->orders()->where('status',$request->status)->orderBy('status','desc')->get();
+                    break;                
+                default:
+                    $item->details = $item->orders()->whereIn('status',[2,3])->orderBy('status','desc')->get();
+                    break;
+            }
             return $item->only(['details']);
         });
         // 合并成一维数组
@@ -163,7 +179,11 @@ class OrdersController extends Controller
             $item->category = (Menu::find($item->menu_id, ['category']))->category;
 
             if ($item->menus_id) {
-                $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->value('name');
+                }
+                $item->menus_name = $menus_name;
             }
 
             if ($item->tags_id) {
@@ -180,4 +200,53 @@ class OrdersController extends Controller
 
         return response()->json(['data'=>$data->all(), 'status'=>200, 'set_time'=>$set_time]);
     } 
+
+    /** 【 送菜列表 】 */
+    public function order(Request $request)
+    {
+        // 制作时间
+        $set_time = (Store::find(auth()->user()->store_id))->set_time;
+        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        $order = $order->map(function ($item, $key) use ($request){
+            switch ($request->status) {
+                case '2':
+                    $item->details = $item->orders()->where('status',$request->status)->orderBy('status','desc')->get();
+                    break;                
+                default:
+                    $item->details = $item->orders()->whereIn('status',[0,3])->orderBy('status','desc')->get();
+                    break;
+            }
+            return $item->only(['details']);
+        });
+        // 合并成一维数组
+        $data = $order->flatten();
+        $data->map(function ($item, $key){
+
+            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
+            $item->category = (Menu::find($item->menu_id, ['category']))->category;
+
+            if ($item->menus_id) {
+                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
+                foreach (json_decode($item->menus_id) as $key => $value) {
+                    $menus_name[] = Menu::where('id',$value)->value('name');
+                }
+                $item->menus_name = $menus_name;
+            }
+
+            if ($item->tags_id) {
+                foreach (json_decode($item->tags_id) as $k => $value) {
+                    $name[] = Tag::find($value)->pluck('name');
+                }
+                $item->tags_name = $name;
+            }
+            $item->fill_price = json_decode($item->fill_price);
+            $item->remark = json_decode($item->remark);
+
+            return $item;
+        });
+
+        return response()->json(['data'=>$data->all(), 'status'=>200, 'set_time'=>$set_time]);
+    } 
+     
 }
