@@ -13,7 +13,7 @@ class BehaviorObserver
 			case 'clean':
 				$order = Order::find($behavior->target_id);
 				// 更新原订单已完成打扫
-				Order::where('id',$order->id)->update(['finish'=>1]);
+				Order::where('id',$order->id)->update(['finish'=>2]);
 				// 修改座位状态--无人状态
 				Place::where('id',$order->place_id)->update(['status'=>0]);
 				break;

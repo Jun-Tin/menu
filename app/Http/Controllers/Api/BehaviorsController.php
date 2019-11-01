@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Behavior, Place, Order, OrderDetail};
+use App\Models\{Behavior, Order, OrderDetail};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BehaviorResource;
@@ -51,9 +51,7 @@ class BehaviorsController extends Controller
         switch ($request->category) {
             // 清洁座位
             case 'clean':
-                $order = Order::find($request->target_id);
-                // 修改座位状态--打扫状态
-                Place::where('id',$order->place_id)->update(['status'=>2]);
+                $order = Order::where('id',$request->target_id)->update(['finish'=>1]);
                 break;
             // 上菜
             case 'serving':
