@@ -93,7 +93,7 @@
         </div>
         <script>
 
-            ws = new WebSocket("ws://192.168.10.10:23460");
+            ws = new WebSocket("ws://120.77.206.79:23460");
             console.log(ws);
             ws.onmessage = function(e){
                 // alert(e);

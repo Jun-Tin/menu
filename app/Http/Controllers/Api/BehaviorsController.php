@@ -51,7 +51,7 @@ class BehaviorsController extends Controller
         switch ($request->category) {
             // 清洁座位
             case 'clean':
-                $order = Order::where('id',$request->target_id)->update(['finish'=>1]);
+                Order::where('id',$request->target_id)->update(['finish'=>1]);
                 break;
             // 上菜
             case 'serving':

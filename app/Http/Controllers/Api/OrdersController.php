@@ -159,27 +159,23 @@ class OrdersController extends Controller
     {
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
-        $order = $order->map(function ($item, $key) use ($request){
-            switch ($request->status) {
-                case '3':
-                    $item->details = $item->orders()->where('status',$request->status)->orderBy('status','desc')->get();
-                    break;                
-                default:
-                    $item->details = $item->orders()->whereIn('status',[0,3])->orderBy('status','desc')->get();
-                    break;
-            }
-            return $item->only(['details']);
+        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        $details = $order->map(function ($item, $key) use ($request){
+            // 未完成 / 已完成的菜品
+            return $item->orders()->where('status',$request->status)->get();
+        });
+
+        $behavior = $order->map(function ($item, $key){
+            // 正在做的菜品
+            return $item->orders()->where('status',1)->get();
         });
         // 合并成一维数组
-        $data = $order->flatten();
-        $data->map(function ($item, $key){
+        $data['details'] = $details->flatten()->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
             $item->category = (Menu::find($item->menu_id, ['category']))->category;
 
             if ($item->menus_id) {
-                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
                 foreach (json_decode($item->menus_id) as $key => $value) {
                     $menus_name[] = Menu::where('id',$value)->value('name');
                 }
@@ -198,7 +194,15 @@ class OrdersController extends Controller
             return $item;
         });
 
-        return response()->json(['data'=>$data->all(), 'status'=>200, 'set_time'=>$set_time]);
+        $behaviors = $behavior->flatten()->filter(function ($item, $key){
+            $userid[$key] = Behavior::where('target_id',$item->id)->where('category','cooking')->value('user_id');
+            if ($userid[$key] == auth()->id()) {
+                return $item;
+            }
+        });
+        $data['behavior'] = array_values($behaviors->all());
+
+        return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     } 
 
     /** 【 送菜列表 】 */
@@ -206,20 +210,19 @@ class OrdersController extends Controller
     {
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
-        $order = $order->map(function ($item, $key){
-            // 正在送的菜品
-            $item->test = $item->orders()->where('status',3)->orderBy('status','desc')->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        $details = $order->map(function ($item, $key){
             // 已完成的菜品
-            $item->details = $item->orders()->where('status',2)->orderBy('status','desc')->get();
-            return $item->only(['details']);
+            return $item->orders()->where('status',2)->orderBy('status','desc')->get();
         });
-        dd($order->all());
+
+        $behavior = $order->map(function ($item, $key){
+            // 正在送的菜品
+            return $item->orders()->where('status',3)->orderBy('status','desc')->get();
+        });
         // 合并成一维数组
-        $data['details'] = $order->flatten();
-        dd($data);
-        $data['details']->map(function ($item, $key){
+        $data['details'] = $details->flatten()->map(function ($item, $key){
             $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
             $item->category = (Menu::find($item->menu_id, ['category']))->category;
 
@@ -241,6 +244,14 @@ class OrdersController extends Controller
 
             return $item;
         });
+
+        $behaviors = $behavior->flatten()->filter(function ($item, $key){
+            $userid[$key] = Behavior::where('target_id',$item->id)->where('category','serving')->value('user_id');
+            if ($userid[$key] == auth()->id()) {
+                return $item;
+            }
+        });
+        $data['behavior'] = array_values($behaviors->all());
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     } 
