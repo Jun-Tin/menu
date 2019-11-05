@@ -233,8 +233,8 @@ class OrdersController extends Controller
     {
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        // $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
         $order->finished = $order->map(function ($item, $key) use ($request){
             // 已完成的菜品
             return $item->orders()->where('status',2)->where('category','m')->get();
@@ -264,7 +264,7 @@ class OrdersController extends Controller
 
         // 合并成一维数组（正在送菜品）
         $data['myself'] = $order->behavior->flatten()->map(function ($item, $key){
-            $behavior = Behavior::where('target_id',$item->id)->where('category','cooking')->first();
+            $behavior = Behavior::where('target_id',$item->id)->where('category','serving')->first();
             if ($behavior->user_id == auth()->id()) {
                 $item->place_name = Place::where('id',$item->place_id)->value('name');
                 if ($item->pid) {
@@ -274,9 +274,10 @@ class OrdersController extends Controller
                 }
 
                 if (!empty(json_decode($item->tags_id,true))) {
-                    foreach (json_decode($item->tags_id) as $k => $value) {
+                    foreach (json_decode($item->tags_id,true) as $k => $value) {
                         $item->tags_name = Tag::where('id',$value)->value('name');
                     }
+                        // $item->tags_name = $name;
                 }
                 $item->remark = $item->remark;
                 $item->behavior = $behavior;
