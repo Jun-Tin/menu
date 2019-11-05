@@ -83,13 +83,26 @@ class BehaviorsController extends Controller
                 break;
             // 做菜
             case 'cooking':
+                $OrderDetail = OrderDetail::find($request->target_id);
+                // 判断是否是套餐内的单品
+                if ($OrderDetail->pid) {
+                    // 修改套餐状态正在做
+                    OrderDetail::where('id',$OrderDetail->pid)->update(['status'=>1]);
+                }
                 // 修改订单菜品状态--做菜状态
-                OrderDetail::where('id',$request->target_id)->update(['status'=>1]);
+                $OrderDetail->update(['status'=>1]);
                 break;
             // 撤销
             case 'backout':
                 // 修改菜单内容状态--撤销状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>0]);
+                $behavior->status = 1;
+                break;
+            // 结账
+            case 'settle':
+                $order = OrderDetail::where('id',$request->target_id)->value('order_order');
+                // 修改原订单状态---已支付
+                Order::where('order',$order)->update(['status'=>2]);
                 $behavior->status = 1;
                 break;
         }

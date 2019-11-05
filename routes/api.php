@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**【 员工 】*/ 
     // 员工信息详情
-    Route::get('user/{user}/detail', 'Api\UsersController@detail');
+    Route::get('user/detail', 'Api\UsersController@detail');
     // 添加员工信息
     Route::post('user/staff', 'Api\UsersController@staff');
     // 修改员工信息
@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除员工信息
     Route::delete('user/{user}/delete', 'Api\UsersController@delete');
     // 员工表现
-    Route::get('user/{user}/behavior', 'Api\UsersController@behavior');
+    Route::get('user/behavior', 'Api\UsersController@behavior');
 
 
     /**【 门店 】*/

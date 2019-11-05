@@ -8,7 +8,6 @@ class BehaviorObserver
 {
 	public function updated(Behavior $behavior)
 	{
-		// 获取原订单数据
 		switch ($behavior->category) {
 			case 'clean':
 				$order = Order::find($behavior->target_id);
@@ -21,11 +20,22 @@ class BehaviorObserver
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
 				break;
 			case 'cooking':
-				OrderDetail::where('id',$behavior->target_id)->update(['status'=>2]);
+				$OrderDetail = OrderDetail::find($behavior->target_id);
+				// 判断是否属于套餐内的单品
+				if ($OrderDetail->pid) {
+					// 获取套餐内单品状态
+					$status = OrderDetail::where('pid',$OrderDetail->pid)->pluck('status');
+					if (in_array(0, $status)) {
+						
+					}
+				}
+				// 修改菜品状态
+				$OrderDetail->update(['status'=>2]);
 				// 获取原订单号
 				$order = (OrderDetail::find($behavior->target_id))->order_order;
-				// 
+				// 获取原订单信息
 				$data = Order::where('order',$order)->find();
+				// 完成个数 == 最终个数
 				if ($data->finish_number + 1 == $data->final_number) {
 					Order::where('order',$order)->update([
 						'finish_number' => $data->finish_number + 1,

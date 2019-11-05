@@ -137,6 +137,8 @@ class UsersController extends Controller
     /** 【 员工详情 】 */
     public function detail(User $user)
     {
+        $user = auth()->user();
+        
         return (new UserResource($user))->additional(['status' => 200]);
     } 
     
@@ -191,6 +193,8 @@ class UsersController extends Controller
     /** 【 员工表现 】 */ 
     public function behavior(Request $request, User $user)
     {
+        $user = auth()->user();
+
         return (BehaviorResource::collection($user->behaviors()->orderBy('created_at','desc')->get()))->additional(['status'=>200]);
     }
 
