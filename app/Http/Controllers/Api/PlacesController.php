@@ -300,10 +300,10 @@ class PlacesController extends Controller
                             'menu_id' => 0,
                             'menus_id' => json_encode(json_decode($item->menus_id,true)[$j])?:0,
                             'tags_id' => json_encode(json_decode($item->tags_id,true)[$j])?:0,
-                            'fill_price' => json_encode(json_decode($item->fill_price,true)[$j])?:0,
+                            'fill_price' => json_decode($item->fill_price,true)[$j]?:0,
                             'number' => 1,
                             'status' => 0,
-                            'remark' => json_encode(json_decode($item->remark,true)[$j], JSON_UNESCAPED_UNICODE)?:'',
+                            'remark' => json_decode($item->remark,true)[$j], JSON_UNESCAPED_UNICODE)?:'',
                             'place_id' => $item->place_id,
                             'pid' => $create->id,
                         ]);

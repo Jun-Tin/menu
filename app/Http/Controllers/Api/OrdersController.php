@@ -155,49 +155,51 @@ class OrdersController extends Controller
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
         $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
         dd($order);
-        $details = $order->map(function ($item, $key) use ($request){
-            // 未完成 / 已完成的菜品
-            return $item->orders()->where('status',$request->status)->get();
-        });
+        // $details = $order->map(function ($item, $key) use ($request){
+        //     // 未完成 / 已完成的菜品
+        //     return $item->orders()->where('status',$request->status)->get();
+        // });
 
-        $behavior = $order->map(function ($item, $key){
-            // 正在做的菜品
-            return $item->orders()->where('status',1)->get();
-        });
-        // 合并成一维数组
-        $data['details'] = $details->flatten()->map(function ($item, $key){
-            $item->place_name = Place::where('id',$item->place_id)->value('name');
-            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            $item->category = Menu::where('id',$item->menu_id)->value('category');
+        // $behavior = $order->map(function ($item, $key){
+        //     // 正在做的菜品
+        //     return $item->orders()->where('status',1)->get();
+        // });
+        // // 合并成一维数组
+        // $data['details'] = $details->flatten()->map(function ($item, $key){
+        //     $item->place_name = Place::where('id',$item->place_id)->value('name');
+        //     $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+        //     $item->category = Menu::where('id',$item->menu_id)->value('category');
 
-            if ($item->menus_id) {
-                foreach (json_decode($item->menus_id) as $key => $value) {
-                    $menus_name[] = Menu::where('id',$value)->value('name');
-                }
-                $item->menus_name = $menus_name;
-            }
+        //     if ($item->menus_id) {
+        //         foreach (json_decode($item->menus_id) as $key => $value) {
+        //             $menus_name[] = Menu::where('id',$value)->value('name');
+        //         }
+        //         $item->menus_name = $menus_name;
+        //     }
 
-            if ($item->tags_id) {
-                foreach (json_decode($item->tags_id) as $k => $value) {
-                    $name[] = Tag::find($value)->pluck('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->fill_price = json_decode($item->fill_price);
-            $item->remark = json_decode($item->remark);
+        //     if ($item->tags_id) {
+        //         foreach (json_decode($item->tags_id) as $k => $value) {
+        //             $name[] = Tag::find($value)->pluck('name');
+        //         }
+        //         $item->tags_name = $name;
+        //     }
+        //     $item->fill_price = json_decode($item->fill_price);
+        //     $item->remark = json_decode($item->remark);
 
-            return $item;
-        });
+        //     return $item;
+        // });
 
-        $behaviors = $behavior->flatten()->filter(function ($item, $key){
-            $userid[$key] = Behavior::where('target_id',$item->id)->where('category','cooking')->value('user_id');
-            if ($userid[$key] == auth()->id()) {
-                return $item;
-            }
-        });
-        $data['behavior'] = array_values($behaviors->all());
+        // $behaviors = $behavior->flatten()->filter(function ($item, $key){
+        //     $userid[$key] = Behavior::where('target_id',$item->id)->where('category','cooking')->value('user_id');
+        //     if ($userid[$key] == auth()->id()) {
+        //         return $item;
+        //     }
+        // });
+        // $data['behavior'] = array_values($behaviors->all());
 
-        return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
+        // return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
+        
+
     } 
 
     /** 【 送菜列表 】 */
