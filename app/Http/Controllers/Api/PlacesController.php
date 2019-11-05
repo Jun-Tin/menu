@@ -303,7 +303,7 @@ class PlacesController extends Controller
                             'fill_price' => json_decode($item->fill_price,true)[$j]?:0,
                             'number' => 1,
                             'status' => 0,
-                            'remark' => json_decode($item->remark,true)[$j], JSON_UNESCAPED_UNICODE)?:'',
+                            'remark' => json_decode($item->remark,true)[$j]?:'',
                             'place_id' => $item->place_id,
                             'pid' => $create->id,
                         ]);
