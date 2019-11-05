@@ -131,21 +131,22 @@ class ShopcartsController extends Controller
      */
     public function update(Request $request, Shopcart $shopcart)
     {
+        // 商品单价
+        $original_price = $shopcart->price/$shopcart->number;
         switch ($request->type) {
             case 'add':
                 $shopcart->update([
                     'number' => $shopcart->number+1,
-                    'price' => $shopcart->price*2
+                    'price' => $shopcart->price+$original_price
                 ]);
                 break;
             default:
                 if ($shopcart->number == 1) {
                     $shopcart->delete();
                 }
-
                 $shopcart->update([
                     'number' => $shopcart->number-1,
-                    'price' => $shopcart->price/2
+                    'price' => $shopcart->price-$original_price
                 ]);
                 break;
         }
@@ -156,6 +157,8 @@ class ShopcartsController extends Controller
     /** 【 客户端--购物车增加、减少商品】 */ 
     public function customerUpdate(Request $request, Shopcart $shopcart)
     {
+        // 商品单价
+        $original_price = $shopcart->price/$shopcart->number;
         switch ($request->type) {
             case 'add':
                 $shopcart->update([
@@ -167,7 +170,6 @@ class ShopcartsController extends Controller
                 if ($shopcart->number == 1) {
                     $shopcart->delete();
                 }
-
                 $shopcart->update([
                     'number' => $shopcart->number-1,
                     'price' => $shopcart->price/2
