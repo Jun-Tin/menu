@@ -277,21 +277,42 @@ class PlacesController extends Controller
         }
         // 循环创建订单详情
         $new = $shopcarts->map(function ($item, $key) use ($only_order){
-            OrderDetail::create([
-                'order_order' => $only_order,
-                'menu_id' => $item->menu_id,
-                'menus_id' => $item->menus_id,
-                'tags_id' => $item->tags_id,
-                'fill_price' => $item->fill_price,
-                'number' => $item->number,
-                'original_price' => $item->original_price,
-                'price' => $item->price,
-                'status' => 0,
-                'remark' => $item->remark
-            ]);
-            
+            for ($i=0; $i < $item->number; $i++) { 
+                $create = OrderDetail::create([
+                    'order_order' => $only_order,
+                    'menu_id' => $item->menu_id,
+                    // 'menus_id' => $item->menus_id,
+                    // 'tags_id' => $item->tags_id,
+                    // 'fill_price' => $item->fill_price,
+                    // 'number' => $item->number,
+                    'number' => 1,
+                    'original_price' => $item->original_price,
+                    'price' => $item->price,
+                    'status' => 0,
+                    // 'remark' => '',
+                    'place_id' => $item->place_id,
+                    'pid' => 0,
+                ]);
+                if ($item->menus_id) {
+                    for ($j=0; $j < count(json_decode($item->menus_id,true)); $j++) { 
+                        OrderDetail::create([
+                            'order_order' => $only_order,
+                            'menu_id' => 0,
+                            'menus_id' => json_encode(json_decode($item->menus_id,true)[$j])?:'',
+                            'tags_id' => json_encode(json_decode($item->tags_id,true)[$j])?:'',
+                            'fill_price' => json_encode(json_decode($item->fill_price,true)[$j])?:'',
+                            'number' => 1,
+                            'status' => 0,
+                            'remark' => json_encode(json_decode($item->remark,true)[$j], JSON_UNESCAPED_UNICODE)?:'',
+                            'place_id' => $item->place_id,
+                            'pid' => $create->id,
+                        ]);
+                    }
+                }
+            }
             // 删除购物车记录
-            Shopcart::where('id',$item->id)->delete();    
+            // Shopcart::where('id',$item->id)->delete();    
+            $item->delete();
         });
 
         // 修改座位状态
@@ -304,7 +325,7 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
-        // Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
@@ -366,13 +387,14 @@ class PlacesController extends Controller
             ]);
             
             // 删除购物车记录
-            Shopcart::where('id',$item->id)->delete();    
+            // Shopcart::where('id',$item->id)->delete();    
+            $item->delete();
         });
 
         // 修改座位状态
         $place->update(['status'=>1]);
 
-        // Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 

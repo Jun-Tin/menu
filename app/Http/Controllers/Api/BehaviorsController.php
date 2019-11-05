@@ -79,7 +79,7 @@ class BehaviorsController extends Controller
                 $order->save();
 
                 $store_id = (User::find($behavior->user_id))->store_id;
-                // Gateway::sendToGroup('chef_'.$store_id, json_encode(array('type'=>'retreat','message'=>'退菜了！'), JSON_UNESCAPED_UNICODE));
+                Gateway::sendToGroup('chef_'.$store_id, json_encode(array('type'=>'retreat','message'=>'退菜了！'), JSON_UNESCAPED_UNICODE));
                 break;
             // 做菜
             case 'cooking':

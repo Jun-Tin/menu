@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Shopcart, Menu};
+use App\Models\{Shopcart, Menu, OrderDetail};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShopcartResource;

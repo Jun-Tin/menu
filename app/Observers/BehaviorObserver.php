@@ -35,9 +35,8 @@ class BehaviorObserver
 					Order::where('order',$order)->increment('finish_number');
 				}
 
-
 				$store_id = (User::find($behavior->user_id))->store_id;
-				// Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
 				break;
 		}
 	}
