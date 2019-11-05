@@ -311,12 +311,12 @@ class OrdersController extends Controller
                 });
             }
             
-            // if (!empty(json_decode($item->tags_id,true))) {
-            //     foreach (json_decode($item->tags_id,true) as $k => $value) {
-            //         $name[] = Tag::where('id',$value)->value('name');
-            //     }
-            //     $item->tags_name = $name;
-            // }
+            if (!empty(json_decode($item->tags_id,true))) {
+                foreach (json_decode($item->tags_id,true) as $k => $value) {
+                    $name[] = Tag::where('id',$value)->value('name');
+                }
+                $item->tags_name = $name;
+            }
             return $item;
         });
 
