@@ -25,8 +25,9 @@ class BehaviorObserver
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
 					$status = OrderDetail::where('pid',$OrderDetail->pid)->pluck('status');
-					if (in_array(0, $status)) {
-						
+					if (!in_array(0, $status)) {
+						// 修改套餐状态
+						Order::where('id',$OrderDetail->pid)->update(['status'=>2]);
 					}
 				}
 				// 修改菜品状态
