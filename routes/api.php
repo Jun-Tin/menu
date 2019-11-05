@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 上菜列表
     Route::get('order/serving', 'Api\OrdersController@serving');
     // 退菜列表
-    Route::get('order/retreat', 'Api\OrdersController@retreat');
+    Route::patch('order/{order}/retreat', 'Api\OrdersController@retreat');
 
     /** 【 员工表现 】 */
     /**

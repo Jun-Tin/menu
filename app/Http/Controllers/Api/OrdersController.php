@@ -293,37 +293,53 @@ class OrdersController extends Controller
     }
 
     /** 【 退菜列表 】 */
-    public function retreat(Request $request)
+    public function retreat(Request $request, Order $order)
     {
-        // 制作时间
-        $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
         // $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
-        $order->finished = $order->map(function ($item, $key) use ($request){
-            // 可以退的菜
-            return $item->orders()->where('status',0)->get();
-        });
+        // dd($order);
+        // $data = $order->map(function ($item, $key) use ($request){
+        //     $item->place_name = Place::where('id',$item->place_id)->value('name');
+        //     // 可以退的菜
+        //     // return $item->orders()->where('status',0)->get();
+        //     $item->package = $item->orders()->where('status',0)->get()->map(function ($item, $key){
+        //         if ($item->category == 'p') {
+        //             $item->details = $item->orders()->where('pid',$item->pid)->get();
+        //         }
+        //         return $item;
+        //     });
+        //     return $item;
+        // });
 
-        // 合并成一维数组（已完成菜品）
-        $data['finished'] = $order->finished->flatten()->map(function ($item, $key){
-            $item->place_name = Place::where('id',$item->place_id)->value('name');
-            if ($item->pid) {
-                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-            } else{
-                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+        $order->place_name = Place::where('id',$order->place_id)->value('name');
+        $order->package = $order->orders()->where('status',0)->get()->map(function ($item, $key){
+            if ($item->category == 'p') {
+                $item->details = $item->where('pid',$item->pid)->get();
             }
-
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->remark = $item->remark;
             return $item;
         });
+        // dd($order);
 
-        return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
+        // 合并成一维数组（已完成菜品）
+        // $data['retreat'] = $order->retreat->flatten()->map(function ($item, $key){
+        //     $item->place_name = Place::where('id',$item->place_id)->value('name');
+        //     if ($item->pid) {
+        //         $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+        //     } else{
+        //         $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+        //     }
+
+        //     if (!empty(json_decode($item->tags_id,true))) {
+        //         foreach (json_decode($item->tags_id,true) as $k => $value) {
+        //             $name[] = Tag::where('id',$value)->value('name');
+        //         }
+        //         $item->tags_name = $name;
+        //     }
+        //     $item->remark = $item->remark;
+        //     return $item;
+        // });
+
+        return response()->json(['data'=>$order, 'status'=>200]);
     }
 
 }
