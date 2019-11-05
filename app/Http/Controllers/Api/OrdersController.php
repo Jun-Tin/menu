@@ -300,7 +300,7 @@ class OrdersController extends Controller
             $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
             if ($item->category == 'p') {
                 $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                    $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                    $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
                     if (!empty(json_decode($item->tags_id,true))) {
                         foreach (json_decode($item->tags_id,true) as $k => $value) {
                             $name[] = Tag::where('id',$value)->value('name');
