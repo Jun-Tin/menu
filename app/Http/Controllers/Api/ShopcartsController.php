@@ -61,7 +61,8 @@ class ShopcartsController extends Controller
         }
 
         $shopcart->original_price = $menu_price;
-        $shopcart->price = $shopcart->price+$menu_price;        
+        $shopcart->price = $shopcart->price+$menu_price;
+        $shopcart->category = $menu->category;
         $shopcart->save();
 
         return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
@@ -94,7 +95,8 @@ class ShopcartsController extends Controller
         }
         
         $shopcart->original_price = $menu_price;
-        $shopcart->price = $shopcart->price+$menu_price;        
+        $shopcart->price = $shopcart->price+$menu_price;
+        $shopcart->category = $menu->category;     
         $shopcart->save();
 
         return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);

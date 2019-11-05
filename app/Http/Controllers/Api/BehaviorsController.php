@@ -95,7 +95,7 @@ class BehaviorsController extends Controller
         }
         $behavior->save();
 
-        return (new BehaviorResource($behavior))->additional(['status' => 200]);
+        return (new BehaviorResource($behavior))->additional(['status' => 200, 'message' => '操作成功！']);
     }
 
     /**
