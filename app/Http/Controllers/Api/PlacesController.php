@@ -298,7 +298,7 @@ class PlacesController extends Controller
                         OrderDetail::create([
                             'order_order' => $only_order,
                             'menu_id' => 0,
-                            'menus_id' => json_encode(json_decode($item->menus_id,true)[$j])?:0,
+                            'menus_id' => json_decode($item->menus_id,true)[$j]?:0,
                             'tags_id' => json_encode(json_decode($item->tags_id,true)[$j])?:0,
                             'fill_price' => json_decode($item->fill_price,true)[$j]?:0,
                             'number' => 1,
