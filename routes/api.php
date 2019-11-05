@@ -175,7 +175,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('order/{order}/update', 'Api\OrdersController@update');
     /** 【 后厨 】 */
     // 出菜 / 未出菜 所有列表
-    Route::get('order/{status}/orders', 'Api\OrdersController@orders');
+    Route::get('order/orders', 'Api\OrdersController@orders');
     Route::get('order/serving', 'Api\OrdersController@serving');
 
     /** 【 员工表现 】 */
