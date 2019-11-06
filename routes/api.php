@@ -225,6 +225,8 @@ Route::group(['middleware' => 'Code'], function(){
     Route::get('store/{store}/customerMenus', 'Api\StoresController@customerMenus');
     /** 【 菜品列表--套餐 】 */ 
     Route::get('store/{store}/customerPackages', 'Api\StoresController@customerPackages');
+    /** 【 菜品详情 】 */ 
+    Route::get('menu/{menu}/customerIndex', 'Api\MenusController@customerIndex');
 
     /** 【 购物车 】 */ 
     // 创建购物车（加入商品）

@@ -19,6 +19,12 @@ class MenusController extends Controller
         return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
+    /** 【 菜品详情--客户端 】 */ 
+    public function customerIndex(Menu $menu)
+    {        
+        return (new MenuResource($menu))->additional(['status' => 200]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
