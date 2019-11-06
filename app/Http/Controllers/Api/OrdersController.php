@@ -21,19 +21,28 @@ class OrdersController extends Controller
         $order->package->map(function ($item, $key){
             $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
             $item->category = Menu::where('id',$item->menu_id)->value('category');
-            $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                if ($item->menus_id) {
-                    $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
-                }
-
-                if (!empty(json_decode($item->tags_id,true))) {
-                    foreach (json_decode($item->tags_id,true) as $k => $value) {
-                        $name[] = Tag::where('id',$value)->value('name');
+            if ($item->category == 'p') {
+                $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
+                    if ($item->menus_id) {
+                        $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
                     }
-                    $item->tags_name = $name;
+
+                    if (!empty(json_decode($item->tags_id,true))) {
+                        foreach (json_decode($item->tags_id,true) as $k => $value) {
+                            $name[] = Tag::where('id',$value)->value('name');
+                        }
+                        $item->tags_name = $name;
+                    }
+                    return $item;
+                });
+            }
+
+            if (!empty(json_decode($item->tags_id,true))) {
+                foreach (json_decode($item->tags_id,true) as $k => $value) {
+                    $name[] = Tag::where('id',$value)->value('name');
                 }
-                return $item;
-            });
+                $item->tags_name = $name;
+            }
             return $item;
         });
 
@@ -50,19 +59,28 @@ class OrdersController extends Controller
         $order->package->map(function ($item, $key){
             $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
             $item->category = Menu::where('id',$item->menu_id)->value('category');
-            $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                if ($item->menus_id) {
-                    $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
-                }
-
-                if (!empty(json_decode($item->tags_id,true))) {
-                    foreach (json_decode($item->tags_id,true) as $k => $value) {
-                        $name[] = Tag::where('id',$value)->value('name');
+            if ($item->category == 'p') {
+                $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
+                    if ($item->menus_id) {
+                        $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
                     }
-                    $item->tags_name = $name;
+
+                    if (!empty(json_decode($item->tags_id,true))) {
+                        foreach (json_decode($item->tags_id,true) as $k => $value) {
+                            $name[] = Tag::where('id',$value)->value('name');
+                        }
+                        $item->tags_name = $name;
+                    }
+                    return $item;
+                });
+            }
+
+            if (!empty(json_decode($item->tags_id,true))) {
+                foreach (json_decode($item->tags_id,true) as $k => $value) {
+                    $name[] = Tag::where('id',$value)->value('name');
                 }
-                return $item;
-            });
+                $item->tags_name = $name;
+            }
             return $item;
         });
 
