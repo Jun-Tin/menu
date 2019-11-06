@@ -73,8 +73,6 @@ class BehaviorsController extends Controller
                 }
                 // 修改订单菜品状态--做菜状态
                 $OrderDetail->update(['status'=>1]);
-                // 将原先撤销的记录删除
-                Behavior::where('target_id',$request->target_id)->where('category','backout')->delete();
                 break;
             // 撤销
             case 'backout':
