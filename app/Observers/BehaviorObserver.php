@@ -50,7 +50,7 @@ class BehaviorObserver
 				}
 
                 // 将原先撤销的记录删除
-                Behavior::where('target_id',$request->target_id)->where('category','backout')->delete();
+                Behavior::where('target_id',$behavior->target_id)->where('category','backout')->delete();
 
 				$store_id = (User::find($behavior->user_id))->store_id;
 				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
