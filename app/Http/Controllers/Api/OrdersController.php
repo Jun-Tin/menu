@@ -19,8 +19,8 @@ class OrdersController extends Controller
         $order->package = $order->orders()->where('pid',0)->get();
         $order->set_time = Store::where('id',$order->store_id)->value('set_time');
         $order->package->map(function ($item, $key){
-            $item->menu_name = Menu::where('id',$item->menu_id, ['name'])->value('name');
-            $item->category = Menu::where('id',$item->menu_id, ['category'])->value('category');
+            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+            $item->category = Menu::where('id',$item->menu_id)->value('category');
             $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
                 if ($item->menus_id) {
                     $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
@@ -48,8 +48,8 @@ class OrdersController extends Controller
         $order->package = $order->orders()->where('pid',0)->get();
         $order->set_time = Store::where('id',$order->store_id)->value('set_time');
         $order->package->map(function ($item, $key){
-            $item->menu_name = Menu::where('id',$item->menu_id, ['name'])->value('name');
-            $item->category = Menu::where('id',$item->menu_id, ['category'])->value('category');
+            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+            $item->category = Menu::where('id',$item->menu_id)->value('category');
             $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
                 if ($item->menus_id) {
                     $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
