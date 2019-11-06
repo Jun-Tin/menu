@@ -78,7 +78,7 @@ class BehaviorsController extends Controller
             case 'backout':
                 // 修改菜单内容状态--撤销状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>0]);
-                OrderDetail::where('id',$request->target_id)->where('category','cooking')->delete();
+                Behavior::where('target_id',$request->target_id)->where('category','cooking')->delete();
                 $behavior->status = 1;
                 break;
             // 结账
