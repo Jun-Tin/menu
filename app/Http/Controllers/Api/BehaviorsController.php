@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Behavior, Order, OrderDetail, User};
+use App\Models\{Behavior, Order, OrderDetail, User, Place};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BehaviorResource;
@@ -100,9 +100,8 @@ class BehaviorsController extends Controller
                 break;
             // 结账
             case 'settle':
-                $order = OrderDetail::where('id',$request->target_id)->value('order_order');
                 // 修改原订单状态---已支付
-                Order::where('order',$order)->update(['status'=>2]);
+                Order::where('id',$request->target_id)->update(['status'=>2]);
                 $behavior->status = 1;
                 break;
         }

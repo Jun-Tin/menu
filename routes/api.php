@@ -190,6 +190,18 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 打扫完成
     Route::patch('behavior/{behavior}/update', 'Api\BehaviorsController@update');
 
+
+    /** 【 支付类型 】 */
+    // 列表
+    Route::get('paymentmethod/index', 'Api\PaymentMethodsController@index');
+    // 创建
+    Route::post('paymentmethod/store', 'Api\PaymentMethodsController@store');
+    // 修改
+    Route::patch('paymentmethod/{paymentmethod}/update', 'Api\PaymentMethodsController@update');
+    // 删除
+    Route::delete('paymentmethod/{paymentmethod}/destroy', 'Api\PaymentMethodsController@destroy');
+
+
     /** 
      * 【 功能类接口 】
      */ 
