@@ -72,6 +72,8 @@ class BehaviorsController extends Controller
                 }
                 if ($order->final_price - $OrderDetail->price == 0) {
                     $order->status = 3;
+                    // 桌子恢复没人状态
+                    Place::where('id',$order->place_id)->update(['status'=>0]);
                 }
 
                 $order->final_price = $order->final_price - $OrderDetail->price;
@@ -101,7 +103,7 @@ class BehaviorsController extends Controller
             // 结账
             case 'settle':
                 // 修改原订单状态---已支付
-                Order::where('id',$request->target_id)->update(['status'=>2]);
+                Order::where('id',$request->target_id)->update(['status'=>2,'payment_method'=>$request->payment_method]);
                 $behavior->status = 1;
                 break;
         }
