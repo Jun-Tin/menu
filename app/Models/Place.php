@@ -36,7 +36,7 @@ class Place extends Model
         $encrypted = Crypt::encryptString($data['name'].'_'.$placeid.'_code');
         $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
         $filename = $data['name'] . '.png';
-        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_DOMAIN_NAME').'/menu/#/'.$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
         // 设置redis缓存
         Redis::set($data['name'].'_'.$placeid, $encrypted);
     } 
