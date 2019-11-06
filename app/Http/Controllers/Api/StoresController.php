@@ -207,4 +207,10 @@ class StoresController extends Controller
 
         return response()->json(['data' => $new->all(), 'status' => 200]);
     }
+
+    /** 【 套餐列表 】 */
+    public function customerPackages(Store $store)
+    {
+        return (new MenuCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
+    }
 }

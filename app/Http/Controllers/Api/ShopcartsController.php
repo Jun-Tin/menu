@@ -165,7 +165,7 @@ class ShopcartsController extends Controller
             case 'add':
                 $shopcart->update([
                     'number' => $shopcart->number+1,
-                    'price' => $shopcart->price*2
+                    'price' => $shopcart->price+$original_price
                 ]);
                 break;
             default:
@@ -174,7 +174,7 @@ class ShopcartsController extends Controller
                 }
                 $shopcart->update([
                     'number' => $shopcart->number-1,
-                    'price' => $shopcart->price/2
+                    'price' => $shopcart->price-$original_price
                 ]);
                 break;
         }

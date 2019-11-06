@@ -221,8 +221,10 @@ Route::get('place/{place}/customerStatus', 'Api\PlacesController@customerStatus'
 Route::group(['middleware' => 'Code'], function(){
     // Route::get('store/index/{store}/{place}/{code}', 'Api\StoresController@index');
     // 
-    /** 【 菜品列表--全部】 */ 
+    /** 【 菜品列表--全部 】 */ 
     Route::get('store/{store}/customerMenus', 'Api\StoresController@customerMenus');
+    /** 【 菜品列表--套餐 】 */ 
+    Route::get('store/{store}/customerPackages', 'Api\StoresController@customerPackages');
 
     /** 【 购物车 】 */ 
     // 创建购物车（加入商品）
@@ -230,7 +232,7 @@ Route::group(['middleware' => 'Code'], function(){
     // 购物车增加、减少商品
     Route::patch('shopcart/{shopcart}/customerUpdate', 'Api\ShopcartsController@customerUpdate'); 
 
-    /**【 座位 】*/
+    /** 【 座位 】 */
     // 获取座位下购物车详情
     Route::get('place/{place}/customerShopcart', 'Api\PlacesController@customerShopcart');
 
