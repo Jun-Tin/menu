@@ -34,7 +34,8 @@ class PlaceResource extends Resource
                     'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
                     'place' => PlaceResource::collection($this->where($where)->get()),
-                    'order' => $this->order()->whereIn('status',[0,1,2])->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first(),
+                    // 'order' => $this->order()->whereIn('status',[0,1,2])->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first(),
+                    'order' => $this->order()->whereIn('status',[0,1,2])->orderBy('created_at','desc')->first(),
                 ];
                 break;
             default :

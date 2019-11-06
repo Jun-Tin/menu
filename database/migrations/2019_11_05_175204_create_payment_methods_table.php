@@ -16,7 +16,7 @@ class CreatePaymentMethodsTable extends Migration
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable()->commit('类型名称');
-            $table->integer('show')->nullable()->commit('是否显示');
+            $table->integer('type')->nullable()->commit('支付类型');
             $table->integer('show')->nullable()->commit('是否显示');
             $table->timestamps();
         });
