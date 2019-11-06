@@ -27,7 +27,7 @@ class BehaviorObserver
 					$all = OrderDetail::where('pid',$OrderDetail->pid)->get();
 					if ($all->min('status') != 0) {
 						// 修改套餐状态
-						Order::where('id',$OrderDetail->pid)->update(['status'=>2]);
+						OrderDetail::where('id',$OrderDetail->pid)->update(['status'=>2]);
 					}
 				}
 				// 修改菜品状态
