@@ -354,37 +354,57 @@ class PlacesController extends Controller
         // 循环创建订单详情
         $new = $shopcarts->map(function ($item, $key) use ($only_order){
             for ($i=0; $i < $item->number; $i++) { 
-                $create = OrderDetail::create([
-                    'order_order' => $only_order,
-                    'menu_id' => $item->menu_id,
-                    'category' => $item->category,
-                    // 'menus_id' => $item->menus_id,
-                    // 'tags_id' => $item->tags_id,
-                    // 'fill_price' => $item->fill_price,
-                    // 'number' => $item->number,
-                    'number' => 1,
-                    'original_price' => $item->original_price,
-                    'price' => $item->price,
-                    'status' => 0,
-                    // 'remark' => '',
-                    'place_id' => $item->place_id,
-                    'pid' => 0,
-                ]);
-                if ($item->menus_id) {
-                    for ($j=0; $j < count(json_decode($item->menus_id,true)); $j++) { 
-                        OrderDetail::create([
-                            'order_order' => $only_order,
-                            'menu_id' => 0,
-                            'category' => 'm',
-                            'menus_id' => json_decode($item->menus_id,true)[$j]?:0,
-                            'tags_id' => json_encode(json_decode($item->tags_id,true)[$j])?:0,
-                            'fill_price' => json_decode($item->fill_price,true)[$j]?:0,
-                            'number' => 1,
-                            'status' => 0,
-                            'remark' => json_decode($item->remark,true)[$j]?:'',
-                            'place_id' => $item->place_id,
-                            'pid' => $create->id,
-                        ]);
+                if ($item->category == 'm') {
+                    $create = OrderDetail::create([
+                        'order_order' => $only_order,
+                        'menu_id' => $item->menu_id,
+                        'category' => $item->category,
+                        'menus_id' => $item->menus_id,
+                        'tags_id' => json_encode(json_decode($item->tags_id,true)[0])?:0,
+                        'fill_price' => $item->fill_price?:0,
+                        'number' => 1,
+                        'original_price' => $item->original_price?:0,
+                        'price' => $item->price/$item->number,
+                        'status' => 0,
+                        'remark' => json_decode($item->remark,true)[0]?:'',
+                        'place_id' => $item->place_id,
+                        'pid' => 0,
+                    ]);
+                } else {
+                    $create = OrderDetail::create([
+                        'order_order' => $only_order,
+                        'menu_id' => $item->menu_id,
+                        'category' => $item->category,
+                        // 'menus_id' => $item->menus_id,
+                        // 'tags_id' => $item->tags_id,
+                        // 'fill_price' => $item->fill_price,
+                        'number' => 1,
+                        'original_price' => $item->original_price,
+                        'price' => $item->price/$item->number,
+                        'status' => 0,
+                        // 'remark' => json_decode($item->remark,true)[0]?:'',
+                        'place_id' => $item->place_id,
+                        'pid' => 0,
+                    ]);
+                }
+                // 判断是套餐还是单品
+                if ($item->category == 'p') {
+                    if ($item->menus_id) {
+                        for ($j=0; $j < count(json_decode($item->menus_id,true)); $j++) { 
+                            OrderDetail::create([
+                                'order_order' => $only_order,
+                                'menu_id' => 0,
+                                'category' => 'm',
+                                'menus_id' => json_decode($item->menus_id,true)[$j]?:0,
+                                'tags_id' => json_encode(json_decode($item->tags_id,true)[$j])?:0,
+                                'fill_price' => json_decode($item->fill_price,true)[$j]?:0,
+                                'number' => 1,
+                                'status' => 0,
+                                'remark' => json_decode($item->remark,true)[$j]?:'',
+                                'place_id' => $item->place_id,
+                                'pid' => $create->id,
+                            ]);
+                        }
                     }
                 }
             }
