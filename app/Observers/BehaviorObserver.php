@@ -18,6 +18,9 @@ class BehaviorObserver
 				break;
 			case 'serving':
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
+
+				$store_id = (User::find($behavior->user_id))->store_id;
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！'), JSON_UNESCAPED_UNICODE));
 				break;
 			case 'cooking':
 				$OrderDetail = OrderDetail::find($behavior->target_id);
