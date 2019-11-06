@@ -33,9 +33,9 @@ class BehaviorObserver
 				// 修改菜品状态
 				$OrderDetail->update(['status'=>2]);
 				// 获取原订单号
-				$order = (OrderDetail::find($behavior->target_id))->order_order;
+				$order = OrderDetail::where('id',$behavior->target_id)->value('order_order');
 				// 获取原订单信息
-				$data = Order::where('order',$order)->find();
+				$data = Order::where('order',$order)->first();
 				// 完成个数 == 最终个数
 				if ($data->finish_number + 1 == $data->final_number) {
 					Order::where('order',$order)->update([
