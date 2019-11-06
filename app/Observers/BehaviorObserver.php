@@ -24,8 +24,8 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
-					$status = OrderDetail::where('pid',$OrderDetail->pid)->pluck('status');
-					if (!in_array(0, $status)) {
+					$all = OrderDetail::where('pid',$OrderDetail->pid)->get();
+					if ($all->min('status') != 0) {
 						// 修改套餐状态
 						Order::where('id',$OrderDetail->pid)->update(['status'=>2]);
 					}
