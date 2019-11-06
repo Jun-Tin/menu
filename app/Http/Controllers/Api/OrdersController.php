@@ -153,7 +153,7 @@ class OrdersController extends Controller
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->whereIn('status',[0,1])->where('finish',0)->get();
         $order->unfinished = $order->map(function ($item, $key) use ($request){
             // 未完成的菜品
             return $item->orders()->where('status',0)->where('category','m')->get();
@@ -236,8 +236,8 @@ class OrdersController extends Controller
     {
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
-        $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        // $order = Order::where('store_id',auth()->user()->store_id)->where('status',0)->where('finish',0)->get();
+        // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->where('status',[0,1])->where('finish',0)->get();
         $order->finished = $order->map(function ($item, $key) use ($request){
             // 已完成的菜品
             return $item->orders()->where('status',2)->where('category','m')->get();
