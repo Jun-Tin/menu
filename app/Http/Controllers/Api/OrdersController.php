@@ -71,50 +71,6 @@ class OrdersController extends Controller
         return (new OrderResource($order))->additional(['status'=>200]);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -134,17 +90,6 @@ class OrdersController extends Controller
         ]);
 
         return response()->json(['status' => 200, 'message' => '修改成功！']);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /** 【 所有未完成订单 】 */
@@ -319,26 +264,7 @@ class OrdersController extends Controller
             }
             return $item;
         });
-
-        // 合并成一维数组（已完成菜品）
-        // $data['retreat'] = $order->retreat->flatten()->map(function ($item, $key){
-        //     $item->place_name = Place::where('id',$item->place_id)->value('name');
-        //     if ($item->pid) {
-        //         $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-        //     } else{
-        //         $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-        //     }
-
-        //     if (!empty(json_decode($item->tags_id,true))) {
-        //         foreach (json_decode($item->tags_id,true) as $k => $value) {
-        //             $name[] = Tag::where('id',$value)->value('name');
-        //         }
-        //         $item->tags_name = $name;
-        //     }
-        //     $item->remark = $item->remark;
-        //     return $item;
-        // });
-
+        
         return response()->json(['data'=>$order, 'status'=>200]);
     }
 
