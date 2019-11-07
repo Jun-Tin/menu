@@ -81,3 +81,13 @@ php artisan horizon:continue 恢复
 <!-- 部署队列 queue -->
 php artisan queue:work 启动
 php artisan queue:restart 重启
+
+<!-- socket消息事件 -->
+退菜通知
+'type'=>'retreat','message'=>'退菜了！'
+做饭通知
+'type'=>'cooking','message'=>'做饭了！'
+更新上菜消息通知
+'type'=>'update serving','message'=>'更新上菜消息！'
+上菜通知
+'type'=>'serving','message'=>'上菜了！'

@@ -21,7 +21,7 @@ class Code
             // 获取座位名称
             $place = Place::find($request->header('placeid'));
             // 执行动作，判断该值是否存在redis数组
-            if (Redis::get($place->name.'_'.$place->id) != $request->header('code')) {
+            if (substr(Redis::get($place->name.'_'.$place->id),0,20) != $request->header('code')) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
             }
         } else {

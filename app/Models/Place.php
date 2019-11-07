@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\{Redis, Crypt};
+use Illuminate\Support\Facades\{Redis, Crypt, Hash};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Place extends Model
@@ -33,11 +33,14 @@ class Place extends Model
     /** 【 更新二维码信息 】 */
     public function updateQrcode($data, $placeid)
     {
-        $encrypted = Crypt::encryptString($data['name'].'_'.$placeid.'_code');
+        $encrypted = substr(Crypt::encryptString($data['name'].'_'.$placeid.'_code'),0,15);
         $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
         $filename = $data['name'] . '.png';
         QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
         // 设置redis缓存
         Redis::set($data['name'].'_'.$placeid, $encrypted);
+
+        // eyJpdiI6ImwwSVg
+        // eyJpdiI6Ijd0dUx
     } 
 }
