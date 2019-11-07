@@ -190,7 +190,7 @@ class OrdersController extends Controller
                 return $item;
             }
         });
-        $data['myself'] = array_filter($data['myself']);
+        $data['myself'] = array_filter($data['myself']->all());
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     } 
@@ -252,7 +252,7 @@ class OrdersController extends Controller
                 return $item;
             }
         });
-        $data['myself'] = array_filter($data['myself']);
+        $data['myself'] = array_filter($data['myself']->all());
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     }
