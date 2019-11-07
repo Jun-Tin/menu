@@ -9,6 +9,7 @@ class BehaviorObserver
 	public function updated(Behavior $behavior)
 	{
 		switch ($behavior->category) {
+			// 清洁
 			case 'clean':
 				$order = Order::find($behavior->target_id);
 				// 更新原订单已完成打扫
@@ -16,12 +17,18 @@ class BehaviorObserver
 				// 修改座位状态--无人状态
 				Place::where('id',$order->place_id)->update(['status'=>0]);
 				break;
+			// 上菜
 			case 'serving':
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
 
 				$store_id = (User::find($behavior->user_id))->store_id;
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！'), JSON_UNESCAPED_UNICODE));
+
+				$count = Order::where('store_id',$store_id)->get()->map(function ($item, $key){
+					return $item->orders()->where('category','m')->where('status',0)->count();
+				});
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！','count'=>$count[0]), JSON_UNESCAPED_UNICODE));
 				break;
+			// 做菜
 			case 'cooking':
 				$OrderDetail = OrderDetail::find($behavior->target_id);
 				// 判断是否属于套餐内的单品
@@ -36,17 +43,17 @@ class BehaviorObserver
 				// 修改菜品状态
 				$OrderDetail->update(['status'=>2]);
 				// 获取原订单号
-				$order = OrderDetail::where('id',$behavior->target_id)->value('order_order');
+				$order_order = OrderDetail::where('id',$behavior->target_id)->value('order_order');
 				// 获取原订单信息
-				$data = Order::where('order',$order)->first();
+				$order = Order::where('order',$order_order)->first();
 				// 完成个数 == 最终个数
-				if ($data->finish_number + 1 == $data->final_number) {
-					Order::where('order',$order)->update([
-						'finish_number' => $data->finish_number + 1,
+				if ($order->finish_number + 1 == $order->final_number) {
+					Order::where('order',$order_order)->update([
+						'finish_number' => $order->finish_number + 1,
 						'status' => 1 
 					]);
 				} else {
-					Order::where('order',$order)->increment('finish_number');
+					Order::where('order',$order_order)->increment('finish_number');
 				}
 
                 // 将原先撤销的记录删除

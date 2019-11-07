@@ -21,4 +21,9 @@ class Order extends Model
     {
     	return $this->hasOne(Place::class, 'id', 'place_id');
     }
+
+    protected function getordersCountAttribute($value)
+    {
+        return $value ?? $this->orders_count = $this->orders()->count();
+    }
 }
