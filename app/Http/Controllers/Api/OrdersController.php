@@ -248,10 +248,9 @@ class OrdersController extends Controller
                 }
                 $item->remark = $item->remark;
                 $item->behavior = $behavior;
-                return $item;
+                return array_filter($item);
             }
         });
-        $data['myself'] = array_filter($data['myself']);
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     }
