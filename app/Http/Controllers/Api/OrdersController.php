@@ -187,9 +187,10 @@ class OrdersController extends Controller
                 }
                 $item->remark = $item->remark;
                 $item->behavior = $behavior;
-                return $item;
+                return array_filter($item);
             }
         });
+        // $data['myself'] = array_filter($data['myself']);
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     } 
@@ -230,7 +231,7 @@ class OrdersController extends Controller
         });
 
         // 合并成一维数组（正在送菜品）
-        $myself = $order->behavior->flatten()->map(function ($item, $key){
+        $data['myself'] = $order->behavior->flatten()->map(function ($item, $key){
             $behavior = Behavior::where('target_id',$item->id)->where('category','serving')->first();
             if ($behavior->user_id == auth()->id()) {
                 $item->place_name = Place::where('id',$item->place_id)->value('name');
@@ -248,10 +249,10 @@ class OrdersController extends Controller
                 }
                 $item->remark = $item->remark;
                 $item->behavior = $behavior;
-                return $item;
+                return array_filter($item);
             }
         });
-        $data['myself'] = array_filter($myself->toArray());
+        // $data['myself'] = array_filter($data['myself']);
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     }
