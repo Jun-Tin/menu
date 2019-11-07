@@ -22,7 +22,6 @@ class BehaviorObserver
 				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
 
 				$store_id = (User::find($behavior->user_id))->store_id;
-
 				$count = Order::where('store_id',$store_id)->get()->map(function ($item, $key){
 					return $item->orders()->where('category','m')->where('status',0)->count();
 				});
@@ -60,7 +59,10 @@ class BehaviorObserver
                 Behavior::where('target_id',$behavior->target_id)->where('category','backout')->delete();
 
 				$store_id = (User::find($behavior->user_id))->store_id;
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！'), JSON_UNESCAPED_UNICODE));
+				$count = Order::where('store_id',$store_id)->get()->map(function ($item, $key){
+					return $item->orders()->where('category','m')->where('status',0)->count();
+				});
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！','count'=>$count[0]), JSON_UNESCAPED_UNICODE));
 				break;
 		}
 	}

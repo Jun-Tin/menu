@@ -37,6 +37,12 @@ class BehaviorsController extends Controller
             case 'serving':
                 // 修改订单菜品状态--上菜状态
                 OrderDetail::where('id',$request->target_id)->update(['status'=>3]);
+
+                $store_id = (User::find($behavior->user_id))->store_id;
+                $count = Order::where('store_id',$store_id)->get()->map(function ($item, $key){
+                    return $item->orders()->where('category','m')->where('status',0)->count();
+                });
+                Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！','count'=>$count[0]), JSON_UNESCAPED_UNICODE));
                 break;
             // 退菜
             case 'retreat':
