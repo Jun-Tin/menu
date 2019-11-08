@@ -131,7 +131,7 @@ class OrdersController extends Controller
         });
 
         // 合并成一维数组（未完成菜品）
-        $data['unfinished'] = $order->unfinished->flatten()->map(function ($item, $key){
+        $unfinished = $order->unfinished->flatten()->map(function ($item, $key){
             $item->place_name = Place::where('id',$item->place_id)->value('name');
             if ($item->pid) {
                 $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
@@ -150,7 +150,7 @@ class OrdersController extends Controller
         });
 
         // 合并成一维数组（已完成菜品）
-        $data['finished'] = $order->finished->flatten()->map(function ($item, $key){
+        $finished = $order->finished->flatten()->map(function ($item, $key){
             $item->place_name = Place::where('id',$item->place_id)->value('name');
             if ($item->pid) {
                 $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
@@ -169,7 +169,7 @@ class OrdersController extends Controller
         });
 
         // 合并成一维数组（正在做菜品）
-        $data['myself'] = $order->behavior->flatten()->map(function ($item, $key){
+        $myself = $order->behavior->flatten()->map(function ($item, $key){
             $behavior = Behavior::where('target_id',$item->id)->where('category','cooking')->first();
             if ($behavior->user_id == auth()->id()) {
                 $item->place_name = Place::where('id',$item->place_id)->value('name');
@@ -190,7 +190,9 @@ class OrdersController extends Controller
                 return $item;
             }
         });
-        $data['myself'] = array_filter($data['myself']->all());
+        $data['unfinished'] = array_merge(array_filter($unfinished->all()),array());
+        $data['finished'] = array_merge(array_filter($finished->all()),array());
+        $data['myself'] = array_merge(array_filter($myself->all()),array());
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     } 
@@ -201,7 +203,7 @@ class OrdersController extends Controller
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->where('status',[0,1])->where('finish',0)->get();
+        $order = Order::where('store_id',auth()->user()->store_id)->whereIn('status',[0,1])->where('finish',0)->get();
         $order->finished = $order->map(function ($item, $key) use ($request){
             // 已完成的菜品
             return $item->orders()->where('status',2)->where('category','m')->get();
@@ -212,7 +214,7 @@ class OrdersController extends Controller
         });
 
         // 合并成一维数组（已完成菜品）
-        $data['finished'] = $order->finished->flatten()->map(function ($item, $key){
+        $finished = $order->finished->flatten()->map(function ($item, $key) use($request){
             $item->place_name = Place::where('id',$item->place_id)->value('name');
             if ($item->pid) {
                 $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
@@ -227,11 +229,18 @@ class OrdersController extends Controller
                 $item->tags_name = $name;
             }
             $item->remark = $item->remark;
-            return $item;
+
+            if ($request->keyword) {
+                if (strpos($item->place_name, $request->keyword) !== FALSE) {
+                    return $item;
+                }
+            } else {
+                return $item;
+            }
         });
 
         // 合并成一维数组（正在送菜品）
-        $data['myself'] = $order->behavior->flatten()->map(function ($item, $key){
+        $myself = $order->behavior->flatten()->map(function ($item, $key){
             $behavior = Behavior::where('target_id',$item->id)->where('category','serving')->first();
             if ($behavior->user_id == auth()->id()) {
                 $item->place_name = Place::where('id',$item->place_id)->value('name');
@@ -252,7 +261,8 @@ class OrdersController extends Controller
                 return $item;
             }
         });
-        $data['myself'] = array_filter($data['myself']->all());
+        $data['finished'] = array_merge(array_filter($finished->all()),array());
+        $data['myself'] = array_merge(array_filter($myself->all()),array());
 
         return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
     }

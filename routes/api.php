@@ -171,7 +171,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 出菜 / 未出菜 所有列表
     Route::get('order/orders', 'Api\OrdersController@orders');
     // 上菜列表
-    Route::get('order/serving', 'Api\OrdersController@serving');
+    Route::patch('order/serving', 'Api\OrdersController@serving');
     // 退菜列表
     Route::patch('order/{order}/retreat', 'Api\OrdersController@retreat');
 
