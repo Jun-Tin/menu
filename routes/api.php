@@ -28,6 +28,14 @@ Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
 /**【 获取区号 】*/ 
 Route::get('areacode', 'Api\AreacodesController@index');
 
+/** 【 socket通讯 】 */
+// 加入端口
+Route::post('socket/join', 'Api\SocketsController@join');
+// 离开端口
+Route::post('socket/leave', 'Api\SocketsController@leave');
+// 测试socket通讯
+Route::post('socket/test', 'Api\SocketsController@test');
+
 
 /**【 验证类接口 】*/ 
 Route::group(['middleware' => 'auth:api'], function(){
@@ -194,14 +202,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('paymentmethod/{paymentmethod}/update', 'Api\PaymentMethodsController@update');
     // 删除
     Route::delete('paymentmethod/{paymentmethod}/destroy', 'Api\PaymentMethodsController@destroy');
-
-    /** 【 socket通讯 】 */
-    // 加入端口
-    Route::post('socket/join', 'Api\SocketsController@join');
-    // 离开端口
-    Route::post('socket/leave', 'Api\SocketsController@leave');
-    // 测试socket通讯
-    Route::post('socket/test', 'Api\SocketsController@test');
 
 
     /** 
