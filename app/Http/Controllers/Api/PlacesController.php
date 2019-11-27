@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Place, Image, Menu, Tag, Order, User, OrderDetail, Shopcart, Behavior};
+use App\Models\{Place, Image, Order, User, OrderDetail, Behavior};
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, Storage, File, Redis};
+use Illuminate\Support\Facades\{Auth, File, Redis};
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{PlaceResource, ShopcartResource};
+use App\Http\Resources\{PlaceResource, ShopcartResource, ShopcartCollection};
 use Chumper\Zipper\Zipper;
 use GatewayWorker\Lib\Gateway;
 
@@ -124,72 +124,32 @@ class PlacesController extends Controller
     public function shopcart(Request $request, Place $place)
     {
         $shopcarts = $place->shopcarts;
-        $new = $shopcarts->map(function ($item, $key){
-            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
-            if ($item->menus_id) {
-                foreach (json_decode($item->menus_id) as $key => $value) {
-                    $menus_name[] = Menu::where('id',$value)->value('name');
-                }
-                $item->menus_name = $menus_name;
-            }
-            if ($item->tags_id) {
-                foreach (json_decode($item->tags_id) as $k => $value) {
-                    $name[] = Tag::find($value)->pluck('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->fill_price = json_decode($item->fill_price);
-            $item->remark = json_decode($item->remark);
-
-            return $item;
-        });
-
+        // 总价格
         $total = $shopcarts->reduce(function ($sum, $value){
             return $sum + $value->price;
         });
-
+        // 总条数
         $number = $shopcarts->reduce(function ($sum, $value){
             return $sum + $value->number;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
+        return (new ShopcartCollection($shopcarts))->additional(['status'=>200, 'count'=>$number?:0, 'total'=>$total?:0]);
     } 
 
     /** 【 客户端--购物车详情 】 */
     public function customerShopcart(Request $request, Place $place)
     {
         $shopcarts = $place->shopcarts;
-        $new = $shopcarts->map(function ($item, $key){
-            $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
-            if ($item->menus_id) {
-                // $item->menus_name = Menu::find(json_decode($item->menus_id))->pluck('name');
-                foreach (json_decode($item->menus_id) as $key => $value) {
-                    $menus_name[] = Menu::where('id',$value)->value('name');
-                }
-                $item->menus_name = $menus_name;
-            }
-
-            if ($item->tags_id) {
-                foreach (json_decode($item->tags_id) as $k => $value) {
-                    $name[] = Tag::find($value)->pluck('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->fill_price = json_decode($item->fill_price);
-            $item->remark = json_decode($item->remark);
-
-            return $item;
-        });
-
+        // 总价格
         $total = $shopcarts->reduce(function ($sum, $value){
             return $sum + $value->price;
         });
-
+        // 总条数
         $number = $shopcarts->reduce(function ($sum, $value){
             return $sum + $value->number;
         });
 
-        return response()->json(['data' => $new->all(), 'status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
+        return (new ShopcartCollection($shopcarts))->additional(['status'=>200, 'count'=>$number?:0, 'total'=>$total?:0]);
     } 
 
     /** 【 创建订单 】 */
@@ -234,11 +194,12 @@ class PlacesController extends Controller
             ]);
         }
         // 循环创建订单详情
-        $new = $shopcarts->map(function ($item, $key) use ($only_order){
+        $new = $shopcarts->map(function ($item, $key) use ($only_order, $place){
             for ($i=0; $i < $item->number; $i++) { 
                 if ($item->category == 'm') {
                     $create = OrderDetail::create([
                         'order_order' => $only_order,
+                        'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
                         'menus_id' => $item->menus_id,
@@ -255,6 +216,7 @@ class PlacesController extends Controller
                 } else {
                     $create = OrderDetail::create([
                         'order_order' => $only_order,
+                        'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
                         // 'menus_id' => $item->menus_id,
@@ -275,6 +237,7 @@ class PlacesController extends Controller
                         for ($j=0; $j < count(json_decode($item->menus_id,true)); $j++) { 
                             OrderDetail::create([
                                 'order_order' => $only_order,
+                                'store_id' => $place->store_id,
                                 'menu_id' => 0,
                                 'category' => 'm',
                                 'menus_id' => json_decode($item->menus_id,true)[$j]?:0,
@@ -352,11 +315,12 @@ class PlacesController extends Controller
             ]);
         }
         // 循环创建订单详情
-        $new = $shopcarts->map(function ($item, $key) use ($only_order){
+        $new = $shopcarts->map(function ($item, $key) use ($only_order, $place){
             for ($i=0; $i < $item->number; $i++) { 
                 if ($item->category == 'm') {
                     $create = OrderDetail::create([
                         'order_order' => $only_order,
+                        'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
                         'menus_id' => $item->menus_id,
@@ -373,6 +337,7 @@ class PlacesController extends Controller
                 } else {
                     $create = OrderDetail::create([
                         'order_order' => $only_order,
+                        'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
                         // 'menus_id' => $item->menus_id,
@@ -393,6 +358,7 @@ class PlacesController extends Controller
                         for ($j=0; $j < count(json_decode($item->menus_id,true)); $j++) { 
                             OrderDetail::create([
                                 'order_order' => $only_order,
+                                'store_id' => $place->store_id,
                                 'menu_id' => 0,
                                 'category' => 'm',
                                 'menus_id' => json_decode($item->menus_id,true)[$j]?:0,

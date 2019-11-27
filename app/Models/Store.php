@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time'
+        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle'
     ];
     
     /**【 一对一图片关联关系 】*/ 
@@ -28,7 +28,7 @@ class Store extends Model
         return $this->hasMany(Place::class);
     }
 
-    /**【 多对多员工关联关系 】*/
+    /**【 一对多员工关联关系 】*/
     public function users()
     {
         return $this->hasMany(User::class);
@@ -40,15 +40,21 @@ class Store extends Model
         return $this->hasMany(Tag::class);
     }
 
-    /** 【 远程一对多关联关系 】 */
-    public function manyBook()
-    {
-        return $this->hasManyThrough(Book::class, Place::class, 'store_id', 'place_id');
-    }
-
     /** 【 一对多预约关联关系】 */
     public function books()
     {
         return $this->hasMany(Book::class);
     }
+
+    /** 【 一对多订单关联关系 】 */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /** 【 一对多远层订单详情关联关系 】 */
+    public function order_details()
+    {
+        return $this->hasManyThrough(OrderDetail::class, Order::class, 'store_id', 'order_order', 'id', 'order');
+    } 
 }

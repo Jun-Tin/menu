@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Store;
-use App\Http\Resources\{ImageResource, PlaceResource};
+use App\Http\Resources\ImageResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class PlaceResource extends Resource
@@ -16,11 +15,6 @@ class PlaceResource extends Resource
      */
     public function toArray($request)
     {
-        $where[] = ['floor',$this->id];
-        if ($request->number) {
-            $where[] = ['number', '>=',$request->number];
-        }
-
         switch ($request->method()) {
             case 'GET':
                 return [
@@ -33,9 +27,7 @@ class PlaceResource extends Resource
                     'status' => $this->status,
                     'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                    'place' => PlaceResource::collection($this->where($where)->get()),
-                    // 'order' => $this->order()->whereIn('status',[0,1,2])->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first(),
-                    'order' => $this->order()->whereIn('status',[0,1,2])->orderBy('created_at','desc')->first(),
+                    'order' => $this->order,
                 ];
                 break;
             default :
@@ -52,6 +44,5 @@ class PlaceResource extends Resource
                 ];
                 break;
         }
-
     }
 }

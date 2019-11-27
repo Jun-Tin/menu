@@ -28,6 +28,12 @@ Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
 /**【 获取区号 】*/ 
 Route::get('areacode', 'Api\AreacodesController@index');
 
+// paypal支付
+Route::get('paypal/pay', 'Api\PaypalsController@pay');
+Route::get('paypal/callback', 'Api\PaypalsController@callback');
+Route::get('paypal/notify', 'Api\PaypalsController@notify');
+
+
 /** 【 socket通讯 】 */
 // 加入端口
 Route::post('socket/join', 'Api\SocketsController@join');
@@ -88,6 +94,29 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/saleOut', 'Api\StoresController@saleOut');
     // 门店菜品列表--全部
     Route::get('store/{store}/totalMenus', 'Api\StoresController@totalMenus');
+    /** 【 销售报表 】 */
+    // 客人数量
+    Route::patch('store/{store}/guestNumber', 'Api\StoresController@guestNumber');
+    // 客人时刻
+    Route::patch('store/{store}/guestMoment', 'Api\StoresController@guestMoment');
+    // 菜品排行
+    Route::patch('store/{store}/menuRank', 'Api\StoresController@menuRank');
+    // 金额排行
+    Route::patch('store/{store}/moneyRank', 'Api\StoresController@moneyRank');
+    // 桌位数量
+    Route::patch('store/{store}/placeNumber', 'Api\StoresController@placeNumber');
+    // 占位时间
+    Route::patch('store/{store}/placeHolder', 'Api\StoresController@placeHolder');
+    // 出菜时间
+    Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
+    // 员工表现
+    // part1
+    Route::patch('store/{store}/staffBehaviorP1', 'Api\StoresController@staffBehaviorP1');
+    // part2
+    Route::patch('store/staffBehaviorP2', 'Api\StoresController@staffBehaviorP2');
+    // part3
+    Route::patch('store/staffBehaviorP3', 'Api\StoresController@staffBehaviorP3');
+
 
     /** 【 标签 】*/
     // 标签列表

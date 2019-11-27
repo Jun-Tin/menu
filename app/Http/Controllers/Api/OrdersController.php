@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Order, Menu, Tag, Behavior, Store, OrderDetail, Place};
+use App\Models\{Order, Behavior, Store, Place};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{OrderResource, OrderCollection};
@@ -18,34 +18,6 @@ class OrdersController extends Controller
     {
         $order->package = $order->orders()->where('pid',0)->get();
         $order->set_time = Store::where('id',$order->store_id)->value('set_time');
-        $order->package->map(function ($item, $key){
-            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            $item->category = Menu::where('id',$item->menu_id)->value('category');
-            if ($item->category == 'p') {
-                $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                    if ($item->menus_id) {
-                        $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
-                    }
-
-                    if (!empty(json_decode($item->tags_id,true))) {
-                        foreach (json_decode($item->tags_id,true) as $k => $value) {
-                            $name[] = Tag::where('id',$value)->value('name');
-                        }
-                        $item->tags_name = $name;
-                    }
-                    return $item;
-                });
-            }
-
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            return $item;
-        });
-
         $order->clean = Behavior::where('target_id',$request->order->id)->where('category','clean')->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
 
         return (new OrderResource($order))->additional(['status'=>200]);
@@ -56,35 +28,6 @@ class OrdersController extends Controller
     {
         $order->package = $order->orders()->where('pid',0)->get();
         $order->set_time = Store::where('id',$order->store_id)->value('set_time');
-        $order->package->map(function ($item, $key){
-            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            $item->category = Menu::where('id',$item->menu_id)->value('category');
-            if ($item->category == 'p') {
-                $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                    if ($item->menus_id) {
-                        $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
-                    }
-
-                    if (!empty(json_decode($item->tags_id,true))) {
-                        foreach (json_decode($item->tags_id,true) as $k => $value) {
-                            $name[] = Tag::where('id',$value)->value('name');
-                        }
-                        $item->tags_name = $name;
-                    }
-                    return $item;
-                });
-            }
-
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            return $item;
-        });
-
-        $order->clean = Behavior::where('target_id',$request->order->id)->where('category','clean')->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
 
         return (new OrderResource($order))->additional(['status'=>200]);
     }
@@ -117,11 +60,11 @@ class OrdersController extends Controller
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
         $order = Order::where('store_id',auth()->user()->store_id)->whereIn('status',[0,1])->where('finish',0)->get();
-        $order->unfinished = $order->map(function ($item, $key) use ($request){
+        $order->unfinished = $order->map(function ($item, $key){
             // 未完成的菜品
             return $item->orders()->where('status',0)->where('category','m')->get();
         });
-        $order->finished = $order->map(function ($item, $key) use ($request){
+        $order->finished = $order->map(function ($item, $key){
             // 已完成的菜品
             return $item->orders()->where('status',2)->where('category','m')->get();
         });
@@ -130,71 +73,11 @@ class OrdersController extends Controller
             return $item->orders()->where('status',1)->where('category','m')->get();
         });
 
-        // 合并成一维数组（未完成菜品）
-        $unfinished = $order->unfinished->flatten()->map(function ($item, $key){
-            $item->place_name = Place::where('id',$item->place_id)->value('name');
-            if ($item->pid) {
-                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-            } else{
-                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            }
+        $order->put('unfinished', $order->unfinished);
+        $order->put('finished', $order->finished);
+        $order->put('behavior', $order->behavior);
 
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->remark = $item->remark;
-            return $item;
-        });
-
-        // 合并成一维数组（已完成菜品）
-        $finished = $order->finished->flatten()->map(function ($item, $key){
-            $item->place_name = Place::where('id',$item->place_id)->value('name');
-            if ($item->pid) {
-                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-            } else{
-                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            }
-
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->remark = $item->remark;
-            return $item;
-        });
-
-        // 合并成一维数组（正在做菜品）
-        $myself = $order->behavior->flatten()->map(function ($item, $key){
-            $behavior = Behavior::where('target_id',$item->id)->where('category','cooking')->first();
-            if ($behavior->user_id == auth()->id()) {
-                $item->place_name = Place::where('id',$item->place_id)->value('name');
-                if ($item->pid) {
-                    $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-                } else{
-                    $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                }
-
-                if (!empty(json_decode($item->tags_id,true))) {
-                    foreach (json_decode($item->tags_id,true) as $k => $value) {
-                        $name[] = Tag::where('id',$value)->value('name');
-                    }
-                    $item->tags_name = $name;
-                }
-                $item->remark = $item->remark;
-                $item->behavior = $behavior;
-                return $item;
-            }
-        });
-        $data['unfinished'] = array_merge(array_filter($unfinished->all()),array());
-        $data['finished'] = array_merge(array_filter($finished->all()),array());
-        $data['myself'] = array_merge(array_filter($myself->all()),array());
-
-        return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
+        return (new OrderCollection($order, $param='orders'))->additional(['status'=>200, 'set_time'=>$set_time]);
     } 
 
     /** 【 送菜列表 】 */
@@ -213,89 +96,20 @@ class OrdersController extends Controller
             return $item->orders()->where('status',3)->where('category','m')->get();
         });
 
-        // 合并成一维数组（已完成菜品）
-        $finished = $order->finished->flatten()->map(function ($item, $key) use($request){
-            $item->place_name = Place::where('id',$item->place_id)->value('name');
-            if ($item->pid) {
-                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-            } else{
-                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            }
+        $order->put('finished', $order->finished);
+        $order->put('behavior', $order->behavior);
 
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            $item->remark = $item->remark;
-
-            if ($request->keyword) {
-                if (strpos($item->place_name, $request->keyword) !== FALSE) {
-                    return $item;
-                }
-            } else {
-                return $item;
-            }
-        });
-
-        // 合并成一维数组（正在送菜品）
-        $myself = $order->behavior->flatten()->map(function ($item, $key){
-            $behavior = Behavior::where('target_id',$item->id)->where('category','serving')->first();
-            if ($behavior->user_id == auth()->id()) {
-                $item->place_name = Place::where('id',$item->place_id)->value('name');
-                if ($item->pid) {
-                    $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-                } else{
-                    $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                }
-
-                if (!empty(json_decode($item->tags_id,true))) {
-                    foreach (json_decode($item->tags_id,true) as $k => $value) {
-                        $name[] = Tag::where('id',$value)->value('name');
-                    }
-                    $item->tags_name = $name;
-                }
-                $item->remark = $item->remark;
-                $item->behavior = $behavior;
-                return $item;
-            }
-        });
-        $data['finished'] = array_merge(array_filter($finished->all()),array());
-        $data['myself'] = array_merge(array_filter($myself->all()),array());
-
-        return response()->json(['data'=>$data, 'status'=>200, 'set_time'=>$set_time]);
+        return (new OrderCollection($order, $param='serving'))->additional(['status'=>200, 'set_time'=>$set_time]);
     }
 
     /** 【 退菜列表 】 */
     public function retreat(Request $request, Order $order)
     {
         $order->place_name = Place::where('id',$order->place_id)->value('name');
-        $order->package = $order->orders()->where('status',0)->where('pid',0)->get()->map(function ($item, $key){
-            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-            if ($item->category == 'p') {
-                $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
-                    $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
-                    if (!empty(json_decode($item->tags_id,true))) {
-                        foreach (json_decode($item->tags_id,true) as $k => $value) {
-                            $name[] = Tag::where('id',$value)->value('name');
-                        }
-                        $item->tags_name = $name;
-                    }
-                    return $item;
-                });
-            }
-            
-            if (!empty(json_decode($item->tags_id,true))) {
-                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                    $name[] = Tag::where('id',$value)->value('name');
-                }
-                $item->tags_name = $name;
-            }
-            return $item;
-        });
-        
-        return response()->json(['data'=>$order, 'status'=>200]);
+        $order->package = $order->orders()->where('status',0)->where('pid',0)->get();
+
+        return (new OrderResource($order))->additional(['status'=>200]);
+
     }
 
 }
