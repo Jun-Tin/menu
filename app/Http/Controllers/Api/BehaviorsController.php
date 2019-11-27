@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Behavior, Order, OrderDetail, Place};
+use App\Models\{Behavior, Order, OrderDetail, Place, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BehaviorResource;
