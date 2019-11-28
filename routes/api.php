@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**【 员工 】*/ 
     // 员工信息详情
-    Route::get('user/detail', 'Api\UsersController@detail');
+    Route::get('user/{user}/detail', 'Api\UsersController@detail');
     // 添加员工信息
     Route::post('user/staff', 'Api\UsersController@staff');
     // 修改员工信息

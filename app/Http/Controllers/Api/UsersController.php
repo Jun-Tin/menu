@@ -136,9 +136,7 @@ class UsersController extends Controller
 
     /** 【 员工详情 】 */
     public function detail(User $user)
-    {
-        $user = auth()->user();
-        
+    {        
         return (new UserResource($user))->additional(['status' => 200]);
     } 
     
