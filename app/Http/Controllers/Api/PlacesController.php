@@ -190,7 +190,7 @@ class PlacesController extends Controller
                 'number' => $number,
                 'final_number' => $number,
                 'status' => 0,
-                'sitter' => $shopcarts[0]['sitter']
+                'sitter' => $request->sitter
             ]);
         }
         // 循环创建订单详情
@@ -311,7 +311,7 @@ class PlacesController extends Controller
                 'number' => $number,
                 'final_number' => $number,
                 'status' => 0,
-                'sitter' => $shopcarts[0]['sitter']
+                'sitter' => $request->sitter
             ]);
         }
         // 循环创建订单详情

@@ -194,10 +194,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('book/{book}/index', 'Api\BooksController@index');
 
     /** 【 购物车 】 */ 
-    // 创建购物车（加入商品）
+    // 创建购物车（加入商品 -- 详情页添加）
     Route::post('shopcart/store', 'Api\ShopcartsController@store');
     // 购物车增加、减少商品
     Route::patch('shopcart/{shopcart}/update', 'Api\ShopcartsController@update'); 
+    // 创建购物车（加入商品 -- 直接点击‘+’添加）
+    Route::post('shopcart/created', 'Api\ShopcartsController@created');
+
 
     /** 【 订单】 */
     // 订单详情

@@ -26,7 +26,7 @@ class ShopcartResource extends Resource
             'original_price' => $this->original_price,
             'price' => $this->price,
             'remark' => $this->remark,
-            'sitter' => $this->sitter,
+            'sitter' => $this->sitter?:0,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
         ];
