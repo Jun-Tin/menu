@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User, Behavior, Menu};
+use App\Models\{Store, User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource};
-use Carbon\Carbon;
 
 class StoresController extends Controller
 {
@@ -271,7 +270,7 @@ class StoresController extends Controller
     public function staffBehaviorP3(Request $request, Store $store)
     {
         // 初始化变量
-        $data = array();
+        $behaviors = array();
         $behaviorsList = array();
         if ($request->has('id')) {
             $user = User::find($request->id);
@@ -279,17 +278,15 @@ class StoresController extends Controller
             if ($request->exists('start_time') && $request->exists('end_time')) {
                 $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
 
-                $behaviors = $user->behaviors()->whereBetween('created_at', $time)->selectRaw('category, count(*) as value')->groupBy('category')->get()->toArray();
+                $behaviors = $user->behaviors()->whereBetween('created_at', $time)->selectRaw('category, count(*) as value')->groupBy('category')->get()->map(function ($item) use ($request){
+                    if ($request->category == $item['category']) {
+                        return $item;
+                    }
+                })->filter()->values();
 
                 $behaviorsList = $user->behaviors()->whereBetween('created_at', $time)->where('category', $request->category)->select('created_at')->get();
-
-                foreach ($behaviors as $key => $value) {
-                    if ($request->category == $value['category']) {
-                        $data = $value;
-                    }
-                }
             }
         }
-        return response()->json(['data' => $behaviorsList, 'title' => $data, 'status' => 200]);
+        return response()->json(['data' => $behaviorsList, 'title' => $behaviors, 'status' => 200]);
     }
 }

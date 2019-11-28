@@ -363,7 +363,7 @@ class StatisticsResource extends Resource
                     $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
                     
                     $collection = $this->orders()->whereBetween('created_at', $time)->selectRaw('place_id, created_at, updated_at')->get();
-                    if ($collection) {
+                    if (!$collection->isEmpty()) {
                         $collection->map(function ($item){
                             $item->name = Place::where('id',$item->place_id)->value('name');
                             $item->place_time = floor((carbon::parse($item->updated_at)->diffInMinutes($item->created_at,true)/60)).':'.(carbon::parse($item->updated_at)->diffInMinutes($item->created_at,true)%60).':'.(carbon::parse($item->updated_at)->diffInSeconds($item->created_at,true)%60);
@@ -394,44 +394,54 @@ class StatisticsResource extends Resource
 
             case 'menuServed':
                 // 声明变量 
-                $data = array();
                 $averages = '0:0:0';
 
                 if ($request->exists('start_time') && $request->exists('end_time')) {
                     $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
                     $collection = $this->order_details()->whereIn('order_details.status', [3,4])->get()->map(function ($item) use ($time){
-                        $item->behaviors = Behavior::where('target_id', $item->id)->where('category', 'serving')->whereBetween('created_at', $time)->selectRaw('created_at, updated_at')->get();
-                        return $item;
-                    });
-
-                    $data = $collection->map(function ($item){
-                        if ($item->behaviors->count() != 0) {
+                        Behavior::where('target_id', $item->id)->where('category', 'serving')->whereBetween('created_at', $time)->get()->map(function ($value) use ($item){
                             if ($item->menu_id) {
                                 $item->name = Menu::find($item->menu_id)->value('name');
                             } else {
                                 $item->name = Menu::find($item->menus_id)->value('name');
                             }
+                            $item->value = floor((carbon::parse($value->updated_at)->diffInMinutes($value->created_at,true)/60)).':'.(carbon::parse($value->updated_at)->diffInMinutes($value->created_at,true)%60).':'.(carbon::parse($value->updated_at)->diffInSeconds($value->created_at,true)%60);
+                            $item->time = carbon::parse($value->updated_at)->diffInSeconds($value->created_at,true);
+                            return $item->only('name', 'value', 'time');
+                        });
+                        return $item->only('name', 'value', 'time');
+                    })->values();
+                    dd($collection);
+
+                    $data = $collection->map(function ($item){
+                        if ($item->behaviors->count() != 0) {
                             $item->behaviors->map(function ($value) use ($item){
                                 $item->value = floor((carbon::parse($value->updated_at)->diffInMinutes($value->created_at,true)/60)).':'.(carbon::parse($value->updated_at)->diffInMinutes($value->created_at,true)%60).':'.(carbon::parse($value->updated_at)->diffInSeconds($value->created_at,true)%60);
                                 $item->time = carbon::parse($value->updated_at)->diffInSeconds($value->created_at,true);
                                 return $item;
                             });
+                            return $item->only('name', 'value', 'time');
                         }
-                        return $item->only('name', 'value', 'time');
                     });
-                    dd($data->toArray());
-                    // 总条数
-                    $count = $collection->count();
-                    // 总时间数
-                    $time_total = 0;
-                    foreach ($data->toArray() as $key => $value) {
-                        $time_total += $value['time'];
+                    
+                    if ($data) {
+                        // 总条数
+                        $count = $collection->behaviors->count();
+                        dd($count);
+                        // 总时间数
+                        $time_total = 0;
+                        foreach ($data->toArray() as $key => $value) {
+                            $time_total += $value['time'];
+                        }
+                        // 格式化平均时间数
+                        $averages = floor(($time_total/$count)/3600).':'.floor(((($time_total/$count)%3600)/60)).':'.(($time_total/$count)%60);
+                        // 格式化总时间数
+                        $total = floor($time_total/3600).':'.floor((($time_total%3600)/60)).':'.($time_total%60);
+                    } else {
+                        $data = array();
                     }
-                    // 格式化平均时间数
-                    $averages = floor(($time_total/$count)/3600).':'.floor(((($time_total/$count)%3600)/60)).':'.(($time_total/$count)%60);
-                    // 格式化总时间数
-                    $total = floor($time_total/3600).':'.floor((($time_total%3600)/60)).':'.($time_total%60);
                 }
+                dd($data);
 
                 return [
                     'data' => $data,

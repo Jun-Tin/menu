@@ -109,7 +109,6 @@ class OrdersController extends Controller
         $order->package = $order->orders()->where('status',0)->where('pid',0)->get();
 
         return (new OrderResource($order))->additional(['status'=>200]);
-
     }
 
 }
