@@ -226,7 +226,7 @@ class UsersController extends Controller
     }
 
     /** 【 更换关联手机 —— 新手机号码 】 */ 
-    public function relate()
+    public function relate(Request $request, User $user)
     {
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
@@ -238,9 +238,22 @@ class UsersController extends Controller
             return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
         }
 
+        $data = $request->all();
+        $data['id'] = $user->id;
+        $validator = $user->validatorUserRegister($data, 'update');
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+        }
+
+        $user = auth()->user();
+        $user->update([
+            'area_code' => $request->area_code,
+            'phone' => $request->phone,
+        ]);
         // 清除验证码缓存
         \Cache::forget($request->key);
 
-        return response()->json(['message' => '修改成功！', 'status' => 200]);
+        return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 }

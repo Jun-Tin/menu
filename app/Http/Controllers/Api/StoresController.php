@@ -203,7 +203,7 @@ class StoresController extends Controller
         return (new StatisticsResource($store, $param='menuServed'))->additional(['status' => 200]);
     }
 
-    /** 【 员工表现 -- p1 】 */
+    /** 【 员工表现 -- part one 】 */
     public function staffBehaviorPartOne(Request $request, Store $store)
     {
         if ($request->has('id')) {
@@ -247,7 +247,7 @@ class StoresController extends Controller
         return response()->json(['data' => $users, 'post' => $post, 'status' => 200]);
     }
 
-    /** 【 员工表现 -- p2 】 */
+    /** 【 员工表现 -- part two 】 */
     public function staffBehaviorPartTwo(Request $request, Store $store)
     {
         // 初始化变量
@@ -265,7 +265,7 @@ class StoresController extends Controller
         return response()->json(['data' => $behaviors, 'user' => $user, 'status' => 200]);
     }
 
-    /** 【 员工表现 -- p3 】 */
+    /** 【 员工表现 -- part three 】 */
     public function staffBehaviorPartThree(Request $request, Store $store)
     {
         // 初始化变量

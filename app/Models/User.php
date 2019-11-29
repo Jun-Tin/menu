@@ -98,9 +98,10 @@ class User extends Authenticatable
                 break;
             case 'update':
                 return Validator::make($data, [
-                    'phone' => 'unique:users,phone,' .$data['id'],
+                    'phone' => 'required|unique:users,phone,' .$data['id'],
                 ], [
-                    'phone.unique' => '手机号码已存在'
+                    'phone.required' => '手机号码不能为空',
+                    'phone.unique' => '手机号码已存在',
                 ]);
                 break;
         }
