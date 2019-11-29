@@ -45,8 +45,8 @@ class StatisticsResource extends Resource
                                                 ->toArray();
                     // 按日排序
                     $date_total_all = $this->orders()->whereYear('created_at', $request->year)
-                                                ->selectRaw('date(created_at) as date, sum(sitter) as value')
-                                                ->groupBy('date')
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
+                                                ->groupBy('month', 'day')
                                                 ->get()
                                                 ->toArray();
                     // 当前年 - 查询年（非当年默认显示12个月）
@@ -69,8 +69,8 @@ class StatisticsResource extends Resource
                                                 ->toArray();
                     // 按日排序
                     $date_total_all = $this->orders()->whereBetween('created_at', $month_until)
-                                                ->selectRaw('date(created_at) as date, sum(sitter) as value')
-                                                ->groupBy('date')
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
+                                                ->groupBy('month', 'day')
                                                 ->get()
                                                 ->toArray();
                     // 本年
@@ -83,7 +83,7 @@ class StatisticsResource extends Resource
                 // 按照年度查询
                 if ($request->exists('start_time') && $request->exists('end_time')) {
                     // 年度
-                    $year_cycle_all = [$request->start_time, $request->end_time];
+                    $year_cycle_all = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
                     // 年度人数
                     $year_total_all = $this->orders()->whereBetween('created_at', $year_cycle_all)->sum('sitter');
                 }
@@ -101,9 +101,8 @@ class StatisticsResource extends Resource
                         }
                     }
                     foreach ($date_total_all as $k => $v) {
-                        if ($value['date'] == explode('-', $v['date'])[1]) {
-                            $data[$key]['data'][$k]['date'] = explode('-', $v['date'])[2];
-                            $data[$key]['data'][$k]['value'] = $v['value'];
+                        if ($value['date'] == $v['month']) {
+                            $data[$key]['data'][] = $v;
                         }
                     }
                 }
@@ -277,8 +276,8 @@ class StatisticsResource extends Resource
                                                 ->toArray();
                     // 按日排序
                     $date_total_all = $this->orders()->whereYear('created_at', $request->year)
-                                                ->selectRaw('date(created_at) as date, count(*) as value')
-                                                ->groupBy('date')
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, count(*) as value')
+                                                ->groupBy('month', 'day')
                                                 ->get()
                                                 ->toArray();
                     // 当前年 - 查询年（非当年默认显示12个月）
@@ -301,8 +300,8 @@ class StatisticsResource extends Resource
                                                 ->toArray();
                     // 按日排序
                     $date_total_all = $this->orders()->whereBetween('created_at', $month_until)
-                                                ->selectRaw('date(created_at) as date, count(*) as value')
-                                                ->groupBy('date')
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, count(*) as value')
+                                                ->groupBy('month', 'day')
                                                 ->get()
                                                 ->toArray();
                     // 本年
@@ -315,7 +314,7 @@ class StatisticsResource extends Resource
                 // 按照年度查询
                 if ($request->exists('start_time') && $request->exists('end_time')) {
                     // 年度
-                    $year_cycle_all = [$request->start_time, $request->end_time];
+                    $year_cycle_all = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
                     // 年度桌数（订单数）
                     $year_total_all = $this->orders()->whereBetween('created_at', $year_cycle_all)->count();
                 }
@@ -333,9 +332,8 @@ class StatisticsResource extends Resource
                         }
                     }
                     foreach ($date_total_all as $k => $v) {
-                        if ($value['date'] == explode('-', $v['date'])[1]) {
-                            $data[$key]['data'][$k]['date'] = explode('-', $v['date'])[2];
-                            $data[$key]['data'][$k]['value'] = $v['value'];
+                        if ($value['date'] == $v['month']) {
+                            $data[$key]['data'][] = $v;
                         }
                     }
                 }
@@ -443,6 +441,101 @@ class StatisticsResource extends Resource
                     'averages' => $averages,
                     // 'count' => $count,
                     // 'total' => $total,
+                ];
+                break;
+
+            case 'income':
+                // 当天
+                $today_total = $this->orders()->whereDate('created_at', Carbon::today())->selectRaw('sum(final_price) as value')->first()->value?:0;
+                // 当天日期
+                $today_cycle = Carbon::now()->format('m.d');
+
+                // 本月
+                $month_total = $this->orders()->whereMonth('created_at', Carbon::now()->month)->selectRaw('sum(final_price) as value')->first()->value?:0;
+                // 本月日期
+                $month_cycle = Carbon::now()->format('m');
+
+
+                if ($request->exists('year')) {
+                    // 按月排序
+                    $month_total_all = $this->orders()->whereYear('created_at', $request->year)
+                                                ->selectRaw('month(created_at) as month, sum(final_price) as value')
+                                                ->groupBy('month')
+                                                ->get()
+                                                ->toArray();
+                    // 按日排序
+                    $date_total_all = $this->orders()->whereYear('created_at', $request->year)
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(final_price) as value')
+                                                ->groupBy('month', 'day')
+                                                ->get()
+                                                ->toArray();
+                    // 当前年 - 查询年（非当年默认显示12个月）
+                    if (Carbon::now()->format('Y') - $request->year != 0) {
+                        $month_cycle = 12;
+                    }
+
+                    // 本年
+                    $year_total = $this->orders()->whereYear('created_at', $request->year)->selectRaw('sum(final_price) as value')->first()->value?:0;
+                    // 本年日期
+                    $year_cycle = $request->year;
+                } else {
+                    // 截止当前月份
+                    $month_until = [Carbon::now()->format('Y').'-01-01',Carbon::now()->format('Y').'-'.$month_cycle.'-31'];
+                    // 按月排序
+                    $month_total_all = $this->orders()->whereBetween('created_at', $month_until)
+                                                ->selectRaw('month(created_at) as month, sum(final_price) as value')
+                                                ->groupBy('month')
+                                                ->get()
+                                                ->toArray();
+                    // 按日排序
+                    $date_total_all = $this->orders()->whereBetween('created_at', $month_until)
+                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(final_price) as value')
+                                                ->groupBy('month', 'day')
+                                                ->get()
+                                                ->toArray();
+                    // 本年
+                    $year_total = $this->orders()->whereYear('created_at', Carbon::now()->year)->selectRaw('sum(final_price) as value')->first()->value?:0;
+                    // 本年日期
+                    $year_cycle = Carbon::now()->format('Y');
+                }
+                
+                $year_total_all = 0;
+                // 按照年度查询
+                if ($request->exists('start_time') && $request->exists('end_time')) {
+                    // 年度
+                    $year_cycle_all = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
+                    // 年度桌数（订单数）
+                    $year_total_all = $this->orders()->whereBetween('created_at', $year_cycle_all)->selectRaw('sum(final_price) as value')->first()->value?:0;
+                }
+
+                // 构造数组
+                for ($i=0; $i < $month_cycle; $i++) {
+                    $data[$i]['date'] = $i+1;
+                    $data[$i]['value'] = 0;
+                }
+
+                foreach ($data as $key => $value) {
+                    foreach ($month_total_all as $k => $v) {
+                        if ($value['date'] == $v['month']) {
+                            $data[$key]['value'] = $v['value'];
+                        }
+                    }
+                    foreach ($date_total_all as $k => $v) {
+                        if ($value['date'] == $v['month']) {
+                            $data[$key]['data'][] = $v;
+                        }
+                    }
+                }
+
+                return [
+                    'today_cycle' => $today_cycle, 
+                    'today_total' => $today_total,
+                    'year_total_all' => $year_total_all, 
+                    'month_cycle' => $month_cycle,
+                    'month_total' => $month_total, 
+                    'year_cycle' => $year_cycle,
+                    'year_total' => $year_total,
+                    'data' => $data, 
                 ];
                 break;
         }

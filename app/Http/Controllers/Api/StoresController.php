@@ -288,4 +288,10 @@ class StoresController extends Controller
         }
         return response()->json(['data' => $behaviorsList, 'title' => $behaviors, 'status' => 200]);
     }
+
+    /** 【 财务报表 -- 收入 】 */
+    public function income(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='income'))->additional(['status' => 200]);
+    } 
 }

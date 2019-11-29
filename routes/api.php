@@ -111,15 +111,19 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/placeNumber', 'Api\StoresController@placeNumber');
     // 占位时间
     Route::patch('store/{store}/placeHolder', 'Api\StoresController@placeHolder');
+    /** 【 员工表现报表 】 */ 
     // 出菜时间
     Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
-    // 员工表现
     // part1
     Route::patch('store/{store}/staffBehaviorPartOne', 'Api\StoresController@staffBehaviorPartOne');
     // part2
     Route::patch('store/staffBehaviorPartTwo', 'Api\StoresController@staffBehaviorPartTwo');
     // part3
     Route::patch('store/staffBehaviorPartThree', 'Api\StoresController@staffBehaviorPartThree');
+    /** 【 财务报表 】 */
+    // 收入
+    Route::patch('store/{store}/income', 'Api\StoresController@income');
+    // 支出 
 
 
     /** 【 标签 】*/
