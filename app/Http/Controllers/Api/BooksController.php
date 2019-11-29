@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookResource;
+use Carbon\Carbon;
 
 class BooksController extends Controller
 {
@@ -48,6 +49,13 @@ class BooksController extends Controller
         $book->date = strtotime($request->date);
         $book->update();
 
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
+    }
+
+    /** 【 预约状态修改按钮 】 */ 
+    public function edit(Request $request, Book $book)
+    {
+        $book->update(['status' => 1]);
         return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 }

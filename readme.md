@@ -68,6 +68,7 @@ php artisan passport:keys --force
 	order, 		status,		0：未支付，1：上完菜，2：已支付，3：已取消
 	order,		finish,		0：未打扫，1：正在打扫，2：已打扫
 	order_detail, status,	0：未完成，1：正在做，2：已做完，3：准备上菜，4：已上菜，5：退菜，
+	book,		status, 	0：未完成，1：已完成，2：逾期
 
 
 <!-- 设置socket registerAddress -->

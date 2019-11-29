@@ -30,7 +30,7 @@ class BookResource extends Resource
             // 'lock_in' => $this->lock_in?date('Y-m-d H:i:s', $this->lock_in):'',
             // 'lock_out' => $this->lock_out?date('Y-m-d H:i:s', $this->lock_out):'',
             // 'type' => $this->type,
-            // 'status' => $this->status,
+            'status' => $this->status,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):''
         ];

@@ -175,4 +175,40 @@ class ShopcartsController extends Controller
 
         return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
     }
+
+    /** 【 客户端--创建购物车（加入商品 -- 直接点击‘+’添加） 】 */ 
+    public function customerCreated(Request $request, Shopcart $shopcart)
+    {
+        $menu = Menu::find($request->menu_id);
+
+        if (!$menu->status) {
+            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+        }
+        switch ($menu->type) {
+            case 'o':
+                $menu_price = $menu->original_price;
+                break;
+            default:
+                $menu_price = $menu->special_price;
+                break;
+        }
+
+        $shopcart->fill($request->all());
+        $shopcart->number = 1;
+        $colletion = $menu->tags()->where('category', 'perfer')->get()->map(function ($item){
+            $item->tags = Tag::where('pid', $item->id)->get()->first();
+            return $item->only('tags');
+        });
+        $colletion->map(function ($item) use ($shopcart){
+            $shopcart->tags_id .= $item['tags']['id'].',';
+        });
+        $shopcart->tags_id = '[['.substr($shopcart->tags_id, 0, -1).']]';
+        $shopcart->original_price = $menu_price;
+        $shopcart->price = $menu_price;
+        $shopcart->category = $menu->category;
+        $shopcart->remark = '[""]';
+        $shopcart->save();
+
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
+    }
 }

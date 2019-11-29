@@ -63,6 +63,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('user/{user}/delete', 'Api\UsersController@delete');
     // 员工表现
     Route::get('user/behavior', 'Api\UsersController@behavior');
+    // 更换关联手机 —— 验证手机号码
+    Route::post('user/verify', 'Api\UsersController@verify');
+    // 更换关联手机 —— 新手机号码
+    Route::post('user/relate', 'Api\UsersController@relate');
 
 
     /**【 门店 】*/
@@ -111,11 +115,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
     // 员工表现
     // part1
-    Route::patch('store/{store}/staffBehaviorP1', 'Api\StoresController@staffBehaviorP1');
+    Route::patch('store/{store}/staffBehaviorPartOne', 'Api\StoresController@staffBehaviorPartOne');
     // part2
-    Route::patch('store/staffBehaviorP2', 'Api\StoresController@staffBehaviorP2');
+    Route::patch('store/staffBehaviorPartTwo', 'Api\StoresController@staffBehaviorPartTwo');
     // part3
-    Route::patch('store/staffBehaviorP3', 'Api\StoresController@staffBehaviorP3');
+    Route::patch('store/staffBehaviorPartThree', 'Api\StoresController@staffBehaviorPartThree');
 
 
     /** 【 标签 】*/
@@ -192,6 +196,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/book', 'Api\StoresController@book');
     // 预约详情
     Route::get('book/{book}/index', 'Api\BooksController@index');
+    // 预约状态修改按钮
+    Route::get('book/{book}/edit', 'Api\BooksController@edit');
 
     /** 【 购物车 】 */ 
     // 创建购物车（加入商品 -- 详情页添加）
@@ -266,7 +272,9 @@ Route::group(['middleware' => 'Code'], function(){
     // 创建购物车（加入商品）
     Route::post('shopcart/customerStore', 'Api\ShopcartsController@customerStore');
     // 购物车增加、减少商品
-    Route::patch('shopcart/{shopcart}/customerUpdate', 'Api\ShopcartsController@customerUpdate'); 
+    Route::patch('shopcart/{shopcart}/customerUpdate', 'Api\ShopcartsController@customerUpdate');
+    // 创建购物车（加入商品 -- 直接点击‘+’添加）
+    Route::post('shopcart/customerCreated', 'Api\ShopcartsController@customerCreated'); 
 
     /** 【 座位 】 */
     // 获取座位下购物车详情

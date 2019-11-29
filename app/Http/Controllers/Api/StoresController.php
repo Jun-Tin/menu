@@ -204,7 +204,7 @@ class StoresController extends Controller
     }
 
     /** 【 员工表现 -- p1 】 */
-    public function staffBehaviorP1(Request $request, Store $store)
+    public function staffBehaviorPartOne(Request $request, Store $store)
     {
         if ($request->has('id')) {
             switch ($request->id) {
@@ -248,7 +248,7 @@ class StoresController extends Controller
     }
 
     /** 【 员工表现 -- p2 】 */
-    public function staffBehaviorP2(Request $request, Store $store)
+    public function staffBehaviorPartTwo(Request $request, Store $store)
     {
         // 初始化变量
         $behaviors = array();
@@ -262,12 +262,11 @@ class StoresController extends Controller
                 $behaviors = $user->behaviors()->whereBetween('created_at', $time)->selectRaw('category, count(*) as value')->groupBy('category')->get();
             }
         }
-
         return response()->json(['data' => $behaviors, 'user' => $user, 'status' => 200]);
     }
 
     /** 【 员工表现 -- p3 】 */
-    public function staffBehaviorP3(Request $request, Store $store)
+    public function staffBehaviorPartThree(Request $request, Store $store)
     {
         // 初始化变量
         $behaviors = array();

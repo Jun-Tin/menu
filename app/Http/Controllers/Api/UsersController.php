@@ -114,12 +114,12 @@ class UsersController extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
         }
-
-        $attributes['pro_password'] = $request->password;
-        $attributes['password'] = bcrypt($request->password);
         
         $user = User::where('phone', $verifyData['phone'])->first();
-        User::where('phone', $verifyData['phone'])->update($attributes);
+        User::where('phone', $verifyData['phone'])->update([
+            'pro_password' => $request->password,
+            'password' => bcrypt($request->password)
+        ]);
 
         // 清除验证码缓存
         \Cache::forget($request->key);
@@ -164,7 +164,7 @@ class UsersController extends Controller
     public function edit(Request $request, User $user)
     {
         $data = $request->all();
-        $data['id'] = $request->user->id;
+        $data['id'] = $user->id;
         $validator = $user->validatorUserRegister($data, 'update');
 
         if ($validator->fails()) {
@@ -206,5 +206,41 @@ class UsersController extends Controller
         return response()->json(['message' => '退出成功！', 'status' => 200]);
     }
 
-    /** 【  】 */ 
+    /** 【 更换关联手机 —— 验证手机号码 】 */ 
+    public function verify(Request $request, User $user)
+    {
+        // 获取缓存的手机号和区号，以及验证码
+        $verifyData = \Cache::get($request->key);
+        if ( ! $verifyData) {
+            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+        }
+
+        if ( ! hash_equals($verifyData['code'], $request->code)) {
+            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+        }
+
+        // 清除验证码缓存
+        \Cache::forget($request->key);
+
+        return response()->json(['message' => '验证通过！', 'status' => 200]);
+    }
+
+    /** 【 更换关联手机 —— 新手机号码 】 */ 
+    public function relate()
+    {
+        // 获取缓存的手机号和区号，以及验证码
+        $verifyData = \Cache::get($request->key);
+        if ( ! $verifyData) {
+            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+        }
+
+        if ( ! hash_equals($verifyData['code'], $request->code)) {
+            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+        }
+
+        // 清除验证码缓存
+        \Cache::forget($request->key);
+
+        return response()->json(['message' => '修改成功！', 'status' => 200]);
+    }
 }
