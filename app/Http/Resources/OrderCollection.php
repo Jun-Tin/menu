@@ -32,8 +32,10 @@ class OrderCollection extends ResourceCollection
                             $item->place_name = Place::where('id',$item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
@@ -43,15 +45,16 @@ class OrderCollection extends ResourceCollection
                                 $item->tags_name = $name;
                             }
                             $item->remark = $item->remark;
-                            $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             return $item;
                         })->values(),
                         'finished' => $this->collection['finished']->flatten()->filter(function ($item){
                             $item->place_name = Place::where('id',$item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
@@ -61,7 +64,6 @@ class OrderCollection extends ResourceCollection
                                 $item->tags_name = $name;
                             }
                             $item->remark = $item->remark;
-                            $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             return $item;
                         })->values(),
                         'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
@@ -70,8 +72,10 @@ class OrderCollection extends ResourceCollection
                                 $item->place_name = Place::where('id',$item->place_id)->value('name');
                                 if ($item->pid) {
                                     $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                    $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                                 } else{
                                     $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                                    $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
                                 }
 
                                 if (!empty(json_decode($item->tags_id,true))) {
@@ -82,7 +86,6 @@ class OrderCollection extends ResourceCollection
                                 }
                                 $item->remark = $item->remark;
                                 $item->behavior = $behavior;
-                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                                 return $item;
                             }
                         })->values(),
