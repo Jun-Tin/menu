@@ -64,6 +64,21 @@ class PlacesController extends Controller
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
+    /** 【 刷新座位二维码 】 */ 
+    public function refresh(Request $request, Place $place)
+    {
+        $data = array(
+            'name' => $place->name,
+            'store_id' => $place->store_id,
+            'floor' => $place->floor,
+        );
+        $place->updateQrcode($data,$place->id);
+        $place->update($data);
+        $code = Redis::get($place->name.'_'.$place->id);
+
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
+    }
+
     // /**【删除座位--整层】*/
     // public function delete(Request $request, Place $place)
     // {

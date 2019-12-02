@@ -163,7 +163,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
     // 菜品售罄
     Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
-
     
 
     /**【 座位 】*/
@@ -173,6 +172,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('place/{place}/editFloor', 'Api\PlacesController@editFloor');
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
+    // 刷新座位二维码
+    Route::get('place/{place}/refresh', 'Api\PlacesController@refresh');
     // 修改座位
     Route::patch('place/{place}/update', 'Api\PlacesController@update');
     // 删除座位--单个
