@@ -43,7 +43,7 @@ class OrderCollection extends ResourceCollection
                                 $item->tags_name = $name;
                             }
                             $item->remark = $item->remark;
-                            $item->path = Image::where('id',$item->menus_id)->value('path');
+                            $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             return $item;
                         })->values(),
                         'finished' => $this->collection['finished']->flatten()->filter(function ($item){
@@ -61,7 +61,7 @@ class OrderCollection extends ResourceCollection
                                 $item->tags_name = $name;
                             }
                             $item->remark = $item->remark;
-                            $item->path = Image::where('id',$item->menus_id)->value('path');
+                            $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             return $item;
                         })->values(),
                         'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
@@ -82,7 +82,7 @@ class OrderCollection extends ResourceCollection
                                 }
                                 $item->remark = $item->remark;
                                 $item->behavior = $behavior;
-                                $item->path = Image::where('id',$item->menus_id)->value('path');
+                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                                 return $item;
                             }
                         })->values(),
