@@ -18,7 +18,7 @@ class TagCollection extends ResourceCollection
         // return parent::toArray($request);
         return [
             'data' => $this->collection->map(function ($item) {
-                $item->menus = Tag::find($item->id)->menus()->where('category','m')->where('status',1)->get()->map(function ($item) {
+                $item->menus = Tag::find($item->pivot->id)->menus()->where('category', 'm')->where('status', 1)->get()->map(function ($item) {
                     $item->image = Image::find($item->image_id);
                     return $item;
                 });
