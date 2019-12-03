@@ -104,6 +104,13 @@ class User extends Authenticatable
                     'phone.unique' => '手机号码已存在',
                 ]);
                 break;
+            case 'updated':
+                return Validator::make($data, [
+                    'phone' => 'required',
+                ], [
+                    'phone.required' => '手机号码不能为空',
+                ]);
+                break;
         }
     }
 

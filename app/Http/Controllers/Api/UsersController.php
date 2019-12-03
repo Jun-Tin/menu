@@ -172,7 +172,7 @@ class UsersController extends Controller
     {
         $data = $request->all();
         $data['id'] = $user->id;
-        $validator = $user->validatorUserRegister($data, 'update');
+        $validator = $user->validatorUserRegister($data, 'updated');
 
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
