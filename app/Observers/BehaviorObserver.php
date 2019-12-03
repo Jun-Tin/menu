@@ -19,10 +19,25 @@ class BehaviorObserver
 			// 	break;
 			// 上菜
 			case 'serving':
-				OrderDetail::where('id',$behavior->target_id)->update(['status'=>4]);
+				// OrderDetail::where('id',$behavior->target_id)->update(['status' => 4]);
+				$OrderDetail = OrderDetail::find($behavior->target_id);
+				// 修改菜品状态
+				$OrderDetail->update(['status' => 2]);
+				// 判断是否属于套餐内的单品
+				if ($OrderDetail->pid) {
+					// 获取套餐内单品状态
+					$all = OrderDetail::where('pid',$OrderDetail->pid)->get();
+					$status = $all->contains(function ($value, $key) {
+					    return $value = 4;
+					});
+					if ($status) {
+						// 修改套餐状态
+						OrderDetail::where('id',$OrderDetail->pid)->update(['status' => 4]);
+					}
+				}
 
 				$store_id = (User::find($behavior->user_id))->store_id;
-				$count = OrderDetail::where('store_id',$store_id)->where('category','m')->where('status',0)->selectRaw('count(*) as value')->get()->toArray();
+				$count = OrderDetail::where('store_id',$store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
 				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！','count'=>$count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
 			// 做菜
@@ -34,11 +49,11 @@ class BehaviorObserver
 					$all = OrderDetail::where('pid',$OrderDetail->pid)->get();
 					if ($all->min('status') != 0) {
 						// 修改套餐状态
-						OrderDetail::where('id',$OrderDetail->pid)->update(['status'=>2]);
+						OrderDetail::where('id',$OrderDetail->pid)->update(['status' => 2]);
 					}
 				}
 				// 修改菜品状态
-				$OrderDetail->update(['status'=>2]);
+				$OrderDetail->update(['status' => 2]);
 				// 获取原订单号
 				$order_order = OrderDetail::where('id',$behavior->target_id)->value('order_order');
 				// 获取原订单信息
@@ -57,8 +72,21 @@ class BehaviorObserver
                 Behavior::where('target_id',$behavior->target_id)->where('category','backout')->delete();
 
 				$store_id = (User::find($behavior->user_id))->store_id;
-				$count = OrderDetail::where('store_id',$store_id)->where('category','m')->where('status',0)->selectRaw('count(*) as value')->get()->toArray();
+				$count = OrderDetail::where('store_id',$store_id)->where('category','m')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
 				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'serving','message'=>'上菜了！','count'=>$count[0]['value']), JSON_UNESCAPED_UNICODE));
+				break;
+			// 撤销
+			case 'retreat':
+				$OrderDetail = OrderDetail::find($behavior->target_id);
+				// 判断是否属于套餐内的单品
+				if ($OrderDetail->pid) {					
+					// 修改套餐状态
+					OrderDetail::where('id',$OrderDetail->pid)->update(['status' => 0]);
+				}
+
+				$store_id = (User::find($behavior->user_id))->store_id;
+				$count = OrderDetail::where('store_id',$store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！','count'=>$count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
 		}
 	}
