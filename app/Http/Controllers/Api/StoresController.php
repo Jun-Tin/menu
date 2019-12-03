@@ -75,16 +75,26 @@ class StoresController extends Controller
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
 
+    /** 【 激活门店 】 */
+    public function active(Request $request, Store $store)
+    {
+        $user = auth()->user();
+        $user->decrement('coins', 3);
+        $store->update(['active' => 1]);
+
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => '激活成功！']);
+    } 
+
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category','m')->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category', 'm')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
     public function packages(Store $store)
     {
-        return (new MenuCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where('category', 'p')->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 （按人数筛选） 】 */
@@ -158,7 +168,7 @@ class StoresController extends Controller
     /** 【 套餐列表 】 */
     public function customerPackages(Store $store)
     {
-        return (new MenuCollection($store->menus()->where('category','p')->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where('category', 'p')->get()))->additional(['status' => 200]);
     }
 
     /** 【 客人数量 】 */

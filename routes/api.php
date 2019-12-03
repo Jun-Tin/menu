@@ -80,6 +80,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/update', 'Api\StoresController@update');
     // 删除门店
     Route::delete('store/{store}/destroy', 'Api\StoresController@destroy');
+    // 激活门店
+    Route::get('store/{store}/active', 'Api\StoresController@active');
     // 门店菜品列表
     Route::get('store/{store}/menus', 'Api\StoresController@menus');
     // 门店套餐列表
