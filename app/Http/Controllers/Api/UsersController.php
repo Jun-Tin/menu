@@ -24,7 +24,14 @@ class UsersController extends Controller
         if (! $user) {
             return response()->json(['error'=>['message' =>['用户不存在！']], 'status' => 401]);
         }
-        if(Auth::attempt(['phone' => $user->phone, 'password' => $request->password])){
+
+        if ($user->post == 'boss') {
+            // 判定条件
+            $status = Auth::attempt(['phone' => $user->phone, 'password' => $request->password]);
+        } else {
+            $status = Auth::attempt(['account' => $user->account, 'password' => $request->password]);
+        }
+        if($status){
             if ($user->post == $request->identity || $user->post == 'manager' || $user->post == 'boss') {
                 if ($user->post == $request->identity) {
                     $scopes = $user->post;
