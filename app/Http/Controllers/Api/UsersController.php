@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use DB;
-use App\Models\{User, Store};
+use App\Models\{User, Store, Place};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -148,9 +148,17 @@ class UsersController extends Controller
     } 
     
     /** 【 设置员工信息 】 */
-    public function staff(Request $request, User $user)
+    public function staff(Request $request, User $user, Place $place)
     {
+        $data = [
+            // 默认类型值
+            'type' => $request->post,
+            'store_id' => $request->store_id,
+            'id' => '123',
+        ];
         
+        dd($place->updateQrcode($data,'123'));
+
         $user = User::create([
             'name' => $request->name,
             'area_code' => $request->area_code,

@@ -168,6 +168,13 @@ class StoresController extends Controller
         $in_number = $store->menus()->where('status', 1)->count();
         $out_number = $store->menus()->where('status', 0)->count();
         return response()->json(['status' => 200, 'in_number' => $in_number, 'out_number' => $out_number, 'all_number' => $all_number]);
+    }
+
+    /** 【 门店售罄菜品一键恢复 】 */
+    public function returnMenus(Store $store)
+    {
+        $store->menus()->update(['status' => 1]);
+        return response()->json(['status' => 200, 'message' => '操作成功！']);
     } 
 
     /** 【 客户端--门店详情 】 */ 

@@ -41,7 +41,7 @@ class Place extends Model
                 $env = env('APP_CLIENT');
                 QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
                 break;
-            case 'staff':
+            case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
                 if (!is_dir($dir)) {
                     File::makeDirectory($dir, 0777, true);
