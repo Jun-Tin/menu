@@ -33,6 +33,17 @@ class Place extends Model
     /** 【 更新二维码信息 】 */
     public function updateQrcode($data, $placeid)
     {
+        switch ($data['type']) {
+            case 'place':
+                
+                break;
+            case 'staff':
+                
+                break;
+            case 'chef':
+                
+                break;
+        }
         $encrypted = substr(Crypt::encryptString($data['name'].'_'.$placeid.'_code'),0,15);
         $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
         $filename = $data['name'] . '.png';

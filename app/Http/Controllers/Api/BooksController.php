@@ -58,4 +58,16 @@ class BooksController extends Controller
         $book->update(['status' => 1]);
         return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Book $book)
+    {
+        $book->delete();
+        return response()->json(['message' => '删除成功！', 'status' => 200]);
+    }
 }
