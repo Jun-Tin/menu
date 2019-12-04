@@ -35,11 +35,14 @@ class PlaceCollection extends ResourceCollection
                 $item->place = PlaceResource::collection($item->where($where)->get())->map(function ($item){
                     switch ($this->param) {
                         case 'places':
-                            $item->order = $item->order()->whereIn('status', [0,1,2])->orderBy('created_at', 'desc')->first();
+                            $item->order = '';
+                            if ($item->status == 1) {
+                                $item->order = $item->order()->orderBy('created_at', 'desc')->first();
+                            }
                             break;
                         
                         case 'retreat':
-                            $item->order = Order::where('place_id',$item->id)->where('status', 0)->orderBy('created_at', 'desc')->first();
+                            $item->order = Order::where('place_id', $item->id)->where('status', 0)->orderBy('created_at', 'desc')->first();
                             break;
                         /*case 'PUT':
                             $item->place = PlaceResource::collection($item->place);

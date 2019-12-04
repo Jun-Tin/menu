@@ -274,7 +274,7 @@ class PlacesController extends Controller
         });
 
         // 修改座位状态
-        $place->update(['status'=>1]);
+        $place->update(['status' => 1]);
         // 记录员工行为
         Behavior::create([
             'user_id' => auth()->id(),
