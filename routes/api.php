@@ -273,9 +273,9 @@ Route::group(['middleware' => 'Code'], function(){
     // Route::get('store/index/{store}/{place}/{code}', 'Api\StoresController@index');
     // 
     /** 【 菜品列表--全部 】 */ 
-    Route::get('store/{store}/customerMenus', 'Api\StoresController@customerMenus');
+    Route::get('store/{store}/customerMenus/{type}', 'Api\StoresController@customerMenus');
     /** 【 菜品列表--套餐 】 */ 
-    Route::get('store/{store}/customerPackages', 'Api\StoresController@customerPackages');
+    Route::get('store/{store}/customerPackages/{type}', 'Api\StoresController@customerPackages');
     /** 【 菜品详情 】 */ 
     Route::get('menu/{menu}/customerIndex', 'Api\MenusController@customerIndex');
 
