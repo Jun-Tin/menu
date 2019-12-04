@@ -246,6 +246,7 @@ class UsersController extends Controller
         }
 
         $data = $request->all();
+        $user = auth()->user();
         $data['id'] = $user->id;
         $validator = $user->validatorUserRegister($data, 'update');
 
@@ -253,7 +254,6 @@ class UsersController extends Controller
             return response()->json(['error'=>$validator->errors(), 'status' => 401]);
         }
 
-        $user = auth()->user();
         $user->update([
             'area_code' => $request->area_code,
             'phone' => $request->phone,

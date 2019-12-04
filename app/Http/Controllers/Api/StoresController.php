@@ -32,6 +32,10 @@ class StoresController extends Controller
         $user = auth()->user();
         $store->fill($request->all());
         $store->user_id = $user->id;
+        // 先给定默认值，后期做修改（删除）
+        $store->clean = 1;
+        $store->settle = 1;
+
         $store->save();
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
