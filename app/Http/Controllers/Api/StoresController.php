@@ -18,7 +18,7 @@ class StoresController extends Controller
     public function index()
     {
         $user = auth()->user();
-        return (new StoreCollection($user->stores))->additional(['status'=>200]);
+        return (new StoreCollection($user->stores))->additional(['status' => 200]);
     }
 
     /**
@@ -148,25 +148,33 @@ class StoresController extends Controller
     /** 【 售罄菜品列表 】 */
     public function saleOut(Request $request, Store $store)
     {
-        return (new MenuCollection($store->menus()->where('status',0)->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where('status', 0)->get()))->additional(['status' => 200]);
     }
 
     /** 【 菜品列表--全部 】 */ 
     public function totalMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid',0)->where('category', 'class')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
     }
+
+    /** 【 在售、售罄菜品数量 】 */
+    public function searchMenus(Store $store)
+    {
+        $in_number = $store->menus()->where('status', 1)->count();
+        $out_number = $store->menus()->where('status', 0)->count();
+        return response()->json(['status' => 200, 'in_number' => $in_number, 'out_number' => $out_number]);
+    } 
 
     /** 【 客户端--门店详情 】 */ 
     public function customerShow(Store $store)
     {
-        return (new StoreResource($store))->additional(['status'=>200]);
+        return (new StoreResource($store))->additional(['status' => 200]);
     }
 
     /** 【 客户端--菜品列表--全部 】 */ 
     public function customerMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid',0)->where('category', 'class')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */

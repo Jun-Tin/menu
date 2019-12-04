@@ -100,6 +100,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/saleOut', 'Api\StoresController@saleOut');
     // 门店菜品列表--全部
     Route::get('store/{store}/totalMenus', 'Api\StoresController@totalMenus');
+    // 门店在售、售罄菜品数量
+    Route::get('store/{store}/searchMenus', 'Api\StoresController@searchMenus');
     /** 【 销售报表 】 */
     // 客人数量
     Route::patch('store/{store}/guestNumber', 'Api\StoresController@guestNumber');
