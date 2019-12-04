@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 门店菜品列表
     Route::get('store/{store}/menus', 'Api\StoresController@menus');
     // 门店套餐列表
-    Route::get('store/{store}/packages', 'Api\StoresController@packages');
+    Route::get('store/{store}/packages/{type}', 'Api\StoresController@packages');
     // 门店座位列表、加菜
     Route::get('store/{store}/places', 'Api\StoresController@places');
     // 门店座位列表--按人数筛选
@@ -99,7 +99,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 售罄菜品列表
     Route::get('store/{store}/saleOut', 'Api\StoresController@saleOut');
     // 门店菜品列表--全部
-    Route::get('store/{store}/totalMenus', 'Api\StoresController@totalMenus');
+    Route::get('store/{store}/totalMenus/{type}', 'Api\StoresController@totalMenus');
     // 门店在售、售罄菜品数量
     Route::get('store/{store}/searchMenus', 'Api\StoresController@searchMenus');
     /** 【 销售报表 】 */

@@ -96,9 +96,13 @@ class StoresController extends Controller
     }
 
     /** 【 套餐列表 】 */
-    public function packages(Store $store)
+    public function packages(Request $request, Store $store)
     {
-        return (new MenuCollection($store->menus()->where('category', 'p')->get()))->additional(['status' => 200]);
+        $where[] = ['category', 'p'];
+        if ($request->type == 'in') {
+            $where[] = ['status', 1];
+        }
+        return (new MenuCollection($store->menus()->where($where)->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 （按人数筛选） 】 */
