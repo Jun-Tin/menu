@@ -31,26 +31,30 @@ class Place extends Model
     } 
 
     /** 【 更新二维码信息 】 */
-    public function updateQrcode($data, $placeid)
+    public function updateQrcode($data, $id)
     {
-        $encrypted = substr(Crypt::encryptString($data['name'].'_'.$placeid.'_code'),0,15);
+        $encrypted = substr(Crypt::encryptString($data['name'].'_'.$id.'_code'),0,15);
         $filename = $data['name'] . '.png';
         switch ($data['type']) {
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
                 $env = env('APP_CLIENT');
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
                 break;
             case 'staff':
-                
+                $dir = public_path('images/qrcodes/'.$data['store_id'].'/store');
+                $env = env('APP_STAFF');
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$id.'/'.$encrypted, $dir. '/'. $filename);
                 break;
             case 'chef':
-                
+                $dir = public_path('images/qrcodes/'.$data['store_id'].'/store');
+                $env = env('APP_CHEF');
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$id.'/'.$encrypted, $dir. '/'. $filename);
                 break;
         }
         // $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
-        // QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$placeid.'/'.$encrypted, $dir. '/'. $filename);
+        // QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
         // 设置redis缓存
-        Redis::set($data['name'].'_'.$placeid, $encrypted);
+        Redis::set($data['name'].'_'.$id, $encrypted);
     } 
 }

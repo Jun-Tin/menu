@@ -152,27 +152,34 @@ class MenusController extends Controller
         return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
     }
 
-    /** 【 菜品售罄、恢复 】 */
+    /** 【 菜品售罄、恢复 -- 多选 】 */
     public function saleStatus(Request $request, Menu $menu)
     {
         $ids = json_decode($request->ids);
 
-        $type = $request->type;
-
-        switch ($type) {
+        switch ($request->type) {
             case 'out':
-                foreach ($ids as $key => $value) {
-                    $menu::where('id',$value)->update(['status' => 0]);
-                }
+                $menu::whereIn('id', $ids)->update(['status' => 0]);
                 break;
             
             default:
-                foreach ($ids as $key => $value) {
-                    $menu::where('id',$value)->update(['status' => 1]);
-                }
+                $menu::whereIn('id', $ids)->update(['status' => 1]);
                 break;
         }
+        return response()->json(['message' => '修改成功！', 'status' => 200]);
+    }
 
+    /** 【 菜品售罄、恢复 -- 单选 】 */
+    public function soldStatus(Request $request, Menu $menu)
+    {
+        switch ($request->type) {
+            case 'out':
+                $menu->update(['status' => 0]);
+                break;
+            default:
+                $menu->update(['status' => 1]);
+                break;
+        }
         return response()->json(['message' => '修改成功！', 'status' => 200]);
     }
 }
