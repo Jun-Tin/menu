@@ -41,7 +41,10 @@ class PlacesController extends Controller
      */
     public function update(Request $request, Place $place)
     {
-        $place->updateQrcode($request->all(),$place->id);
+        $data = $request->all();
+        // 默认类型值
+        $data['type'] = 'place';
+        $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         $code = Redis::get($place->name.'_'.$place->id);
 
@@ -74,6 +77,7 @@ class PlacesController extends Controller
             'name' => $place->name,
             'store_id' => $place->store_id,
             'floor' => $place->floor,
+            'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
         $place->update($data);

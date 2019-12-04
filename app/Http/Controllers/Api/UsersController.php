@@ -150,6 +150,7 @@ class UsersController extends Controller
     /** 【 设置员工信息 】 */
     public function staff(Request $request, User $user)
     {
+        
         $user = User::create([
             'name' => $request->name,
             'area_code' => $request->area_code,
@@ -163,6 +164,8 @@ class UsersController extends Controller
             'store_id' => $request->store_id,
             'account' => $user->random(),
         ]);
+
+
         
         return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
     }
