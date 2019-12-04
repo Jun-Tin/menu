@@ -26,7 +26,7 @@ class PlacesController extends Controller
         $data = $request->all();
         // 默认类型值
         $data['type'] = 'place';
-        $place->updateQrcode(,$place->id);
+        $place->updateQrcode($data,$place->id);
         $code = Redis::get($place->name.'_'.$place->id);
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！', 'code' => $code]);
