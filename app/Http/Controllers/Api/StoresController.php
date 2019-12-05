@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User};
+use App\Models\{Store, User, MenuTag};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -164,9 +164,21 @@ class StoresController extends Controller
     /** 【 在售、售罄菜品数量 】 */
     public function searchMenus(Store $store)
     {
-        $all_number = $store->menus->count();
-        $in_number = $store->menus()->where('status', 1)->count();
-        $out_number = $store->menus()->where('status', 0)->count();
+        $all_number = $store->menus->filter(function ($item){
+            if (MenuTag::where('menu_id', $item->id)->first()) {
+                return $item;
+            }
+        })->count();
+        $in_number = $store->menus()->where('status', 1)->filter(function ($item){
+            if (MenuTag::where('menu_id', $item->id)->first()) {
+                return $item;
+            }
+        })->count();
+        $out_number = $store->menus()->where('status', 0)->filter(function ($item){
+            if (MenuTag::where('menu_id', $item->id)->first()) {
+                return $item;
+            }
+        })->count();
         return response()->json(['status' => 200, 'in_number' => $in_number, 'out_number' => $out_number, 'all_number' => $all_number]);
     }
 
