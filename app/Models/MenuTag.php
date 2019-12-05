@@ -9,6 +9,6 @@ class MenuTag extends Model
     protected $table = 'menu_tag';
 
     protected $fillable = [
-        'menu_id', 'target_id', 'pid', 'fill_price', 'order_number'
+        'menu_id', 'target_id', 'name', 'pid', 'fill_price', 'order_number'
     ];
 }

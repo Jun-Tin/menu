@@ -30,8 +30,8 @@ class TagResource extends Resource
             'menus' => $this->whenPivotLoaded('menu_tag', function(){
                 return Menu::find($this->pivot->menu_id)->menus($this->pivot->id)->get()->map(function ($item, $key){
                     $item->image = Image::find($item->image_id);
-                    $item->perfer = $item->tags()->where('category','perfer')->get()->map(function ($item, $key){
-                        $item->category = new TagCollection(Tag::where('pid',$item->pivot->target_id)->get());
+                    $item->perfer = $item->tags()->where('category', 'perfer')->get()->map(function ($item, $key){
+                        $item->category = new TagCollection(Tag::where('pid', $item->pivot->target_id)->get());
                         return $item;
                     });
                     return $item;

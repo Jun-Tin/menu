@@ -171,6 +171,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
     // 菜品在售、售罄修改（单个菜品）
     Route::patch('menu/{menu}/soldStatus', 'Api\MenusController@soldStatus');
+
+    /** 【 新套餐 】 */
+    // 创建标签
+    Route::post('menuTag/{menu}/store', 'Api\MenuTagController@store');
     
 
     /**【 座位 】*/

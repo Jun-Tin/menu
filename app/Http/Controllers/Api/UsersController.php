@@ -22,7 +22,7 @@ class UsersController extends Controller
         }
 
         if (! $user) {
-            return response()->json(['error'=>['message' =>['用户不存在！']], 'status' => 401]);
+            return response()->json(['error' => ['message' => ['用户不存在！']], 'status' => 401]);
         }
 
         if ($user->post == 'boss') {
@@ -42,12 +42,12 @@ class UsersController extends Controller
                 }
                 // 删除之前的token
                 // DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->update(['revoked'=>1]);
-                DB::table('oauth_access_tokens')->where('user_id',$user->id)->where('name','MyApp')->delete();
+                DB::table('oauth_access_tokens')->where('user_id', $user->id)->where('name', 'MyApp')->delete();
                 // 获取新的token
                 $success['token'] =  $user->createToken('MyApp', [$scopes])->accessToken;
                 return response()->json(['success' => $success, 'status' => 200, 'message' => '登录成功！']);
             }
-            return response()->json(['error' => ['message' => ['没有权限登录！']],'status' => 203]);
+            return response()->json(['error' => ['message' => ['没有权限登录！']], 'status' => 203]);
         }
         return response()->json(['error' => ['message' => ['密码错误！']], 'status' => 401]);
     }
@@ -71,7 +71,7 @@ class UsersController extends Controller
         $validator = $user->validatorUserRegister($data, 'register');
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
 
         $user = User::create([
@@ -119,7 +119,7 @@ class UsersController extends Controller
         $validator = $user->validatorUserRegister($request->all(), 'password');
         
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
         
         $user = User::where('phone', $verifyData['phone'])->first();
@@ -150,15 +150,6 @@ class UsersController extends Controller
     /** 【 设置员工信息 】 */
     public function staff(Request $request, User $user, Place $place)
     {
-        $data = [
-            // 默认类型值
-            'type' => $request->post,
-            'store_id' => $request->store_id,
-            'id' => '123',
-        ];
-        
-        dd($place->updateQrcode($data,'123'));
-
         $user = User::create([
             'name' => $request->name,
             'area_code' => $request->area_code,
@@ -173,26 +164,43 @@ class UsersController extends Controller
             'account' => $user->random(),
         ]);
 
-
+        // 创建登录二维码写入登录链接
+        $data = [
+            // 默认类型值
+            'type' => $request->post,
+            'store_id' => $request->store_id,
+            'name' => $user->account,
+            'id' => $user->id,
+        ];
+        $result = $place->updateQrcode($data,$user->id);
+        // 更新数据
+        $user->update(['qrcode' => $result['qrcode'], 'link' => $result['link']]);
         
         return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
     }
 
     /** 【 修改员工信息 】 */ 
-    public function edit(Request $request, User $user)
+    public function edit(Request $request, User $user, Place $place)
     {
         $data = $request->all();
         $data['id'] = $user->id;
         $validator = $user->validatorUserRegister($data, 'updated');
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors(), 'status' => 401]);
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
 
         $user->fill($request->all());
         $user->password = bcrypt($request->password);
         $user->pro_password = $request->password;
         $user->entry_time = strtotime($request->entry_time);
+
+        $data['name'] = $user->account;
+        $data['type'] = $request->post;
+        $result = $place->updateQrcode($data,$user->id);
+        $user->qrcode = $result['qrcode'];
+        $user->link = $result['link'];
+
         $user->update();
 
         return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
@@ -211,7 +219,7 @@ class UsersController extends Controller
     {
         $user = auth()->user();
 
-        return (BehaviorResource::collection($user->behaviors()->orderBy('created_at','desc')->get()))->additional(['status'=>200]);
+        return (BehaviorResource::collection($user->behaviors()->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 退出登录 】 */

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\{Redis, Crypt};
+use Illuminate\Support\Facades\{Redis, Crypt, File};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Place extends Model
@@ -38,29 +38,36 @@ class Place extends Model
         switch ($data['type']) {
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
-                $env = env('APP_CLIENT');
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
                 if (!is_dir($dir)) {
                     File::makeDirectory($dir, 0777, true);
                 }
-                $env = env('APP_STAFF');
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$id.'/'.$encrypted, $dir. '/'. $filename);
+                $link = env('APP_STAFF').$id.'/'.$encrypted;
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
+                $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'chef':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
                 if (!is_dir($dir)) {
                     File::makeDirectory($dir, 0777, true);
                 }
-                $env = env('APP_CHEF');
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($env.$id.'/'.$encrypted, $dir. '/'. $filename);
+                $link = env('APP_CHEF').$id.'/'.$encrypted;
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
+                $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
+                break;
+            default :
+                $qrcode = '';
+                $link = '';
                 break;
         }
-        // $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
-        // QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
         // 设置redis缓存
         Redis::set($data['name'].'_'.$id, $encrypted);
+        return [
+            'qrcode' => $qrcode,
+            'link' => $link,
+        ];
     } 
 }

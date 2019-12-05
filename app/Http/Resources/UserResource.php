@@ -31,6 +31,7 @@ class UserResource extends Resource
             'entry_time' => $this->entry_time?date('Y-m-d',$this->entry_time):'',
             'password' => $this->pro_password,
             'link' => $this->link,
+            'qrcode' => $this->qrcode,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
         ];

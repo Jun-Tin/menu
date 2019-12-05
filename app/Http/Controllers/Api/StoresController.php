@@ -92,7 +92,7 @@ class StoresController extends Controller
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus()->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category', 'm')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
