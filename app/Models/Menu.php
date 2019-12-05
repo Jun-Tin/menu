@@ -27,4 +27,10 @@ class Menu extends Model
     {
         return $this->belongsToMany(self::class, 'menu_tag', 'menu_id', 'target_id')->withPivot('id', 'fill_price', 'order_number')->wherePivot('pid', $value)->withTimestamps()->orderBy('order_number');
     }
+
+    /** 【 一对多标签关联关系 】 */
+    public function tag()
+    {
+        return $this->hasMany(MenuTag::class, 'menu_id', 'id');
+    } 
 }

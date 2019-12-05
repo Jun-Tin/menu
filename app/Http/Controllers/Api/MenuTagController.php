@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\MenuTag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MenuTagResource;
 
 class MenuTagController extends Controller
 {
@@ -36,7 +37,11 @@ class MenuTagController extends Controller
      */
     public function store(Request $request, MenuTag $menuTag)
     {
-        
+        dd($menuTag);
+        $menuTag->pid = 0;
+        $menuTag->save();
+
+        return (new MenuTagResource($menuTag))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**

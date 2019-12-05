@@ -155,11 +155,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('menu/destroy', 'Api\MenusController@destroy');
     /** 【 套餐嵌入标签 】 */ 
     // 添加标签
-    Route::post('menu/{menu}/addTags', 'Api\MenusController@addTags');
+    // Route::post('menu/{menu}/addTags', 'Api\MenusController@addTags');
     // 排序标签
-    Route::post('menu/{menu}/orderTags', 'Api\MenusController@orderTags');
+    // Route::post('menu/{menu}/orderTags', 'Api\MenusController@orderTags');
     // 删除标签
-    Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
+    // Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
     /** 【 套餐嵌入菜品 】 */
     // 添加、修改菜品
     Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
@@ -174,7 +174,13 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /** 【 新套餐 】 */
     // 创建标签
-    Route::post('menuTag/{menu}/store', 'Api\MenuTagController@store');
+    Route::post('menu/{menu}/addTags', 'Api\MenusController@addTags');
+    // 修改标签
+    Route::patch('menu/{menu}/editTags', 'Api\MenusController@editTags');
+    // 排序标签
+    Route::post('menu/{menu}/orderTags', 'Api\MenusController@orderTags');
+    // 删除标签
+    Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
     
 
     /**【 座位 】*/

@@ -169,12 +169,12 @@ class StoresController extends Controller
                 return $item;
             }
         })->count();
-        $in_number = $store->menus()->where('status', 1)->filter(function ($item){
+        $in_number = $store->menus()->where('status', 1)->get()->filter(function ($item){
             if (MenuTag::where('menu_id', $item->id)->first()) {
                 return $item;
             }
         })->count();
-        $out_number = $store->menus()->where('status', 0)->filter(function ($item){
+        $out_number = $store->menus()->where('status', 0)->get()->filter(function ($item){
             if (MenuTag::where('menu_id', $item->id)->first()) {
                 return $item;
             }

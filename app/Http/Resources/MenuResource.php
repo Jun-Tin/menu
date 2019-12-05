@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Tag;
-use App\Http\Resources\{ImageResource, MenuResource, MenuCollection, TagCollection};
+use App\Http\Resources\{ImageResource, MenuResource, MenuCollection, TagCollection, MenuTagCollection};
 use Illuminate\Http\Resources\Json\Resource;
 
 class MenuResource extends Resource
@@ -31,16 +31,34 @@ class MenuResource extends Resource
                     'status' => $this->status,
                     'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                    'class' => new MenuCollection($this->tags()->where('category','class')->get()),
-                    'perfer' => new MenuCollection($this->tags()->where('category','perfer')->get()->map(function ($item, $key){
-                        $item->category = new TagCollection(Tag::where('pid',$item->pivot->target_id)->get());
+                    'class' => new MenuCollection($this->tags()->where('category', 'class')->get()),
+                    'perfer' => new MenuCollection($this->tags()->where('category', 'perfer')->get()->map(function ($item, $key){
+                        $item->category = new TagCollection(Tag::where('pid', $item->pivot->target_id)->get());
                         return $item;
                     })),
-                    'class_id' => $this->tags->where('category','class')->pluck('id'),
-                    'perfer_id' => $this->tags->where('category','perfer')->pluck('id'),
+                    'class_id' => $this->tags->where('category', 'class')->pluck('id'),
+                    'perfer_id' => $this->tags->where('category', 'perfer')->pluck('id'),
                 ];
                 break;
             
+            case 'p':
+                return [
+                    'id' => $this->id,
+                    'store_id' => $this->store_id,
+                    'name' => $this->name,
+                    'image' => new ImageResource($this->image),
+                    'original_price' => $this->original_price,
+                    'special_price' => $this->special_price,
+                    'level' => $this->level,
+                    'type' => $this->type,
+                    'category' => $this->category,
+                    'status' => $this->status,
+                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'tags' => new MenuTagCollection($this->tag()->where('pid', 0)->get()),
+                ];
+                break;
+
             default:
                 return [
                     'id' => $this->id,
