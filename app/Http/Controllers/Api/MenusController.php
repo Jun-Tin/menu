@@ -249,4 +249,13 @@ class MenusController extends Controller
     
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
     }
+
+    /** 【 新套餐 -- 获取菜品列表 】 */ 
+    public function getMenus(Request $request, Menu $menu)
+    {
+        $menuTag = MenuTag::find($request->id);
+        $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
+
+        return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
+    }
 }

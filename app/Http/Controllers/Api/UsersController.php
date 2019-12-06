@@ -286,24 +286,37 @@ class UsersController extends Controller
     /** 【 销售人员创建账号 】 */
     public function create(Request $request, User $user)
     {
-        $user = auth()->user();
         $data = $request->all();
-
         $validator = $user->validatorUserRegister($data, 'register');
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'area_code' => 86,
-            'phone' => $verifyData['phone'],
+            'phone' => $request->phone,
             'password' => bcrypt($request->password),
             'pro_password' => $request->password,
             'post' => 'boss',
             'account' => $user->random(),
+            'created_by' => auth()->user()->id,
         ]);
 
+        return response()->json(['success'=> [
+                                    'name' => $user->name,
+                                    'token' => $user->createToken('MyApp', ['boss'])->accessToken
+                                ], 
+                                'status' => 200 ,
+                                'message' => '创建成功！' ]);
+
     }
+
+    /** 【 我的客户 】 */
+    public function client(Request $request, User $user)
+    {
+        $user = auth()->user();
+        dd($user->users);
+    } 
 }

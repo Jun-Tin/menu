@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'store_id', 'account', 'area_code', 'phone', 'pro_password', 'image_id', 'gender', 'birthday', 'post', 'entry_time', 'link', 'qrcode'
+        'name', 'email', 'password', 'store_id', 'account', 'area_code', 'phone', 'pro_password', 'image_id', 'gender', 'birthday', 'post', 'entry_time', 'link', 'qrcode', 'created_by'
     ];
 
     /**
@@ -69,6 +69,12 @@ class User extends Authenticatable
     public function behaviors()
     {
         return $this->hasMany(Behavior::class);
+    }
+
+    /** 【 一对多客户关联关系 】 */
+    public function users()
+    {
+        return $this->hasMany(self::class, 'created_by', 'id');
     } 
 
     /** 【 自定义验证规则 ] */ 

@@ -69,6 +69,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('user/relate', 'Api\UsersController@relate');
     // 销售人员创建账号
     Route::post('user/create', 'Api\UsersController@create');
+    // 我的客户
+    Route::get('user/client', 'Api\UsersController@client');
 
 
     /**【 门店 】*/
@@ -168,7 +170,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // // 删除菜品
     // Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
     // // 获取菜品列表
-    // Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
+    Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
     // 菜品售罄（多选菜品）
     Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
     // 菜品在售、售罄修改（单个菜品）
