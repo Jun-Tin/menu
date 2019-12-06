@@ -55,7 +55,19 @@ class BooksController extends Controller
     /** 【 预约状态修改按钮 】 */ 
     public function edit(Request $request, Book $book)
     {
-        $book->update(['status' => 1]);
+        switch ($request->type) {
+            case 'success':
+                $book->update(['status' => 1]);
+                break;
+            case 'back':
+                if (strtotime(date('Y-m-d', $book->date).' '.$book->meal_time) < time()) {
+                    $status = 2;
+                } else {
+                    $status = 0;
+                }
+                $book->update(['status' => $status]);
+                break;
+        }
         return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 

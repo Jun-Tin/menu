@@ -69,7 +69,8 @@ php artisan passport:keys --force
 	order,		finish,				0：未打扫，1：已打扫
 	order_detail, status,			0：未完成，1：正在做，2：已做完，3：准备上菜，4：已上菜，5：退菜，
 	book,		status, 			0：未完成，1：已完成，2：逾期
-	order 		payment_method 		1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他
+	order, 		payment_method 		1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他
+	user,		created_by			0：系统，{id}：用户id
 
 
 <!-- 设置socket registerAddress -->

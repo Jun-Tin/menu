@@ -282,4 +282,28 @@ class UsersController extends Controller
 
         return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
     }
+
+    /** 【 销售人员创建账号 】 */
+    public function create(Request $request, User $user)
+    {
+        $user = auth()->user();
+        $data = $request->all();
+
+        $validator = $user->validatorUserRegister($data, 'register');
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
+        }
+
+        User::create([
+            'name' => $request->name,
+            'area_code' => 86,
+            'phone' => $verifyData['phone'],
+            'password' => bcrypt($request->password),
+            'pro_password' => $request->password,
+            'post' => 'boss',
+            'account' => $user->random(),
+        ]);
+
+    }
 }

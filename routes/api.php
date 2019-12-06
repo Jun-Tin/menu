@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('user/verify', 'Api\UsersController@verify');
     // 更换关联手机 —— 新手机号码
     Route::post('user/relate', 'Api\UsersController@relate');
+    // 销售人员创建账号
+    Route::post('user/create', 'Api\UsersController@create');
 
 
     /**【 门店 】*/
@@ -224,7 +226,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 预约详情
     Route::get('book/{book}/index', 'Api\BooksController@index');
     // 预约状态修改按钮
-    Route::get('book/{book}/edit', 'Api\BooksController@edit');
+    Route::patch('book/{book}/edit', 'Api\BooksController@edit');
 
     /** 【 购物车 】 */ 
     // 创建购物车（加入商品 -- 详情页添加）
