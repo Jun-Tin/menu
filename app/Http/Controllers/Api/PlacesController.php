@@ -197,7 +197,8 @@ class PlacesController extends Controller
                 'price' => $order->price + $total,
                 'final_price' => $order->price + $total,
                 'number' => $order->number + $number,
-                'final_number' => $order->number + $number
+                'final_number' => $order->number + $number,
+                'sitter' => $request->sitter
             ]);
             $only_order = $order->order;
         } else {
@@ -318,7 +319,8 @@ class PlacesController extends Controller
                 'price' => $order->price + $total,
                 'final_price' => $order->price + $total,
                 'number' => $order->number + $number,
-                'final_number' => $order->number + $number
+                'final_number' => $order->number + $number,
+                'sitter' => $request->sitter
             ]);
             $only_order = $order->order;
         } else {

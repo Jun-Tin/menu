@@ -316,7 +316,9 @@ class UsersController extends Controller
     /** 【 我的客户 】 */
     public function client(Request $request, User $user)
     {
-        $user = auth()->user();
-        dd($user->users);
+        $users = auth()->user()->users;
+        return (UserResource::collection($users))->additional(['status' => 200]);
     } 
+
+    /** 【  】*/ 
 }

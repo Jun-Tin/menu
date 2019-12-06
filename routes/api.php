@@ -67,10 +67,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('user/verify', 'Api\UsersController@verify');
     // 更换关联手机 —— 新手机号码
     Route::post('user/relate', 'Api\UsersController@relate');
-    // 销售人员创建账号
+    /** 【 销售人员 】 */ 
+    // 创建账号
     Route::post('user/create', 'Api\UsersController@create');
     // 我的客户
     Route::get('user/client', 'Api\UsersController@client');
+    // 修改信息
+    Route::patch('user/{user}/');
 
 
     /**【 门店 】*/
