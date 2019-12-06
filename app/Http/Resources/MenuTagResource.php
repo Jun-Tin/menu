@@ -14,7 +14,6 @@ class MenuTagResource extends Resource
      */
     public function toArray($request)
     {
-        dd($this);
         return parent::toArray($request);
     }
 }

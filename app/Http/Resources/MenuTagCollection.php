@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\{Menu, MenuTag, Image};
+use App\Http\Resources\{MenuResource, MenuTagCollection, MenuTagResource};
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MenuTagCollection extends ResourceCollection
@@ -17,10 +18,10 @@ class MenuTagCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function ($item) {
-                MenuTag::where('pid', $item->id)->get()->map(function ($value) use ($item){
-                    dump($value);
-                    $menus[] = Menu::where('id', $value->target_id)->get();
-                    $item->menus = $menus;
+                // dd($item);
+                // dd(MenuTag::where('pid', $item->id)->get());
+                $item->menus = MenuTag::where('pid', $item->id)->get()->map(function ($item){
+                    $item->name = Menu::find($item->target_id)->value('name');
                     return $item;
                 });
                 return $item;

@@ -39,6 +39,8 @@ class Place extends Model
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
                 QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
+                $qrcode = '';
+                $link = '';
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
