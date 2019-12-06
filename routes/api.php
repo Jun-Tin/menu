@@ -185,8 +185,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
     // 删除菜品
     Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
-    // 获取菜品列表
-    Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
     
 
     /**【 座位 】*/

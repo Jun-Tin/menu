@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\{Menu, MenuTag, Tag};
-use App\Http\Resources\{MenuResource, MenuTagCollection, MenuTagResource};
+use App\Http\Resources\TagCollection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MenuTagCollection extends ResourceCollection
