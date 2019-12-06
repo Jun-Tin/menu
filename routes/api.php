@@ -233,6 +233,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('shopcart/{shopcart}/update', 'Api\ShopcartsController@update'); 
     // 创建购物车（加入商品 -- 直接点击‘+’添加）
     Route::post('shopcart/created', 'Api\ShopcartsController@created');
+    // 创建购物车（减少商品 -- 直接点击‘-’减少）
+    Route::post('shopcart/reduced', 'Api\ShopcartsController@reduced');
 
 
     /** 【 订单】 */
@@ -301,7 +303,9 @@ Route::group(['middleware' => 'Code'], function(){
     // 购物车增加、减少商品
     Route::patch('shopcart/{shopcart}/customerUpdate', 'Api\ShopcartsController@customerUpdate');
     // 创建购物车（加入商品 -- 直接点击‘+’添加）
-    Route::post('shopcart/customerCreated', 'Api\ShopcartsController@customerCreated'); 
+    Route::post('shopcart/customerCreated', 'Api\ShopcartsController@customerCreated');
+    // 创建购物车（减少商品 -- 直接点击‘-’减少）
+    Route::post('shopcart/customerReduced', 'Api\ShopcartsController@customerReduced');
 
     /** 【 座位 】 */
     // 获取座位下购物车详情

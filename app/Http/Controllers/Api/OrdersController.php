@@ -16,9 +16,9 @@ class OrdersController extends Controller
      */
     public function index(Request $request, Order $order)
     {
-        $order->package = $order->orders()->where('pid',0)->get();
-        $order->set_time = Store::where('id',$order->store_id)->value('set_time');
-        $order->clean = Behavior::where('target_id',$request->order->id)->where('category','clean')->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
+        $order->package = $order->orders()->where('pid', 0)->get();
+        $order->set_time = Store::where('id', $order->store_id)->value('set_time');
+        $order->clean = Behavior::where('target_id', $request->order->id)->where('category', 'clean')->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
 
         return (new OrderResource($order))->additional(['status'=>200]);
     }
@@ -26,8 +26,8 @@ class OrdersController extends Controller
     /** 【 客户端--订单详情 】 */ 
     public function customerIndex(Request $request, Order $order)
     {
-        $order->package = $order->orders()->where('pid',0)->get();
-        $order->set_time = Store::where('id',$order->store_id)->value('set_time');
+        $order->package = $order->orders()->where('pid', 0)->get();
+        $order->set_time = Store::where('id', $order->store_id)->value('set_time');
 
         return (new OrderResource($order))->additional(['status'=>200]);
     }
@@ -59,18 +59,18 @@ class OrdersController extends Controller
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->whereIn('status', [0,1])->where('finish', 0)->get();
+        $order = Order::where('store_id', auth()->user()->store_id)->whereIn('status', [0,1])->where('finish', 0)->get();
         $order->unfinished = $order->map(function ($item, $key){
             // 未完成的菜品
-            return $item->orders()->where('status',0)->where('category','m')->get();
+            return $item->orders()->where('status', 0)->where('category', 'm')->get();
         });
         $order->finished = $order->map(function ($item, $key){
             // 已完成的菜品
-            return $item->orders()->where('status',2)->where('category','m')->get();
+            return $item->orders()->where('status', 2)->where('category', 'm')->get();
         });
         $order->behavior = $order->map(function ($item, $key){
             // 正在做的菜品
-            return $item->orders()->where('status',1)->where('category','m')->get();
+            return $item->orders()->where('status', 1)->where('category', 'm')->get();
         });
 
         $order->put('unfinished', $order->unfinished);
@@ -86,14 +86,14 @@ class OrdersController extends Controller
         // 制作时间
         $set_time = (Store::find(auth()->user()->store_id))->set_time;
         // $order = Order::where('store_id',auth()->user()->store_id)->whereDate('created_at',date('Y-m-d'))->where('status',0)->where('finish',0)->get();
-        $order = Order::where('store_id',auth()->user()->store_id)->whereIn('status', [0,1])->where('finish', 0)->get();
+        $order = Order::where('store_id', auth()->user()->store_id)->whereIn('status', [0,1])->where('finish', 0)->get();
         $order->finished = $order->map(function ($item, $key) use ($request){
             // 已完成的菜品
-            return $item->orders()->where('status',2)->where('category','m')->get();
+            return $item->orders()->where('status', 2)->where('category', 'm')->get();
         });
         $order->behavior = $order->map(function ($item, $key){
             // 正在送的菜品
-            return $item->orders()->where('status',3)->where('category','m')->get();
+            return $item->orders()->where('status', 3)->where('category', 'm')->get();
         });
 
         $order->put('finished', $order->finished);
@@ -105,8 +105,8 @@ class OrdersController extends Controller
     /** 【 退菜列表 】 */
     public function retreat(Request $request, Order $order)
     {
-        $order->place_name = Place::where('id',$order->place_id)->value('name');
-        $order->package = $order->orders()->where('status',0)->where('pid',0)->get();
+        $order->place_name = Place::where('id', $order->place_id)->value('name');
+        $order->package = $order->orders()->where('status', 0)->where('pid', 0)->get();
 
         return (new OrderResource($order))->additional(['status'=>200]);
     }

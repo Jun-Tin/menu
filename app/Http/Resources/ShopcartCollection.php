@@ -15,13 +15,12 @@ class ShopcartCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'data' => $this->collection->map(function ($item){
                 $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
                 if ($item->menus_id) {
                     foreach (json_decode($item->menus_id) as $key => $value) {
-                        $names[] = Menu::where('id',$value)->value('name');
+                        $names[] = Menu::where('id', $value)->value('name');
                     }
                     $item->menus_name = $names;
                 }

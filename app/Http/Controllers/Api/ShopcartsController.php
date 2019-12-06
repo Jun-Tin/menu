@@ -211,4 +211,24 @@ class ShopcartsController extends Controller
 
         return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
     }
+
+    /** 【 创建购物车（减少商品 -- 直接点击‘-’减少） 】 */ 
+    public function reduced(Request $request, Shopcart $shopcart)
+    {
+        $id = Shopcart::where('place_id', $request->place_id)->where('menu_id', $request->menu_id)->value('id');
+        Shopcart::where('id', $id)->delete();
+        $shopcart = Shopcart::where('place_id', $request->place_id)->get();
+
+        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => '减少成功！']);
+    }
+
+    /** 【 客户端--创建购物车（减少商品 -- 直接点击‘-’减少） 】 */ 
+    public function customerReduced(Request $request, Shopcart $shopcart)
+    {
+        $id = Shopcart::where('place_id', $request->place_id)->where('menu_id', $request->menu_id)->value('id');
+        Shopcart::where('id', $id)->delete();
+        $shopcart = Shopcart::where('place_id', $request->place_id)->get();
+
+        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => '减少成功！']);
+    }
 }
