@@ -161,12 +161,12 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除标签
     // Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
     /** 【 套餐嵌入菜品 】 */
-    // 添加、修改菜品
-    Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
-    // 删除菜品
-    Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
-    // 获取菜品列表
-    Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
+    // // 添加、修改菜品
+    // Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
+    // // 删除菜品
+    // Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
+    // // 获取菜品列表
+    // Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
     // 菜品售罄（多选菜品）
     Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
     // 菜品在售、售罄修改（单个菜品）
@@ -181,6 +181,12 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('menu/{menu}/orderTags', 'Api\MenusController@orderTags');
     // 删除标签
     Route::delete('menu/{menu}/subTags', 'Api\MenusController@subTags');
+    // 添加、修改菜品
+    Route::post('menu/{id}/addMenus', 'Api\MenusController@addMenus');
+    // 删除菜品
+    Route::delete('menu/{menu}/subMenus', 'Api\MenusController@subMenus');
+    // 获取菜品列表
+    Route::get('menu/{id}/getMenus', 'Api\MenusController@getMenus');
     
 
     /**【 座位 】*/

@@ -114,43 +114,43 @@ class MenusController extends Controller
     // }
 
     /** 【 添加菜品 】 */
-    public function addMenus(Request $request, Menu $menu)
-    {
-        $data = json_decode($request->data, true);
-        $menuTag = MenuTag::find($request->id);
-        $menu = $menu::find($menuTag->menu_id);
+    // public function addMenus(Request $request, Menu $menu)
+    // {
+    //     $data = json_decode($request->data, true);
+    //     $menuTag = MenuTag::find($request->id);
+    //     $menu = $menu::find($menuTag->menu_id);
 
-        // 先解除原有数据
-        $menu->menus($request->id)->detach();
-        foreach ($data as $key => $value) {
-            if ($value['id']) {
-                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
-            }
-        }
+    //     // 先解除原有数据
+    //     $menu->menus($request->id)->detach();
+    //     foreach ($data as $key => $value) {
+    //         if ($value['id']) {
+    //             $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+    //         }
+    //     }
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '保存成功！']);
-    }
+    //     return (new MenuResource($menu))->additional(['status' => 200, 'message' => '保存成功！']);
+    // }
 
-    /** 【 删除菜品 】 */
-    public function subMenus(Request $request, Menu $menu)
-    {
-        $ids = json_decode($request->ids, true);
+    // /** 【 删除菜品 】 */
+    // public function subMenus(Request $request, Menu $menu)
+    // {
+    //     $ids = json_decode($request->ids, true);
 
-        foreach ($ids as $key => $value) {
-            MenuTag::where('id',$value)->delete();
-        }
+    //     foreach ($ids as $key => $value) {
+    //         MenuTag::where('id',$value)->delete();
+    //     }
     
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
-    }
+    //     return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
+    // }
 
-    /** 【 获取菜品列表 】 */ 
-    public function getMenus(Request $request, Menu $menu)
-    {
-        $menuTag = MenuTag::find($request->id);
-        $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
+    // /** 【 获取菜品列表 】 */ 
+    // public function getMenus(Request $request, Menu $menu)
+    // {
+    //     $menuTag = MenuTag::find($request->id);
+    //     $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
 
-        return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
-    }
+    //     return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
+    // }
 
     /** 【 菜品售罄、恢复 -- 多选 】 */
     public function saleStatus(Request $request, Menu $menu)
@@ -221,5 +221,41 @@ class MenusController extends Controller
         MenuTag::whereIn('pid', $ids)->delete();
     
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
+    }
+
+    /** 【 新套餐 -- 添加菜品 】 */
+    public function addMenus(Request $request, Menu $menu)
+    {
+        $data = json_decode($request->data, true);
+        $menuTag = MenuTag::find($request->id);
+        $menu = $menu::find($menuTag->menu_id);
+
+        // 先解除原有数据
+        $menu->menus($request->id)->detach();
+        foreach ($data as $key => $value) {
+            if ($value['id']) {
+                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+            }
+        }
+
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '保存成功！']);
+    }
+
+    /** 【 新套餐 -- 删除菜品 】 */
+    public function subMenus(Request $request, Menu $menu)
+    {
+        $ids = json_decode($request->ids, true);
+        MenuTag::whereIn('id', $ids)->delete();
+    
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
+    }
+
+    /** 【 新套餐 -- 获取菜品列表 】 */ 
+    public function getMenus(Request $request, Menu $menu)
+    {
+        $menuTag = MenuTag::find($request->id);
+        $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
+
+        return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
     }
 }
