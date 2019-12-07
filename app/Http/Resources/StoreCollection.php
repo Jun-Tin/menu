@@ -15,7 +15,6 @@ class StoreCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'data' => $this->collection->map(function ($item, $key){
                 $item->image = Image::find($item->image_id);

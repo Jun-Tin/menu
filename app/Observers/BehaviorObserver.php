@@ -22,7 +22,7 @@ class BehaviorObserver
 				// OrderDetail::where('id',$behavior->target_id)->update(['status' => 4]);
 				$OrderDetail = OrderDetail::find($behavior->target_id);
 				// 修改菜品状态
-				$OrderDetail->update(['status' => 2]);
+				$OrderDetail->update(['status' => 4]);
 				// 判断是否属于套餐内的单品
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
