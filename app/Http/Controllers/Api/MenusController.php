@@ -64,7 +64,6 @@ class MenusController extends Controller
                 }
             }
         }
-        
         $menu->update($request->all());
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
