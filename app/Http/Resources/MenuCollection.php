@@ -23,7 +23,7 @@ class MenuCollection extends ResourceCollection
                             $item->image = Image::find($item->image_id);
                             return $item;
                         }
-                    })
+                    })->values(),
                 ];
                 break;
             default:
@@ -31,7 +31,7 @@ class MenuCollection extends ResourceCollection
                     'data' => $this->collection->filter(function ($item){
                         $item->image = Image::find($item->image_id);
                         return $item;
-                    })
+                    })->values(),
                 ];
                 break;
         }
