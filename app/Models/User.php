@@ -78,6 +78,12 @@ class User extends Authenticatable
         return $this->hasMany(self::class, 'created_by', 'id');
     } 
 
+    /** 【 一对多账单关联关系 】 */
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'operate', 'id');
+    } 
+
     /** 【 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
@@ -126,20 +132,4 @@ class User extends Authenticatable
     {
         return str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT);
     }
-
-    /** 【 写入记录 】 */
-    public function bill_to_log($data, $id)
-    {
-        dd($data);
-        Bill::create([
-            'title' => '23',
-            'order' => '23',
-            'operate' => '23',
-            'accept' => '23',
-            'execute' => '23',
-            'type' => '23',
-            'number' => '23',
-            'method' => '23',
-        ]);
-    } 
 }

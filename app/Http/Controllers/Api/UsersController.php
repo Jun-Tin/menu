@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use DB;
-use App\Models\{User, Store, Place};
+use App\Models\{User, Store, Place, Bill};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\{UserResource, BehaviorResource};
+use App\Http\Resources\{UserResource, BehaviorResource, BillResource};
 
 class UsersController extends Controller
 {
@@ -325,12 +325,25 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         // 修改客户金币数
-        User::where('id', $request->user_id)->update(['coins' => $request->number]);
+        User::where('id', $request->user_id)->increment('coins', $request->number);
         // 写入账单记录
-        // 构造数据
-        $data = $request->all();
-        $data['title'] = '充值';
-        $user->bill_to_log($data, $user->id);
+        Bill::create([
+            'title' => '充值金币',
+            'order' => 'Pay'.date('YmdHis').$user->random(),
+            'operate' => $user->id,
+            'accept' => $request->user_id,
+            'execute' => 1,
+            'type' => 1,
+            'number' => $request->number,
+            'method' => $request->method,
+        ]);
         return response()->json(['status' => 200, 'message' => '修改成功！']);
     }
+
+    /** 【 我的账单 】 */
+    public function bill(Request $request, User $user)
+    {
+        $user = auth()->user();
+        return (BillResource::collection($user->bills))->additional(['status' => 200]);
+    } 
 }

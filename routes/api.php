@@ -72,6 +72,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user/client', 'Api\UsersController@client');
     // 修改客户金币数
     Route::patch('user/update', 'Api\UsersController@update');
+    // 我的账单
+    Route::get('user/bill', 'Api\UsersController@bill');
 
 
     /**【 门店 】*/

@@ -16,7 +16,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->nullable()->commit('标题');
-            $table->string('order')->nullable()->commit('订单编号');
+            $table->string('order')->nullable()->unique()->commit('订单编号');
             $table->string('operate')->nullable()->commit('操作方');
             $table->string('accept')->nullable()->commit('接收方');
             $table->integer('execute')->nullable()->commit('执行动作；0：减少，1：增加');
