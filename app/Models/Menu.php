@@ -29,7 +29,7 @@ class Menu extends Model
     }
 
     /** 【 一对多标签关联关系 】 */
-    public function tag()
+    public function menuTag()
     {
         return $this->hasMany(MenuTag::class, 'menu_id', 'id');
     } 

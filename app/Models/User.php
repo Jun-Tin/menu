@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Validator;
+use App\Models\Bill;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -125,4 +126,20 @@ class User extends Authenticatable
     {
         return str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT);
     }
+
+    /** 【 写入记录 】 */
+    public function bill_to_log($data, $id)
+    {
+        dd($data);
+        Bill::create([
+            'title' => '23',
+            'order' => '23',
+            'operate' => '23',
+            'accept' => '23',
+            'execute' => '23',
+            'type' => '23',
+            'number' => '23',
+            'method' => '23',
+        ]);
+    } 
 }

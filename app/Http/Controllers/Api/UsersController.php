@@ -306,7 +306,7 @@ class UsersController extends Controller
 
         return response()->json(['success'=> [
                                     'name' => $user->name,
-                                    'token' => $user->createToken('MyApp', ['boss'])->accessToken
+                                    // 'token' => $user->createToken('MyApp', ['boss'])->accessToken
                                 ], 
                                 'status' => 200 ,
                                 'message' => '创建成功！' ]);
@@ -320,5 +320,17 @@ class UsersController extends Controller
         return (UserResource::collection($users))->additional(['status' => 200]);
     } 
 
-    /** 【  】*/ 
+    /** 【 修改客户金币数 】*/ 
+    public function update(Request $request, User $user)
+    {
+        $user = auth()->user();
+        // 修改客户金币数
+        User::where('id', $request->user_id)->update(['coins' => $request->number]);
+        // 写入账单记录
+        // 构造数据
+        $data = $request->all();
+        $data['title'] = '充值';
+        $user->bill_to_log($data, $user->id);
+        return response()->json(['status' => 200, 'message' => '修改成功！']);
+    }
 }

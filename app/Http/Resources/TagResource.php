@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\{Menu, Tag, Image};
 use Illuminate\Http\Resources\Json\Resource;
-use App\Http\Resources\{MenuCollection, TagCollection};
+use App\Http\Resources\TagCollection;
 
 class TagResource extends Resource
 {

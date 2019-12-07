@@ -152,7 +152,7 @@ class StoresController extends Controller
     /** 【 售罄菜品列表 】 */
     public function saleOut(Request $request, Store $store)
     {
-        return (new MenuCollection($store->menus()->where('status', 0)->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('status', 0)->get()))->additional(['status' => 200]);
     }
 
     /** 【 菜品列表--全部 】 */ 
@@ -204,7 +204,11 @@ class StoresController extends Controller
     /** 【 套餐列表 】 */
     public function customerPackages(Store $store)
     {
-        return (new MenuCollection($store->menus()->where('category', 'p')->get()))->additional(['status' => 200]);
+        $where[] = ['category', 'p'];
+        if ($request->type == 'in') {
+            $where[] = ['status', 1];
+        }
+        return (new MenuCollection($store->menus()->where($where)->get()))->additional(['status' => 200]);
     }
 
     /** 【 客人数量 】 */

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\{Menu, MenuTag};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{MenuResource, MenuCollection};
+use App\Http\Resources\{MenuResource, MenuCollection, StoreCollection};
 
 class MenusController extends Controller
 {
@@ -203,7 +203,7 @@ class MenusController extends Controller
     /** 【 新套餐 -- 修改标签 】 */ 
     public function editTags(Request $request, Menu $menu)
     {
-        $menu->tag()->where('id', $request->tags_id)->update(['name' => $request->name]);
+        $menu->menuTag()->where('id', $request->tags_id)->update(['name' => $request->name]);
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -265,6 +265,6 @@ class MenusController extends Controller
         $menuTag = MenuTag::find($request->id);
         $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
 
-        return (new MenuCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
+        return (new StoreCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
     }
 }

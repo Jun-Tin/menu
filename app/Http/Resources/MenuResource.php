@@ -55,7 +55,7 @@ class MenuResource extends Resource
                     'status' => $this->status,
                     'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
-                    'tags' => new MenuTagCollection($this->tag()->where('pid', 0)->get()),
+                    'tags' => new MenuTagCollection($this->menuTag()->where('pid', 0)->get()),
                 ];
                 break;
 

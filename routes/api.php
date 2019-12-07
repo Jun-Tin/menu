@@ -47,8 +47,6 @@ Route::post('socket/test', 'Api\SocketsController@test');
 Route::group(['middleware' => 'auth:api'], function(){
     /**【 个人信息 】*/ 
     Route::get('user/member', 'Api\UsersController@member');
-    /**【 修改密码 /手机号码】*/ 
-    Route::patch('user/update', 'Api\UsersController@update');
     /**【 退出登录 】*/
     Route::get('user/logout', 'Api\UsersController@logout');
 
@@ -72,8 +70,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('user/create', 'Api\UsersController@create');
     // 我的客户
     Route::get('user/client', 'Api\UsersController@client');
-    // 修改信息
-    Route::patch('user/{user}/');
+    // 修改客户金币数
+    Route::patch('user/update', 'Api\UsersController@update');
 
 
     /**【 门店 】*/
