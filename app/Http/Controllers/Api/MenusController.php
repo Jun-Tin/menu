@@ -55,7 +55,7 @@ class MenusController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        if (!$request->has('category')) {
+        if ($request->category == 'm') {
             $ids = json_decode($request->ids);
             $menu->tags()->detach();
             if ($ids) {
