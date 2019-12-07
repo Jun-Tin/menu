@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Bill extends Model
 {
     protected $fillable = [
-        'title', 'user_id', 'execute', 'number'
+        'title', 'order', 'operate', 'accept', 'execute', 'type', 'number', 'method'
     ];
 }
