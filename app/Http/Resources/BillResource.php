@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\Resource;
 
 class BillResource extends Resource
@@ -21,7 +23,7 @@ class BillResource extends Resource
             'operate' => $this->operate,
             'accept' => $this->accept,
             'execute' => $this->execute,
-            'type' => $this->type,
+            'type' => $this->type? new UserResource(User::where('id', $this->accept)->first()):'系统',
             'number' => $this->number,
             'method' => $this->method,
         ];
