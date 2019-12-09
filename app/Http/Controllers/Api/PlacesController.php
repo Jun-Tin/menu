@@ -23,13 +23,14 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
-        $data = $request->all();
-        // 默认类型值
-        $data['type'] = 'place';
-        $place->updateQrcode($data,$place->id);
-        $code = Redis::get($place->name.'_'.$place->id);
+        // $data = $request->all();
+        // // 默认类型值
+        // $data['type'] = 'place';
+        // $place->updateQrcode($data,$place->id);
+        // $code = Redis::get($place->name.'_'.$place->id);
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！', 'code' => $code]);
+        // return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！', 'code' => $code]);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
     /**

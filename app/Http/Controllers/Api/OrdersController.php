@@ -20,7 +20,7 @@ class OrdersController extends Controller
         $order->set_time = Store::where('id', $order->store_id)->value('set_time');
         $order->clean = Behavior::where('target_id', $request->order->id)->where('category', 'clean')->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
 
-        return (new OrderResource($order))->additional(['status'=>200]);
+        return (new OrderResource($order))->additional(['status' => 200]);
     }
 
     /** 【 客户端--订单详情 】 */ 
@@ -29,7 +29,7 @@ class OrdersController extends Controller
         $order->package = $order->orders()->where('pid', 0)->get();
         $order->set_time = Store::where('id', $order->store_id)->value('set_time');
 
-        return (new OrderResource($order))->additional(['status'=>200]);
+        return (new OrderResource($order))->additional(['status' => 200]);
     }
 
     /**
@@ -77,7 +77,7 @@ class OrdersController extends Controller
         $order->put('finished', $order->finished);
         $order->put('behavior', $order->behavior);
 
-        return (new OrderCollection($order, $param='orders'))->additional(['status'=>200, 'set_time'=>$set_time]);
+        return (new OrderCollection($order, $param='orders'))->additional(['status' => 200, 'set_time' => $set_time]);
     } 
 
     /** 【 送菜列表 】 */
@@ -99,7 +99,7 @@ class OrdersController extends Controller
         $order->put('finished', $order->finished);
         $order->put('behavior', $order->behavior);
 
-        return (new OrderCollection($order, $param='serving'))->additional(['status'=>200, 'set_time'=>$set_time]);
+        return (new OrderCollection($order, $param='serving'))->additional(['status' => 200, 'set_time' => $set_time]);
     }
 
     /** 【 退菜列表 】 */
@@ -108,7 +108,7 @@ class OrdersController extends Controller
         $order->place_name = Place::where('id', $order->place_id)->value('name');
         $order->package = $order->orders()->where('status', 0)->where('pid', 0)->get();
 
-        return (new OrderResource($order))->additional(['status'=>200]);
+        return (new OrderResource($order))->additional(['status' => 200]);
     }
 
 }

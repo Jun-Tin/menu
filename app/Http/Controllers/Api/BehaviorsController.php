@@ -52,7 +52,7 @@ class BehaviorsController extends Controller
                 // 修改订单菜品状态 -- 上菜状态
                 OrderDetail::where('id', $request->target_id)->update(['status' => 3]);
                 $count = OrderDetail::where('store_id', $user->store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
-                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count'=>$count[0]['value']), JSON_UNESCAPED_UNICODE));
+                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
                 break;
             // 退菜
             case 'retreat':
