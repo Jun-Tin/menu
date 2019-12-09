@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\Place;
+use App\Models\{Place, User};
 use Illuminate\Support\Facades\Redis;
 
 class Code
@@ -17,11 +17,22 @@ class Code
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($request->header('placeid') && $request->header('code')) {
-            // 获取座位名称
-            $place = Place::find($request->header('placeid'));
+        if ($request->header('placeid') || $request->header('userid') && $request->header('code')) {
+            if ($request->header('placeid')) {
+                // 获取座位
+                $place = Place::find($request->header('placeid'));
+                $name = $place->name;
+                $id = $place->id;
+            }
+
+            if ($request->header('userid')) {
+                // 获取用户
+                $user = User::find($request->header('userid'));
+                $name = $user->account;
+                $id = $user->id;
+            }
             // 执行动作，判断该值是否存在redis数组
-            if (substr(Redis::get($place->name.'_'.$place->id),0,20) != $request->header('code')) {
+            if (substr(Redis::get($name.'_'.$id),0,20) != $request->header('code')) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
             }
         } else {

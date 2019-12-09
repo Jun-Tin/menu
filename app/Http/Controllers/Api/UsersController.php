@@ -346,4 +346,16 @@ class UsersController extends Controller
         $user = auth()->user();
         return (BillResource::collection($user->bills))->additional(['status' => 200]);
     } 
+
+    /** 【 免登录验证 】 */
+    public function confirm(Request $request, User $user)
+    {
+        $user = $user::find($request->header('userid'));
+        if ($user) {
+            return response()->json(['success' => [ 'token' => $user->createToken('MyApp', [$user->post])->accessToken],
+                                    'status' => 200,
+            ]);
+        }
+        return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
+    } 
 }
