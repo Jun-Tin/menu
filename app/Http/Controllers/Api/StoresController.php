@@ -202,7 +202,7 @@ class StoresController extends Controller
     }
 
     /** 【 套餐列表 】 */
-    public function customerPackages(Store $store)
+    public function customerPackages(Request $request, Store $store)
     {
         $where[] = ['category', 'p'];
         if ($request->type == 'in') {
