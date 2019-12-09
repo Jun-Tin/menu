@@ -207,6 +207,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('place/{place}/refresh', 'Api\PlacesController@refresh');
     // 修改座位
     Route::patch('place/{place}/update', 'Api\PlacesController@update');
+    // 绑定二维码
+    Route::patch('place/{place}/binding', 'Api\PlacesController@binding');
     // 删除座位--单个
     Route::delete('place/{place}/destroy', 'Api\PlacesController@destroy');
     // 删除座位--整层

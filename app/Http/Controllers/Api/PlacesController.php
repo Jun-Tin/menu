@@ -419,4 +419,11 @@ class PlacesController extends Controller
 
         return response()->json(['data'=>$place, 'status'=>200]);
     }
+
+    /** 【 绑定桌位二维码 】 */
+    public function binding(Request $request, Place $place)
+    {
+        $place->update(['image_id' => $request->image_id]);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
+    }
 }
