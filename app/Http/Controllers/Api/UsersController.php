@@ -302,6 +302,7 @@ class UsersController extends Controller
             'post' => 'boss',
             'account' => $user->random(),
             'created_by' => auth()->user()->id,
+            'coins' => 0,
         ]);
 
         return response()->json(['success'=> [
