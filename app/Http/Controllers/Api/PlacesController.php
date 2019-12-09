@@ -81,7 +81,8 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
-        $place->update($data);
+        $place->fill($request->all());
+        $place->update();
         $code = Redis::get($place->name.'_'.$place->id);
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
@@ -423,7 +424,8 @@ class PlacesController extends Controller
     /** 【 绑定桌位二维码 】 */
     public function binding(Request $request, Place $place)
     {
-        $place->update(['image_id' => $request->image_id]);
+        $place->fill($request->all());
+        $place->update();
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
     }
 }

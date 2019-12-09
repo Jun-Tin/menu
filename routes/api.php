@@ -204,7 +204,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 创建座位
     Route::post('place/store', 'Api\PlacesController@store');
     // 刷新座位二维码
-    Route::get('place/{place}/refresh', 'Api\PlacesController@refresh');
+    Route::patch('place/{place}/refresh', 'Api\PlacesController@refresh');
     // 修改座位
     Route::patch('place/{place}/update', 'Api\PlacesController@update');
     // 绑定二维码
