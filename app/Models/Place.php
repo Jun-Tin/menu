@@ -40,7 +40,7 @@ class Place extends Model
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
                 // 判断图片是否存在
                 if (file_exists($dir. '/' .$filename)) {
-                    unlink($dir. '/' .$filename);
+                    dd(unlink($dir. '/' .$filename));
                 }
                 QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
                 $qrcode = '';
