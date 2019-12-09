@@ -75,7 +75,7 @@ class PlacesController extends Controller
     public function refresh(Request $request, Place $place)
     {
         $data = array(
-            'name' => $place->name,
+            'name' => $request->name,
             'store_id' => $place->store_id,
             'floor' => $place->floor,
             'type' => 'place',
