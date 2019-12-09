@@ -24,7 +24,7 @@ class PlacesController extends Controller
         $place->status = 0;
         $place->save();
         // $data = $request->all();
-        // // 默认类型值
+        // 默认类型值
         // $data['type'] = 'place';
         // $place->updateQrcode($data,$place->id);
         // $code = Redis::get($place->name.'_'.$place->id);
@@ -425,6 +425,13 @@ class PlacesController extends Controller
     public function binding(Request $request, Place $place)
     {
         $place->fill($request->all());
+        $data = array(
+            'name' => $place->name,
+            'store_id' => $place->store_id,
+            'floor' => $place->floor,
+            'type' => 'place',
+        );
+        $place->updateQrcode($data,$place->id);
         $place->update();
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
     }
