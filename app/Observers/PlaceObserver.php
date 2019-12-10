@@ -7,7 +7,7 @@ class PlaceObserver
 {
 	public function created(Place $place)
 	{
-		if ($place->pid != 0) {
+		if ($place->floor != 0) {
 			$place->update([
 				'name' => '新座位'.$place->id,
 				'number' => 1,
