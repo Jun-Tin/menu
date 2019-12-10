@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User, MenuTag};
+use App\Models\{Store, User, MenuTag, Bill};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -80,11 +80,23 @@ class StoresController extends Controller
     }
 
     /** 【 激活门店 】 */
-    public function active(Request $request, Store $store)
+    public function active(Request $request, Store $store, User $user)
     {
         $user = auth()->user();
         $user->decrement('coins', 3);
         $store->update(['active' => 1]);
+
+        // 写入记录
+        Bill::create([
+            'title' => '激活门店',
+            'order' => 'Act'.date('YmdHis').$user->random(),
+            'operate' => $user->id,
+            'accept' => '系统',
+            'execute' => 0,
+            'type' => 0,
+            'number' => 3,
+            'method' => 7,
+        ]);
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '激活成功！']);
     } 
