@@ -27,7 +27,7 @@ class SocketsController extends Controller
     /** 【 测试socket通讯 】 */
     public function test(Request $request)
     {
-        dd(Gateway::sendToGroup($request->group.'_'.$request->store_id, json_encode(array('type'=>'update serving','message'=>'更新上菜消息！'), JSON_UNESCAPED_UNICODE)));
+        dd(Gateway::sendToGroup($request->group.'_'.$request->store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！'), JSON_UNESCAPED_UNICODE)));
     } 
 
 

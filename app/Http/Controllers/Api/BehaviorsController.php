@@ -87,7 +87,7 @@ class BehaviorsController extends Controller
                     OrderDetail::where('id', $OrderDetail->pid)->update(['status' => 1]);
                 }
                 // 修改订单菜品状态--做菜状态
-                $OrderDetail->update(['status'=>1]);
+                $OrderDetail->update(['status' => 1]);
                 break;
             // 撤销
             case 'backout':

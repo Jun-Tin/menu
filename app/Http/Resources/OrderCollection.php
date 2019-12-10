@@ -29,18 +29,18 @@ class OrderCollection extends ResourceCollection
                 return [
                     'data' => [
                         'unfinished' => $this->collection['unfinished']->flatten()->filter(function ($item){
-                            $item->place_name = Place::where('id',$item->place_id)->value('name');
+                            $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
-                                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                                 $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             } else{
-                                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
+                                $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
                                 foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                    $name[] = Tag::where('id',$value)->value('name');
+                                    $name[] = Tag::where('id', $value)->value('name');
                                 }
                                 $item->tags_name = $name;
                             }
@@ -48,18 +48,18 @@ class OrderCollection extends ResourceCollection
                             return $item;
                         })->values(),
                         'finished' => $this->collection['finished']->flatten()->filter(function ($item){
-                            $item->place_name = Place::where('id',$item->place_id)->value('name');
+                            $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
-                                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                                 $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
                             } else{
-                                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
+                                $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                $item->path = Image::where('id',Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
                                 foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                    $name[] = Tag::where('id',$value)->value('name');
+                                    $name[] = Tag::where('id', $value)->value('name');
                                 }
                                 $item->tags_name = $name;
                             }
@@ -67,20 +67,20 @@ class OrderCollection extends ResourceCollection
                             return $item;
                         })->values(),
                         'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                            $behavior = Behavior::where('target_id',$item->id)->where('category','cooking')->first();
+                            $behavior = Behavior::where('target_id', $item->id)->where('category','cooking')->first();
                             if ($behavior->user_id == auth()->id()) {
-                                $item->place_name = Place::where('id',$item->place_id)->value('name');
+                                $item->place_name = Place::where('id', $item->place_id)->value('name');
                                 if ($item->pid) {
-                                    $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
-                                    $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
+                                    $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                    $item->path = Image::where('id',Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                                 } else{
-                                    $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                                    $item->path = Image::where('id',Menu::where('id',$item->menu_id)->value('image_id'))->value('path');
+                                    $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                    $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                                 }
 
                                 if (!empty(json_decode($item->tags_id,true))) {
                                     foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                        $name[] = Tag::where('id',$value)->value('name');
+                                        $name[] = Tag::where('id', $value)->value('name');
                                     }
                                     $item->tags_name = $name;
                                 }
@@ -97,16 +97,16 @@ class OrderCollection extends ResourceCollection
             case 'serving':
                 return [
                     'finished' => $this->collection['finished']->flatten()->filter(function ($item) use ($request){
-                        $item->place_name = Place::where('id',$item->place_id)->value('name');
+                        $item->place_name = Place::where('id', $item->place_id)->value('name');
                         if ($item->pid) {
-                            $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                            $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                         } else{
-                            $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                            $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                         }
 
                         if (!empty(json_decode($item->tags_id,true))) {
                             foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                $name[] = Tag::where('id',$value)->value('name');
+                                $name[] = Tag::where('id', $value)->value('name');
                             }
                             $item->tags_name = $name;
                         }
@@ -121,18 +121,18 @@ class OrderCollection extends ResourceCollection
                         }
                     })->values(),
                     'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                        $behavior = Behavior::where('target_id',$item->id)->where('category','serving')->first();
+                        $behavior = Behavior::where('target_id', $item->id)->where('category','serving')->first();
                         if ($behavior->user_id == auth()->id()) {
-                            $item->place_name = Place::where('id',$item->place_id)->value('name');
+                            $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
-                                $item->menu_name = Menu::where('id',$item->menus_id)->value('name');
+                                $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                             } else{
-                                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
+                                $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
                                 foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                    $name[] = Tag::where('id',$value)->value('name');
+                                    $name[] = Tag::where('id', $value)->value('name');
                                 }
                                 $item->tags_name = $name;
                             }

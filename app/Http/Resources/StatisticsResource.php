@@ -128,7 +128,7 @@ class StatisticsResource extends Resource
                 $total = $this->orders()->whereBetween('created_at', $time)->sum('sitter');
                 
                 $data = $this->orders()->whereBetween('created_at', $time)->selectRaw('place_id, sum(sitter) as value')->groupBy('place_id')->get()->map(function ($item){
-                    $item->name = Place::where('id',$item->place_id)->value('name');
+                    $item->name = Place::where('id', $item->place_id)->value('name');
                     return $item->only('name', 'value');
                 });
                 return [
@@ -363,7 +363,7 @@ class StatisticsResource extends Resource
                     $collection = $this->orders()->whereBetween('created_at', $time)->selectRaw('place_id, created_at, updated_at')->get();
                     if (!$collection->isEmpty()) {
                         $collection->map(function ($item){
-                            $item->name = Place::where('id',$item->place_id)->value('name');
+                            $item->name = Place::where('id', $item->place_id)->value('name');
                             $item->place_time = floor((carbon::parse($item->updated_at)->diffInMinutes($item->created_at,true)/60)).':'.(carbon::parse($item->updated_at)->diffInMinutes($item->created_at,true)%60).':'.(carbon::parse($item->updated_at)->diffInSeconds($item->created_at,true)%60);
                             $item->time = carbon::parse($item->updated_at)->diffInSeconds($item->created_at,true);
                             return $item;

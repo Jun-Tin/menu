@@ -121,21 +121,21 @@ class StoresController extends Controller
     public function places(Request $request, Store $store)
     {
         // $param 自定义格外参数，用于resource区别不同数据
-        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param = 'places'))->additional(['status' => 200]);
+        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param='places'))->additional(['status' => 200]);
     }
 
     /** 【 座位列表--按人数筛选 】 */
     public function scrPlaces(Request $request, Store $store)
     {
         // $param 自定义格外参数，用于resource区别不同数据
-        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param = 'places'))->additional(['status' => 200]);
+        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param='places'))->additional(['status' => 200]);
     }
 
     /** 【 座位列表--退菜 】 */
     public function retreatPlaces(Request $request, Store $store)
     {
         // $param 自定义格外参数，用于resource区别不同数据
-        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param = 'retreat'))->additional(['status' => 200]);
+        return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param='retreat'))->additional(['status' => 200]);
     } 
 
     /** 【 员工列表 】 */

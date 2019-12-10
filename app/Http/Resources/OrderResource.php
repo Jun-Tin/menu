@@ -30,17 +30,17 @@ class OrderResource extends Resource
             'status' => $this->status,
             'finish' => $this->finish,
             'package' => $this->package->map(function ($item){
-                $item->menu_name = Menu::where('id',$item->menu_id)->value('name');
-                $item->category = Menu::where('id',$item->menu_id)->value('category');
+                $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                $item->category = Menu::where('id', $item->menu_id)->value('category');
                 if ($item->category == 'p') {
-                    $item->details = $item->where('pid',$item->id)->get()->map(function ($item, $key){
+                    $item->details = $item->where('pid', $item->id)->get()->map(function ($item, $key){
                         if ($item->menus_id) {
-                            $item->menus_name = Menu::where('id',$item->menus_id)->value('name');
+                            $item->menus_name = Menu::where('id', $item->menus_id)->value('name');
                         }
 
                         if (!empty(json_decode($item->tags_id,true))) {
                             foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                $name[] = Tag::where('id',$value)->value('name');
+                                $name[] = Tag::where('id', $value)->value('name');
                             }
                             $item->tags_name = $name;
                         }
@@ -50,7 +50,7 @@ class OrderResource extends Resource
 
                 if (!empty(json_decode($item->tags_id,true))) {
                     foreach (json_decode($item->tags_id,true) as $k => $value) {
-                        $name[] = Tag::where('id',$value)->value('name');
+                        $name[] = Tag::where('id', $value)->value('name');
                     }
                     $item->tags_name = $name;
                 }

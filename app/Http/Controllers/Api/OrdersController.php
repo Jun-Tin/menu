@@ -41,7 +41,7 @@ class OrdersController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        $order->update(['status'=>2]);
+        $order->update(['status' => 2]);
         // 记录员工表现
         Behavior::create([
             'user_id' => auth()->id(),
