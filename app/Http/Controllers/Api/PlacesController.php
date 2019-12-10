@@ -74,18 +74,18 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
+        $path = Image::where('id', $place->image_id)->value('path');
+        $str = substr($path, strripos($path, "images"));
+        unlink($str);
         $data = array(
             'name' => $request->name,
-            'store_id' => $place->store_id,
-            'floor' => $place->floor,
+            'store_id' => $request->store_id,
+            'floor' => $request->floor,
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
         $place->fill($request->all());
         $place->update();
-        $path = Image::find($place->image_id)->value('path');
-        $str = substr($path,strripos($path, "images"));
-        unlink($str);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $code = Redis::get($place->name.'_'.$place->id);
 
@@ -430,17 +430,14 @@ class PlacesController extends Controller
     {
         $place->fill($request->all());
         $data = array(
-            'name' => $place->name,
-            'store_id' => $place->store_id,
-            'floor' => $place->floor,
+            'name' => $request->name,
+            'store_id' => $request->store_id,
+            'floor' => $request->floor,
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
-        // $path = Image::find($place->image_id)->value('path');
-        // $str = substr($path,strripos($path, "images"));
-        // unlink($str);
-        Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $place->update();
+        Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
     }
 }
