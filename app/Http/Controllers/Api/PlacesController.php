@@ -19,7 +19,7 @@ class PlacesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Place $place, Image $image)
-    {        
+    {
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
