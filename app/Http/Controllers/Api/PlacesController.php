@@ -85,7 +85,8 @@ class PlacesController extends Controller
             'floor' => $place->floor,
             'type' => 'place',
         );
-        $place->updateQrcode($data,$place->id);
+        $result = $place->updateQrcode($data,$place->id);
+        dd($result);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $code = Redis::get($place->name.'_'.$place->id);
 
