@@ -435,9 +435,9 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->update();
         $data = array(
-            'name' => $request->name,
-            'store_id' => $request->store_id,
-            'floor' => $request->floor,
+            'name' => $data->name,
+            'store_id' => $data->store_id,
+            'floor' => $data->floor,
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
