@@ -42,6 +42,9 @@ class PlacesController extends Controller
      */
     public function update(Request $request, Place $place)
     {
+        $path = Image::where('id', $place->image_id)->value('path');
+        $str = substr($path, strripos($path, "images"));
+        unlink($str);
         $data = $request->all();
         // 默认类型值
         $data['type'] = 'place';
