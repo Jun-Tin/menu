@@ -42,7 +42,7 @@ class Place extends Model
                 if (file_exists($dir. '/' .$filename)) {
                     unlink($dir. '/' .$filename);
                 }
-                dd(QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename));
+                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
                 $qrcode = true;
                 $link = true;
                 break;
