@@ -74,13 +74,9 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
-        $data = array(
-            'name' => $place->name,
-            'store_id' => $place->store_id,
-            'floor' => $place->floor,
-            'type' => 'place',
-        );
-        $place->updateQrcode($data,$place->id);
+        $path = Image::where('id', $place->image_id)->value('path');
+        $str = substr($path, strripos($path, "images"));
+        unlink($str);
         $place->fill($request->all());
         $place->update();
         $data = array(
@@ -435,9 +431,9 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->update();
         $data = array(
-            'name' => $data->name,
-            'store_id' => $data->store_id,
-            'floor' => $data->floor,
+            'name' => $place->name,
+            'store_id' => $place->store_id,
+            'floor' => $place->floor,
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
