@@ -74,18 +74,22 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
-        $path = Image::where('id', $place->image_id)->value('path');
-        $str = substr($path, strripos($path, "images"));
-        unlink($str);
         $data = array(
-            'name' => $request->name,
-            'store_id' => $request->store_id,
-            'floor' => $request->floor,
+            'name' => $place->name,
+            'store_id' => $place->store_id,
+            'floor' => $place->floor,
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
         $place->fill($request->all());
         $place->update();
+        $data = array(
+            'name' => $place->name,
+            'store_id' => $place->store_id,
+            'floor' => $place->floor,
+            'type' => 'place',
+        );
+        $place->updateQrcode($data,$place->id);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $code = Redis::get($place->name.'_'.$place->id);
 
@@ -429,6 +433,7 @@ class PlacesController extends Controller
     public function binding(Request $request, Place $place)
     {
         $place->fill($request->all());
+        $place->update();
         $data = array(
             'name' => $request->name,
             'store_id' => $request->store_id,
@@ -436,7 +441,6 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
-        $place->update();
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
     }
