@@ -15,7 +15,6 @@ class PlaceObserver
 	        if (!is_dir($dir)) {
 	            File::makeDirectory($dir, 0777, true);
 	        }
-	        // $filename = date('YmdHis').uniqid().'.png';
 	        $filename = '新座位'.$place->id. '.png';
 	        // 判断图片是否存在
 	        if (file_exists($dir. '/' .$filename)) {

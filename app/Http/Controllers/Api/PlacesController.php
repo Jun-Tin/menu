@@ -23,13 +23,7 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
-        // $data = $request->all();
-        // 默认类型值
-        // $data['type'] = 'place';
-        // $place->updateQrcode($data,$place->id);
-        // $code = Redis::get($place->name.'_'.$place->id);
 
-        // return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！', 'code' => $code]);
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
     }
 
@@ -51,9 +45,8 @@ class PlacesController extends Controller
         $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
-        $code = Redis::get($place->name.'_'.$place->id);
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**
@@ -66,7 +59,7 @@ class PlacesController extends Controller
     {
         $images = Image::find($place->image_id);
         $pos = strpos($images->path, 'images');
-        $path = substr($images->path,$pos,strlen($images->path));
+        $path = substr($images->path, $pos, strlen($images->path));
         if (file_exists($path)) {
             unlink($path);
         }
@@ -91,30 +84,11 @@ class PlacesController extends Controller
         );
         $result = $place->updateQrcode($data,$place->id);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
-        $code = Redis::get($place->name.'_'.$place->id);
 
         if ($result) {
-            return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
+            return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
         }
     }
-
-    // /**【删除座位--整层】*/
-    // public function delete(Request $request, Place $place)
-    // {
-    //     // dd($request->store_id);
-    //     // dd(Storage::disk('qrcodes'));
-    //     // dd(public_path('/images/uploads/201909'));
-    //     // $file = Storage::delete('/uploads/201909/');
-    //     Storage::disk('qrcodes')->deleteDirectory('1/1');
-    //     // \File::delete(public_path('/images/uploads/201909/'));
-    //     // $file = File::delete();
-    //     // dd($disk);
-    //     dd(123);
-
-    //     $place->where('floor', $request->floor)->delete();
-
-    //     return response()->json(['message' => '删除成功！', 'status' => 200]);
-    // }
 
     /** 【 获取压缩包 】 */
     public function makeZip(Request $request)
