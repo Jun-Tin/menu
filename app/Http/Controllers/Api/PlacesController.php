@@ -141,7 +141,7 @@ class PlacesController extends Controller
             return $sum + $value->number;
         });
 
-        return (new ShopcartCollection($shopcarts))->additional(['status'=>200, 'count'=>$number?:0, 'total'=>$total?:0]);
+        return (new ShopcartCollection($shopcarts))->additional(['status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
     } 
 
     /** 【 客户端--购物车详情 】 */
@@ -157,7 +157,7 @@ class PlacesController extends Controller
             return $sum + $value->number;
         });
 
-        return (new ShopcartCollection($shopcarts))->additional(['status'=>200, 'count'=>$number?:0, 'total'=>$total?:0]);
+        return (new ShopcartCollection($shopcarts))->additional(['status' => 200, 'count' => $number?:0, 'total' => $total?:0]);
     } 
 
     /** 【 创建订单 】 */
@@ -228,14 +228,10 @@ class PlacesController extends Controller
                         'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
-                        // 'menus_id' => $item->menus_id,
-                        // 'tags_id' => $item->tags_id,
-                        // 'fill_price' => $item->fill_price,
                         'number' => 1,
                         'original_price' => $item->original_price,
                         'price' => $item->price/$item->number,
                         'status' => 0,
-                        // 'remark' => json_decode($item->remark,true)[0]?:'',
                         'place_id' => $item->place_id,
                         'pid' => 0,
                     ]);
@@ -263,7 +259,6 @@ class PlacesController extends Controller
                 }
             }
             // 删除购物车记录
-            // Shopcart::where('id',$item->id)->delete();    
             $item->delete();
         });
 
@@ -277,7 +272,7 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => '做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
@@ -350,14 +345,10 @@ class PlacesController extends Controller
                         'store_id' => $place->store_id,
                         'menu_id' => $item->menu_id,
                         'category' => $item->category,
-                        // 'menus_id' => $item->menus_id,
-                        // 'tags_id' => $item->tags_id,
-                        // 'fill_price' => $item->fill_price,
                         'number' => 1,
                         'original_price' => $item->original_price,
                         'price' => $item->price/$item->number,
                         'status' => 0,
-                        // 'remark' => json_decode($item->remark,true)[0]?:'',
                         'place_id' => $item->place_id,
                         'pid' => 0,
                     ]);
@@ -385,14 +376,13 @@ class PlacesController extends Controller
                 }
             }
             // 删除购物车记录
-            // Shopcart::where('id',$item->id)->delete();    
             $item->delete();
         });
 
         // 修改座位状态
         $place->update(['status'=>1]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type'=>'cooking','message'=>'做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => '做饭了！'), JSON_UNESCAPED_UNICODE));
 
         return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
     } 
@@ -400,7 +390,7 @@ class PlacesController extends Controller
     /** 【 客户端--座位状态 】*/
     public function customerStatus(Request $request, Place $place)
     {
-        $place->order = Order::where('place_id',$place->id)->where('status',0)->whereDate('created_at',date('Y-m-d'))->orderBy('created_at','desc')->first();
+        $place->order = Order::where('place_id', $place->id)->where('status', 0)->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
 
         return response()->json(['data'=>$place, 'status'=>200]);
     }
