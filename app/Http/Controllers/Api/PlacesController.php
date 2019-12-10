@@ -436,9 +436,9 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
-        $path = Image::find($place->image_id)->value('path');
-        $str = substr($path,strripos($path, "images"));
-        unlink($str);
+        // $path = Image::find($place->image_id)->value('path');
+        // $str = substr($path,strripos($path, "images"));
+        // unlink($str);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $place->update();
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);

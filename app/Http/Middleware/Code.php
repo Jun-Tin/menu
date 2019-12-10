@@ -32,7 +32,7 @@ class Code
                 $id = $user->id;
             }
             // 执行动作，判断该值是否存在redis数组
-            if (substr(Redis::get($name.'_'.$id),0,20) != $request->header('code')) {
+            if (substr(Redis::get($name.'_'.$id), 0, 20) != $request->header('code')) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
             }
         } else {
