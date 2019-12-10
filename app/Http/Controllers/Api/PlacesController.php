@@ -86,11 +86,12 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $result = $place->updateQrcode($data,$place->id);
-        dd($result);
         Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         $code = Redis::get($place->name.'_'.$place->id);
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
+        if ($result) {
+            return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！', 'code' => $code]);
+        }
     }
 
     // /**【删除座位--整层】*/
