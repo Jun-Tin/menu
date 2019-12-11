@@ -32,7 +32,6 @@ class ShopcartCollection extends ResourceCollection
                 }
                 $item->fill_price = json_decode($item->fill_price);
                 $item->remark = json_decode($item->remark);
-
                 return $item;
             }),
         ];
