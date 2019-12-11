@@ -195,11 +195,11 @@ class ShopcartsController extends Controller
 
         $shopcart->fill($request->all());
         $shopcart->number = 1;
-        dd($menu->tags()->where('category', 'perfer')->get());
         $colletion = $menu->tags()->where('category', 'perfer')->get()->map(function ($item){
             $item->tags = Tag::where('pid', $item->id)->get()->first();
             return $item->only('tags');
         });
+        dd($colletion);
         $colletion->map(function ($item) use ($shopcart){
             $shopcart->tags_id .= $item['tags']['id'].',';
         });
