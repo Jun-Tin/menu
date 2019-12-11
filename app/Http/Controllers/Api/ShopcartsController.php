@@ -198,7 +198,7 @@ class ShopcartsController extends Controller
         $colletion = $menu->tags()->where('category', 'perfer')->get()->map(function ($item){
             $item->tags = Tag::where('pid', $item->id)->first();
             return $item->only('tags');
-        })->values();
+        })->filter()->values();
         dd($colletion);
         $colletion->map(function ($item) use ($shopcart){
             $shopcart->tags_id .= $item['tags']['id'].',';
