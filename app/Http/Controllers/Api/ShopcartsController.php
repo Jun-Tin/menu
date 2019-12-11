@@ -200,6 +200,7 @@ class ShopcartsController extends Controller
             return $item->only('tags');
         })->values();
         $colletion->map(function ($item) use ($shopcart){
+            dd($item);
             $shopcart->tags_id .= $item['tags']['id'].',';
         });
         $shopcart->tags_id = '[['.substr($shopcart->tags_id, 0, -1).']]';
