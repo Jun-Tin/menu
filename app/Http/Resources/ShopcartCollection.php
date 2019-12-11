@@ -20,6 +20,7 @@ class ShopcartCollection extends ResourceCollection
                 $item->menu_name = (Menu::find($item->menu_id, ['name']))->name;
                 if ($item->menus_id) {
                     foreach (json_decode($item->menus_id) as $key => $value) {
+                        $names[] = '';
                         if (!empty($value)) {
                             $names[] = Menu::where('id', $value)->value('name');
                         }
@@ -28,6 +29,7 @@ class ShopcartCollection extends ResourceCollection
                 }
                 if ($item->tags_id) {
                     foreach (json_decode($item->tags_id) as $k => $value) {
+                        $name[] = '';
                         if (!empty($value)) {
                             $name[] = Tag::find($value)->pluck('name');
                         }
