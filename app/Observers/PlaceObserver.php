@@ -2,7 +2,7 @@
 namespace App\Observers;
 
 use App\Models\{Place, Image};
-use Illuminate\Support\Facades\{Auth, Storage, File, Crypt};
+use Illuminate\Support\Facades\{Auth, Storage, File, Crypt, Redis};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PlaceObserver
@@ -36,6 +36,8 @@ class PlaceObserver
 				'number' => 1,
 				'image_id' => $image->id,
 			]);
+	        // 设置redis缓存
+        	Redis::set($place->name.'_'.$place->id, $encrypted);
 		}
 	}
 } 
