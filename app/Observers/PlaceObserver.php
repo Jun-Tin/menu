@@ -9,6 +9,7 @@ class PlaceObserver
 {
 	public function created(Place $place)
 	{
+		// eyJpdiI6ImhkaE1
 		if ($place->floor != 0) {
 			$encrypted = substr(Crypt::encryptString('新座位'.$place->id.'_'.$place->id.'_code'), 0, 15);
 			$dir = public_path('images/qrcodes/'.$place->store_id. '/' .$place->floor);

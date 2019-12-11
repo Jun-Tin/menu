@@ -147,6 +147,11 @@ class PlacesController extends Controller
     /** 【 客户端--购物车详情 】 */
     public function customerShopcart(Request $request, Place $place)
     {
+        $str = "[[]]";
+        foreach (json_decode($str) as $key => $value) {
+            dd(empty($value));
+        }
+        dd(empty(json_decode($str)));
         $shopcarts = $place->shopcarts;
         // 总价格
         $total = $shopcarts->reduce(function ($sum, $value){
