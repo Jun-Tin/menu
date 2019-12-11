@@ -71,9 +71,9 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
-        $path = Image::where('id', $place->image_id)->value('path');
-        $str = substr($path, strripos($path, "images"));
-        unlink($str);
+        $str = Image::where('id', $place->image_id)->value('path');
+        $path = substr($str, strripos($str, "images"));
+        unlink($path);
         $place->fill($request->all());
         $place->update();
         $data = array(

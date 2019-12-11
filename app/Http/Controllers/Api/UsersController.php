@@ -211,9 +211,8 @@ class UsersController extends Controller
     {
         // 如果不是老板，删除员工二维码
         if ($user->post != 'boss') {
-            $path = $user->qrcode;
-            $str = substr($path, strripos($path, "images"));
-            unlink($str);
+            $path = substr($user->qrcode, strripos($user->qrcode, "images"));
+            unlink($path);
         }
         $user->delete();
 
