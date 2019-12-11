@@ -131,6 +131,8 @@ class PlacesController extends Controller
     /** 【 购物车详情 】 */
     public function shopcart(Request $request, Place $place)
     {
+        dd(substr(Redis::get('新座位_102'), 0, 20));
+        
         $shopcarts = $place->shopcarts;
         // 总价格
         $total = $shopcarts->reduce(function ($sum, $value){
@@ -147,7 +149,6 @@ class PlacesController extends Controller
     /** 【 客户端--购物车详情 】 */
     public function customerShopcart(Request $request, Place $place)
     {
-        dd(substr(Redis::get('新座位_102'), 0, 20));
         $shopcarts = $place->shopcarts;
         // 总价格
         $total = $shopcarts->reduce(function ($sum, $value){
