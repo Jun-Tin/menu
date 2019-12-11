@@ -200,9 +200,10 @@ class ShopcartsController extends Controller
             return $item->only('tags');
         });
         $colletion->map(function ($item) use ($shopcart){
-            $shopcart->tags_id .= $item['tags']['id'].',';
+            if (!empty($item)) {
+                $shopcart->tags_id .= $item['tags']['id'].',';
+            }
         });
-        dd($shopcart);
         $shopcart->tags_id = '[['.substr($shopcart->tags_id, 0, -1).']]';
         $shopcart->original_price = $menu_price;
         $shopcart->price = $menu_price;
