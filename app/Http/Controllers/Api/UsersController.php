@@ -209,6 +209,12 @@ class UsersController extends Controller
     /** 【 删除员工信息 】 */
     public function delete(User $user)
     {
+        // 如果不是老板，删除员工二维码
+        if ($user->post != 'boss') {
+            $path = $user->qrcode;
+            $str = substr($path, strripos($path, "images"));
+            unlink($str);
+        }
         $user->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
