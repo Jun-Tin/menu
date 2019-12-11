@@ -22,7 +22,7 @@ class ShopcartCollection extends ResourceCollection
                     foreach (json_decode($item->menus_id) as $key => $value) {
                         // $names[] = '';
                         if (!empty($value)) {
-                            $names[] = Menu::where('id', $value)->value('name')?;
+                            $names[] = Menu::where('id', $value)->value('name');
                         }
                     }
                     $item->menus_name = $names;
