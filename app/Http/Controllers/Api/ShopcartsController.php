@@ -200,7 +200,7 @@ class ShopcartsController extends Controller
             return $item->only('tags');
         });
         $colletion->map(function ($item) use ($shopcart){
-            if (!empty($item)) {
+            if (!empty($item['tags'])) {
                 $shopcart->tags_id .= $item['tags']['id'].',';
             }
         });
