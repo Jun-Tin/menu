@@ -195,7 +195,7 @@ class ShopcartsController extends Controller
 
         $shopcart->fill($request->all());
         $shopcart->number = 1;
-        $colletion = $menu->tags()->where('category', 'perfer')->get()->map(function ($item){
+        $colletion = $menu->tags()->where('category', 'perfer')->get()->filter(function ($item){
             $item->tags = Tag::where('pid', $item->id)->get()->first();
             return $item->only('tags');
         });
