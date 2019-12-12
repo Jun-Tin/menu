@@ -62,7 +62,7 @@ class OrdersController extends Controller
         $order = Order::where('store_id', auth()->user()->store_id)->whereIn('status', [0, 1])->where('finish', 0)->get();
         $order->unfinished = $order->map(function ($item, $key){
             // 未完成的菜品
-            return $item->orders()->where('status', '<=', 1)->where('category', 'm')->get();
+            return $item->orders()->whereIn('status', [0, 1])->where('category', 'm')->get();
         });
         $order->finished = $order->map(function ($item, $key){
             // 已完成的菜品
