@@ -47,6 +47,7 @@ class BehaviorObserver
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
 					$all = OrderDetail::where('pid', $OrderDetail->pid)->select('status')->get();
+					dd($all);
 					$status = $all->contains(function ($value, $key) {
 					    return $value > 0;
 					});
