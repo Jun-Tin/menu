@@ -26,7 +26,7 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $OrderDetail->pid)->get()->toArray();
+					$all = OrderDetail::where('pid', $OrderDetail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
 					    return $value = 4;
 					});
@@ -46,7 +46,7 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($OrderDetail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $OrderDetail->pid)->get()->toArray();
+					$all = OrderDetail::where('pid', $OrderDetail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
 					    return $value > 0;
 					});
