@@ -38,8 +38,7 @@ class PlaceObserver
 				'image_id' => $image->id,
 			]);
 	        // 设置redis缓存
-        	// Redis::set($place->name.'_'.$place->id, $encrypted);
-        	Redis::setex($place->name.'_'.$place->id, '', $encrypted);
+        	Redis::set($place->name.'_'.$place->id, $encrypted);
 		}
 	}
 } 
