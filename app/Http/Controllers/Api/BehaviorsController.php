@@ -91,8 +91,14 @@ class BehaviorsController extends Controller
                 break;
             // 撤销
             case 'backout':
+                $OrderDetail = OrderDetail::find($behavior->target_id);
+                // 判断是否属于套餐内的单品
+                if ($OrderDetail->pid) {                    
+                    // 修改套餐状态
+                    OrderDetail::where('id', $OrderDetail->pid)->update(['status' => 0]);
+                }
                 // 修改菜单内容状态 -- 撤销状态
-                OrderDetail::where('id', $request->target_id)->update(['status' => 0]);
+                $OrderDetail->update(['status' => 0]);
                 // 将原先制作的记录删除
                 Behavior::where('target_id', $request->target_id)->where('category', 'cooking')->delete();
                 $behavior->status = 1;
