@@ -81,6 +81,7 @@ class BehaviorObserver
 			// 撤销
 			case 'retreat':
 				$OrderDetail = OrderDetail::find($behavior->target_id);
+				dd($OrderDetail);
 				// 判断是否属于套餐内的单品
 				if ($OrderDetail->pid) {					
 					// 修改套餐状态
