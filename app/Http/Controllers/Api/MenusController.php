@@ -21,7 +21,7 @@ class MenusController extends Controller
 
     /** 【 菜品详情--客户端 】 */ 
     public function customerIndex(Menu $menu)
-    {        
+    {
         return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
