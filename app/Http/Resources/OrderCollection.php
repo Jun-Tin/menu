@@ -32,10 +32,10 @@ class OrderCollection extends ResourceCollection
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
+                                $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
+                                $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
@@ -51,10 +51,10 @@ class OrderCollection extends ResourceCollection
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id',$item->menus_id)->value('image_id'))->value('path');
+                                $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
-                                $item->path = Image::where('id',Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
+                                $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
                             if (!empty(json_decode($item->tags_id,true))) {
@@ -67,26 +67,28 @@ class OrderCollection extends ResourceCollection
                             return $item;
                         })->values(),
                         'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                            $behavior = Behavior::where('target_id', $item->id)->where('category','cooking')->first();
-                            if ($behavior->user_id == auth()->id()) {
-                                $item->place_name = Place::where('id', $item->place_id)->value('name');
-                                if ($item->pid) {
-                                    $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
-                                    $item->path = Image::where('id',Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
-                                } else{
-                                    $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
-                                    $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
-                                }
-
-                                if (!empty(json_decode($item->tags_id,true))) {
-                                    foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                        $name[] = Tag::where('id', $value)->value('name');
+                            $behavior = Behavior::where('target_id', $item->id)->where('category', 'cooking')->first();
+                            if ($behavior) {
+                                if ($behavior->user_id == auth()->id()) {
+                                    $item->place_name = Place::where('id', $item->place_id)->value('name');
+                                    if ($item->pid) {
+                                        $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                        $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
+                                    } else{
+                                        $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                        $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                                     }
-                                    $item->tags_name = $name;
+
+                                    if (!empty(json_decode($item->tags_id,true))) {
+                                        foreach (json_decode($item->tags_id,true) as $k => $value) {
+                                            $name[] = Tag::where('id', $value)->value('name');
+                                        }
+                                        $item->tags_name = $name;
+                                    }
+                                    $item->remark = $item->remark;
+                                    $item->behavior = $behavior;
+                                    return $item;
                                 }
-                                $item->remark = $item->remark;
-                                $item->behavior = $behavior;
-                                return $item;
                             }
                         })->values(),
                     ],
@@ -121,24 +123,26 @@ class OrderCollection extends ResourceCollection
                         }
                     })->values(),
                     'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                        $behavior = Behavior::where('target_id', $item->id)->where('category','serving')->first();
-                        if ($behavior->user_id == auth()->id()) {
-                            $item->place_name = Place::where('id', $item->place_id)->value('name');
-                            if ($item->pid) {
-                                $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
-                            } else{
-                                $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
-                            }
-
-                            if (!empty(json_decode($item->tags_id,true))) {
-                                foreach (json_decode($item->tags_id,true) as $k => $value) {
-                                    $name[] = Tag::where('id', $value)->value('name');
+                        $behavior = Behavior::where('target_id', $item->id)->where('category', 'serving')->first();
+                        if ($behavior) {
+                            if ($behavior->user_id == auth()->id()) {
+                                $item->place_name = Place::where('id', $item->place_id)->value('name');
+                                if ($item->pid) {
+                                    $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                } else{
+                                    $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                                 }
-                                $item->tags_name = $name;
+
+                                if (!empty(json_decode($item->tags_id,true))) {
+                                    foreach (json_decode($item->tags_id,true) as $k => $value) {
+                                        $name[] = Tag::where('id', $value)->value('name');
+                                    }
+                                    $item->tags_name = $name;
+                                }
+                                $item->remark = $item->remark;
+                                $item->behavior = $behavior;
+                                return $item;
                             }
-                            $item->remark = $item->remark;
-                            $item->behavior = $behavior;
-                            return $item;
                         }
                     })->values(),
                 ];
