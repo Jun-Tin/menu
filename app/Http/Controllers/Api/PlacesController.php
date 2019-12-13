@@ -22,7 +22,7 @@ class PlacesController extends Controller
     {
         // eyJpdiI6ImFZXC9
         // eyJpdiI6Ik5yWW1
-        dd(Redis::get('新座位*'));
+        dd(Redis::get('新座位103_103'));
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
