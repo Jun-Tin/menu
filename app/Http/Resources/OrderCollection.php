@@ -66,7 +66,7 @@ class OrderCollection extends ResourceCollection
                             $item->remark = $item->remark;
                             return $item;
                         })->values(),
-                        'myself' => $this->collection['myself']->flatten()->filter(function ($item){
+                        'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
                             $behavior = Behavior::where('target_id', $item->id)->where('category', 'cooking')->first();
                             if ($behavior) {
                                 if ($behavior->user_id == auth()->id()) {
@@ -92,7 +92,6 @@ class OrderCollection extends ResourceCollection
                             }
                         })->values(),
                     ],
-                    'dat' => dd($this->collection),
                     'unfinished_count' => $this->collection['unfinished']->flatten()->values()->count(),
                     'finished_count' => $this->collection['finished']->flatten()->values()->count(),
                 ];
