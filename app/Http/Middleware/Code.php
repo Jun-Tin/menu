@@ -23,7 +23,7 @@ class Code
                 $place = Place::find($request->header('placeid'));
                 $name = $place->name;
                 $id = $place->id;
-                $store_id = $place->store;
+                $store_id = $place->store_id;
             }
 
             if ($request->header('userid')) {
@@ -31,7 +31,7 @@ class Code
                 $user = User::find($request->header('userid'));
                 $name = $user->account;
                 $id = $user->id;
-                $store_id = $user->store;
+                $store_id = $user->store_id;
             }
             // 执行动作，判断该值是否存在redis数组
             if (substr(Redis::get($name.'_'.$store_id.'_'.$id), 0, 20) != $request->header('code')) {
