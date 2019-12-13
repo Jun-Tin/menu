@@ -94,7 +94,7 @@ class OrderCollection extends ResourceCollection
                     ],
                     'unfinished_count' => $this->collection['unfinished']->flatten()->values()->count(),
                     'finished_count' => $this->collection['finished']->flatten()->values()->count(),
-                    'dat' => dd($this->myself),
+                    'dat' => dd($this->collection),
                 ];
                 break;
             case 'serving':
