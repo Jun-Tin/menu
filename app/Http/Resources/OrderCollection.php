@@ -26,8 +26,6 @@ class OrderCollection extends ResourceCollection
         // return parent::toArray($request);
         switch ($this->param) {
             case 'orders':
-                        dd($this->collection['unfinished']->flatten()->count());
-
                 return [
                     'data' => [
                         'unfinished' => $this->collection['unfinished']->flatten()->filter(function ($item){
