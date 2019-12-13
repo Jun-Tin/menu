@@ -38,7 +38,6 @@ class PlaceObserver
 			]);
 	        // 设置redis缓存
         	Redis::set($place->name.'_'.$place->store_id.'_'.$place->id, $encrypted);
-        	// Redis::setex($place->name.'_'.$place->store_id.'_'.$place->id, 3153600000, $encrypted);
 		}
 	}
 } 

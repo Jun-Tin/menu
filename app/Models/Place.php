@@ -71,7 +71,6 @@ class Place extends Model
         }
         // 设置redis缓存
         Redis::set($data['name'].'_'.$data['store_id'].'_'.$id, $encrypted);
-        // Redis::setex($data['name'].'_'.$data['store_id'].'_'.$id, 3153600000, $encrypted);
         return [
             'qrcode' => $qrcode,
             'link' => $link,
