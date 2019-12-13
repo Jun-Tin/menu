@@ -92,9 +92,9 @@ class OrderCollection extends ResourceCollection
                             }
                         })->values(),
                     ],
-                        dd($this->myself);
-                    'unfinished_count' => $this->collection['unfinished']->flatten()->values()->count() + $this->collection['behavior']->flatten()->values()->count(),
+                    'unfinished_count' => $this->collection['unfinished']->flatten()->values()->count(),
                     'finished_count' => $this->collection['finished']->flatten()->values()->count(),
+                    'dat' => dd($this->myself),
                 ];
                 break;
             case 'serving':
