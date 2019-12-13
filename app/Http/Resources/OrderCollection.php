@@ -28,6 +28,7 @@ class OrderCollection extends ResourceCollection
             case 'orders':
                 return [
                     'data' => [
+                        dd($this->collection['unfinished']);
                         'unfinished' => $this->collection['unfinished']->flatten()->filter(function ($item){
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
