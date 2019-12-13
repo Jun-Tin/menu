@@ -358,10 +358,10 @@ class UsersController extends Controller
     {
         $user = $user::find($request->header('userid'));
         if ($user) {
-            if ($user->post != $request->post) {
+            if ($user->post != $request->identity) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
             }
-            
+
             return response()->json(['success' => [ 'token' => $user->createToken('MyApp', [$user->post])->accessToken],
                                     'status' => 200,
                                     'message' => '登录成功！'
