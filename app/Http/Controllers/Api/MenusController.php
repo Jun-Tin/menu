@@ -6,6 +6,7 @@ use App\Models\{Menu, MenuTag};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{MenuResource, MenuCollection, StoreCollection};
+use GatewayWorker\Lib\Gateway;
 
 class MenusController extends Controller
 {
@@ -181,12 +182,22 @@ class MenusController extends Controller
     /** 【 菜品售罄、恢复 -- 单选 】 */
     public function soldStatus(Request $request, Menu $menu)
     {
+        $user = auth()->user();
         switch ($request->type) {
             case 'out':
                 $menu->update(['status' => 0]);
                 break;
             default:
                 $menu->update(['status' => 1]);
+                break;
+        }
+
+        switch ($user->post) {
+            case 'waiter':
+                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
+                break;
+            case 'chef':
+                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
                 break;
         }
         return response()->json(['message' => '修改成功！', 'status' => 200]);
