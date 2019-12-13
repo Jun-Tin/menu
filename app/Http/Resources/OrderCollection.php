@@ -26,9 +26,10 @@ class OrderCollection extends ResourceCollection
         // return parent::toArray($request);
         switch ($this->param) {
             case 'orders':
+                        dd($this->collection['unfinished']);
+                
                 return [
                     'data' => [
-                        dd($this->collection['unfinished']);
                         'unfinished' => $this->collection['unfinished']->flatten()->filter(function ($item){
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
