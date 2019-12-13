@@ -68,14 +68,14 @@ class OrdersController extends Controller
             // 已完成的菜品
             return $item->orders()->where('status', '>=', 2)->where('category', 'm')->get();
         });
-        $order->behavior = $order->map(function ($item, $key){
+        $order->myself = $order->map(function ($item, $key){
             // 正在做的菜品
             return $item->orders()->where('status', 1)->where('category', 'm')->get();
         });
 
         $order->put('unfinished', $order->unfinished);
         $order->put('finished', $order->finished);
-        $order->put('behavior', $order->behavior);
+        $order->put('myself', $order->myself);
 
         return (new OrderCollection($order, $param='orders'))->additional(['status' => 200, 'set_time' => $set_time]);
     } 
