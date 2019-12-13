@@ -9,7 +9,6 @@ class PlaceObserver
 {
 	public function created(Place $place)
 	{
-		// eyJpdiI6ImhkaE1
 		if ($place->floor != 0) {
 			$encrypted = substr(Crypt::encryptString('新座位'.$place->id.'_'.$place->id.'_code'), 0, 15);
 			$dir = public_path('images/qrcodes/'.$place->store_id. '/' .$place->floor);
@@ -38,7 +37,8 @@ class PlaceObserver
 				'image_id' => $image->id,
 			]);
 	        // 设置redis缓存
-        	Redis::set($place->name.'_'.$place->id, $encrypted);
+        	// Redis::set($place->name.'_'.$place->id, $encrypted);
+        	Redis::setex($place->name.'_'.$place->store_id.'_'.$place->id, 3153600000, $encrypted);
 		}
 	}
 } 

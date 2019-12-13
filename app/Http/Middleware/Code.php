@@ -23,6 +23,7 @@ class Code
                 $place = Place::find($request->header('placeid'));
                 $name = $place->name;
                 $id = $place->id;
+                $store_id = $place->store_id;
             }
 
             if ($request->header('userid')) {
@@ -30,9 +31,10 @@ class Code
                 $user = User::find($request->header('userid'));
                 $name = $user->account;
                 $id = $user->id;
+                $store_id = $user->store_id;
             }
             // 执行动作，判断该值是否存在redis数组
-            if (substr(Redis::get($name.'_'.$id), 0, 20) != $request->header('code')) {
+            if (substr(Redis::get($name.'_'.$store_id.'_'.$id), 0, 20) != $request->header('code')) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
             }
         } else {
