@@ -286,6 +286,16 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 删除
     Route::delete('paymentmethod/{paymentmethod}/destroy', 'Api\PaymentMethodsController@destroy');
 
+    /** 【 上线周期 】 */
+    // 列表
+    Route::get('period/index', 'Api\PeriodController@index');
+    // 创建
+    Route::post('period/store', 'Api\PeriodController@store');
+    // 修改
+    Route::patch('period/{period}/update', 'Api\PeriodController@update');
+    // 删除
+    Route::delete('period/{period}/destroy', 'Api\PeriodController@destroy');
+
 
     /** 
      * 【 功能类接口 】
