@@ -33,6 +33,11 @@ Route::get('paypal/pay', 'Api\PaypalsController@pay');
 Route::get('paypal/callback', 'Api\PaypalsController@callback');
 Route::get('paypal/notify', 'Api\PaypalsController@notify');
 
+/** 【 定时调用 】 */
+// 定时计算上线天数
+Route::get('store/computeDays', 'Api\StoresController@computeDays');
+
+
 
 /** 【 socket通讯 】 */
 // 加入端口

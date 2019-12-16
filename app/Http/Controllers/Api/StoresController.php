@@ -88,7 +88,10 @@ class StoresController extends Controller
             return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
         }
         $user->decrement('coins', $request->pay_coins);
-        $store->increment('days', $request->pay_coins+1);
+        if ($store->days == 0) {
+            $store->increment('days', $request->pay_coins+1);
+        }
+        $store->increment('days', $request->pay_coins);
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
 
         // 写入记录
@@ -361,4 +364,16 @@ class StoresController extends Controller
     {
         return (new StatisticsResource($store, $param='income'))->additional(['status' => 200]);
     } 
+
+    /** 【 定时计算上线天数 -- 每天递减1 】 */ 
+    public function computeDays()
+    {
+        Store::where('active', 1)->get()->map(function ($item){
+            if (($item->days -1) <= 0) {
+                $item->update(['active' => 0]);
+            } else {
+                $item->decrement('days', 1);
+            }
+        });
+    }
 }
