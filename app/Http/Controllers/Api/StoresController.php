@@ -84,12 +84,12 @@ class StoresController extends Controller
     public function active(Request $request, Store $store, User $user)
     {
         $user = auth()->user();
-        if ($user->coins - $request->pay_coins <0) {
-            return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
-        }
-        $user->decrement('coins', $request->pay_coins);
         // 上线周期
         $period = Period::find($request->id);
+        if ($user->coins - $period->number <0) {
+            return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
+        }
+        $user->decrement('coins', $period->number);
         if ($store->days == 0) {
             $days = $period->number+1;
             $store->increment('days', $days);
