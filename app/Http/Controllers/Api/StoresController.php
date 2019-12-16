@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User, MenuTag, Bill};
+use App\Models\{Store, User, MenuTag, Bill, Period};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
@@ -88,10 +88,14 @@ class StoresController extends Controller
             return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
         }
         $user->decrement('coins', $request->pay_coins);
+        // 上线周期
+        $period = Period::find($request->id);
         if ($store->days == 0) {
-            $store->increment('days', $request->pay_coins+1);
+            $days = $period->number+1;
+            $store->increment('days', $days);
         } else {
-            $store->increment('days', $request->pay_coins);
+            $days = $period->number;
+            $store->increment('days', $days);
         }
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
 
@@ -104,7 +108,7 @@ class StoresController extends Controller
             'target' => $store->id,
             'execute' => 0,
             'type' => 0,
-            'number' => $request->pay_coins,
+            'number' => $days,
             'method' => 7,
         ]);
 
