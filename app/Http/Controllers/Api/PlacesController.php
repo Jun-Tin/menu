@@ -390,7 +390,8 @@ class PlacesController extends Controller
     /** 【 客户端--座位状态 】*/
     public function customerStatus(Request $request, Place $place)
     {
-        $place->order = Order::where('place_id', $place->id)->where('status', 0)->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
+        // $place->order = Order::where('place_id', $place->id)->where('status', 0)->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
+        $place->order = Order::where('place_id', $place->id)->where('status', 0)->orderBy('created_at', 'desc')->first();
 
         return response()->json(['data'=>$place, 'status'=>200]);
     }
