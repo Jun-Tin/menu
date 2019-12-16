@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource};
+use Carbon\Carbon;
 
 class StoresController extends Controller
 {
@@ -83,8 +84,12 @@ class StoresController extends Controller
     public function active(Request $request, Store $store, User $user)
     {
         $user = auth()->user();
-        $user->decrement('coins', 3);
-        $store->update(['active' => 1]);
+        if ($user->coins - $request->pay_coins <0) {
+            return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
+        }
+        $user->decrement('coins', $request->pay_coins);
+        $store->increment('days', $request->pay_coins+1);
+        $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
 
         // 写入记录
         Bill::create([
@@ -94,7 +99,7 @@ class StoresController extends Controller
             'accept' => '系统',
             'execute' => 0,
             'type' => 0,
-            'number' => 3,
+            'number' => $request->pay_coins,
             'method' => 7,
         ]);
 
