@@ -90,8 +90,9 @@ class StoresController extends Controller
         $user->decrement('coins', $request->pay_coins);
         if ($store->days == 0) {
             $store->increment('days', $request->pay_coins+1);
+        } else {
+            $store->increment('days', $request->pay_coins);
         }
-        $store->increment('days', $request->pay_coins);
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
 
         // 写入记录
