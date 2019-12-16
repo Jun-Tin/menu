@@ -22,6 +22,7 @@ class BillResource extends Resource
             'order' => $this->order,
             'operate' => $this->operate,
             'accept' => $this->accept,
+            'target' => $this->target,
             'execute' => $this->execute,
             'type' => $this->type? new UserResource(User::where('id', $this->accept)->first()):'系统',
             'number' => $this->number,

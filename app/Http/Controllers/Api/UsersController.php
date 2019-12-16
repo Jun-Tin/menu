@@ -338,6 +338,7 @@ class UsersController extends Controller
             'order' => 'Pay'.date('YmdHis').$user->random(),
             'operate' => $user->id,
             'accept' => $request->user_id,
+            'target' => $request->user_id,
             'execute' => 1,
             'type' => 1,
             'number' => $request->number,

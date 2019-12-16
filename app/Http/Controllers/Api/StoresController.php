@@ -101,6 +101,7 @@ class StoresController extends Controller
             'order' => 'Act'.date('YmdHis').$user->random(),
             'operate' => $user->id,
             'accept' => '系统',
+            'target' => $store->id,
             'execute' => 0,
             'type' => 0,
             'number' => $request->pay_coins,
