@@ -351,7 +351,7 @@ class UsersController extends Controller
     public function bill(Request $request, User $user)
     {
         $user = auth()->user();
-        return (BillResource::collection($user->bills))->additional(['status' => 200]);
+        return (BillResource::collection($user->bills()->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     } 
 
     /** 【 免登录验证 】 */
