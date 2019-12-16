@@ -112,7 +112,7 @@ class StoresController extends Controller
             'method' => 7,
         ]);
 
-        return (new StoreResource($store))->additional(['status' => 200, 'message' => '激活成功！']);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => '上线成功！']);
     } 
 
     /** 【 菜品列表 】 */
