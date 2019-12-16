@@ -18,6 +18,7 @@ class PeriodResource extends Resource
             'id' => $this->id,
             'title' => $this->title,
             'number' => $this->number,
+            'days' => $this->days,
             'show' => $this->show,
             'order_number' => $this->order_number,
             'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',

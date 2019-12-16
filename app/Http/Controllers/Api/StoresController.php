@@ -91,10 +91,10 @@ class StoresController extends Controller
         }
         $user->decrement('coins', $period->number);
         if ($store->days == 0) {
-            $days = $period->number+1;
+            $days = $period->days+1;
             $store->increment('days', $days);
         } else {
-            $days = $period->number;
+            $days = $period->days;
             $store->increment('days', $days);
         }
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
