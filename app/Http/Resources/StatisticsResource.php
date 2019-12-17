@@ -624,7 +624,7 @@ class StatisticsResource extends Resource
                 ];
                 break;
 
-            case 'eachWeekIncome':
+            case 'totalWeekIncome':
                 $get_week = $this->get_week(date('Y', $request->date));
 
                 foreach ($get_week as $key => $value) {
