@@ -365,11 +365,33 @@ class StoresController extends Controller
         return response()->json(['data' => $behaviorsList, 'title' => $behaviors, 'status' => 200]);
     }
 
-    /** 【 财务报表 -- 收入 】 */
-    public function income(Request $request, Store $store)
+    // /** 【 财务报表 -- 收入 】 */
+    // public function income(Request $request, Store $store)
+    // {
+    //     return (new StatisticsResource($store, $param='income'))->additional(['status' => 200]);
+    // } 
+
+    /** 【 收入报表 】 */ 
+    // 总月
+    public function totalMonthIncome(Request $request, Store $store)
     {
-        return (new StatisticsResource($store, $param='income'))->additional(['status' => 200]);
-    } 
+        return (new StatisticsResource($store, $param='totalMonthIncome'))->additional(['status' => 200]);
+    }
+    // 每月
+    public function eachMonthIncome(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='eachMonthIncome'))->additional(['status' => 200]);
+    }
+    // 每天
+    public function eachDayIncome(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='eachDayIncome'))->additional(['status' => 200]);
+    }
+    // 每周
+    public function eachWeekIncome(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='eachWeekIncome'))->additional(['status' => 200]);
+    }
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
     public function computeDays()

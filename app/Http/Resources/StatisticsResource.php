@@ -538,6 +538,94 @@ class StatisticsResource extends Resource
                     'data' => $data, 
                 ];
                 break;
+
+            case 'totalMonthIncome':
+                // 构造数组
+                for ($i=0; $i < 12; $i++) { 
+                    $data[$i]['month'] = $i+1;
+                    $data[$i]['price'] = 0;
+                    $data[$i]['number'] = 0;
+
+                    // 树状图
+                    $month[$i] = $i+1;
+                    $price[$i] = 0;
+                }
+
+                $orders = $this->orders()->whereYear('created_at', Carbon::now()->format('Y'))
+                                                ->selectRaw('month(created_at) as month, sum(final_price) as price, sum(sitter) as number')
+                                                ->groupBy('month')
+                                                ->get()
+                                                ->toArray();
+
+                foreach ($data as $key => $value) {
+                    foreach ($orders as $k => $v) {
+                        if ($value['month'] == $v['month']) {
+                            $data[$key]['price'] = $v['price'];
+                            $data[$key]['number'] = $v['number'];
+                        }
+                    }
+                }
+
+                foreach ($price as $key => $value) {
+                    foreach ($orders as $k => $v) {
+                        if ($key == ($v['month'] -1)) {
+                            $price[$key] = $v['price'];
+                        }
+                    }
+                }
+
+                return [
+                    'data' => $data,
+                    'month' => $month,
+                    'price' => $price,
+                ];
+                break;
+
+            case 'eachMonthIncome':
+                // 获取指定时间月份天数
+                $days = cal_days_in_month(CAL_GREGORIAN, $request->month, Carbon::now()->format('Y'));
+                $orders = $this->orders()->whereMonth('created_at', $request->month)
+                                                ->selectRaw('day(created_at) as day, sum(final_price) as price, sum(sitter) as number')
+                                                ->groupBy('day')
+                                                ->get()
+                                                ->toArray();
+
+                // 构造数组
+                for ($i=0; $i < $days; $i++) { 
+                    $data[$i]['day'] = $i+1;
+                    $data[$i]['price'] = 0;
+                    $data[$i]['number'] = 0;
+                }
+
+                foreach ($data as $key => $value) {
+                    foreach ($orders as $k => $v) {
+                        if ($value['day'] == $v['day']) {
+                            $data[$key]['price'] = $v['price'];
+                            $data[$key]['number'] = $v['number'];
+                        }
+                    }
+                }
+
+                return [
+                    'data' => $data
+                ];
+                break;
+
+            case 'eachDayIncome':
+                $orders = $this->orders()->whereDay('created_at', $request->day)->get()->map(function ($item){
+                    $item->place_name = Place::where('id', $item->place_id)->value('name');
+                    return $item->only('place_name', 'sitter', 'final_price');
+                })->values();
+
+                return [
+                    'data' => $orders
+                ];
+                break;
+
+            case 'eachWeekIncome':
+                $get_week = $this->get_week(2019);
+                dd($get_week);
+                break;
         }
     }
 }
