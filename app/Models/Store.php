@@ -72,7 +72,8 @@ class Store extends Model
         if (intval(date('W', $endday)) == '7') {
             $endday = strtotime("last sunday", strtotime($year_end));
         }
-     
+        // 1546790400
+dd(date('oW', strtotime('2013-12-31')));
         $num = intval(date('W', $endday));
         for ($i = 1; $i <= $num; $i++) {
             $j = $i -1;
@@ -86,6 +87,7 @@ class Store extends Model
                 $start_date
             ), str_replace("-", ".", $end_day));
         }
+
         return $week_array;
     }
  

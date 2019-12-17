@@ -569,7 +569,7 @@ class StatisticsResource extends Resource
                 foreach ($price as $key => $value) {
                     foreach ($orders as $k => $v) {
                         if ($key == ($v['month'] -1)) {
-                            $price[$key] = $v['price'];
+                            $price[$key] = $v['price']/1000;
                         }
                     }
                 }
