@@ -650,6 +650,7 @@ class StatisticsResource extends Resource
                         $week[] = $i;
                     }
                 }
+                sort($week);
 
                 foreach ($week as $key => $value) {
                     $betweenDay[$key] = [$get_week[$value-1]['startday'], $get_week[$value-1]['endday']];
