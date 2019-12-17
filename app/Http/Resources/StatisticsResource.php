@@ -625,8 +625,45 @@ class StatisticsResource extends Resource
                 break;
 
             case 'eachWeekIncome':
-                $get_week = $this->get_week(2020);
-                dd($get_week);
+                $get_week = $this->get_week(date('Y', $request->date));
+
+                foreach ($get_week as $key => $value) {
+                    if ($value['startday'] < date('Y-m-d', $request->date) && $value['endday'] >= date('Y-m-d', $request->date)) {
+                        $period = $value['period'];
+                    }
+                    $betweenDay[$key] = [$value['startday'], $value['endday']];
+                    $orders[$key] = $this->orders()->whereBetween('created_at', $betweenDay[$key])
+                                                ->selectRaw('sum(final_price) as price, sum(sitter) as number')
+                                                ->get()
+                                                ->toArray();
+
+                    $get_week[$key]['price'] = $orders[$key][0]['price']?:0;
+                    $get_week[$key]['number'] = $orders[$key][0]['number']?:0;
+                }
+
+                if (($period-10) >= 0) {
+                    for ($i=$period; $i>($period-10); $i--) { 
+                        $week[] = $i;
+                    }
+                } else {
+                    for ($i=$period; $i>0; $i--) { 
+                        $week[] = $i;
+                    }
+                }
+
+                foreach ($week as $key => $value) {
+                    $betweenDay[$key] = [$get_week[$value-1]['startday'], $get_week[$value-1]['endday']];
+                    $price[$key] = $this->orders()->whereBetween('created_at', $betweenDay[$key])
+                                                    ->selectRaw('sum(final_price) as price')
+                                                    ->get()
+                                                    ->toArray()[0]['price']?:0;
+                }
+
+                return [
+                    'data' => $get_week,
+                    'week' => $week,
+                    'price' => $price,
+                ];
                 break;
         }
     }
