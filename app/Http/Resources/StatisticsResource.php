@@ -612,7 +612,9 @@ class StatisticsResource extends Resource
                 break;
 
             case 'eachDayIncome':
-                $orders = $this->orders()->whereDay('created_at', $request->day)->get()->map(function ($item){
+                // 组合日期
+                $date = Carbon::now()->format('Y').'-'.$request->month.'-'.$request->day;
+                $orders = $this->orders()->whereDate('created_at', $date)->get()->map(function ($item){
                     $item->place_name = Place::where('id', $item->place_id)->value('name');
                     return $item->only('place_name', 'sitter', 'final_price');
                 })->values();
@@ -623,7 +625,7 @@ class StatisticsResource extends Resource
                 break;
 
             case 'eachWeekIncome':
-                $get_week = $this->get_week(2019);
+                $get_week = $this->get_week(2020);
                 dd($get_week);
                 break;
         }

@@ -73,7 +73,6 @@ class Store extends Model
             $endday = strtotime("last sunday", strtotime($year_end));
         }
         // 1546790400
-dd(date('oW', strtotime('2013-12-31')));
         $num = intval(date('W', $endday));
         for ($i = 1; $i <= $num; $i++) {
             $j = $i -1;
