@@ -151,8 +151,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/eachMonthIncome', 'Api\StoresController@eachMonthIncome');
     // 收入报表 -- 每天
     Route::patch('store/{store}/eachDayIncome', 'Api\StoresController@eachDayIncome');
-    // 收入报表 -- 每周
+    // 收入报表 -- 总周
     Route::patch('store/{store}/totalWeekIncome', 'Api\StoresController@totalWeekIncome');
+    // 收入报表 -- 每周
+    Route::patch('store/{store}/eachWeekIncome', 'Api\StoresController@eachWeekIncome');
 
 
     /** 【 标签 】*/

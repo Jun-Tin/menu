@@ -656,7 +656,7 @@ class StatisticsResource extends Resource
                     $price[$key] = $this->orders()->whereBetween('created_at', $betweenDay[$key])
                                                     ->selectRaw('sum(final_price) as price')
                                                     ->get()
-                                                    ->toArray()[0]['price']?:0;
+                                                    ->toArray()[0]['price']/1000?:0;
                 }
 
                 return [
@@ -664,6 +664,10 @@ class StatisticsResource extends Resource
                     'week' => $week,
                     'price' => $price,
                 ];
+                break;
+
+            case 'eachWeekIncome':
+
                 break;
         }
     }

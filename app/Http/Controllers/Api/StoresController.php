@@ -387,10 +387,15 @@ class StoresController extends Controller
     {
         return (new StatisticsResource($store, $param='eachDayIncome'))->additional(['status' => 200]);
     }
-    // 每周
+    // 总周
     public function totalWeekIncome(Request $request, Store $store)
     {
         return (new StatisticsResource($store, $param='totalWeekIncome'))->additional(['status' => 200]);
+    }
+    // 每周
+    public function eachWeekIncome(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='eachWeekIncome'))->additional(['status' => 200]);
     }
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
