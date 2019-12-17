@@ -551,7 +551,7 @@ class StatisticsResource extends Resource
                     $price[$i] = 0;
                 }
 
-                $orders = $this->orders()->whereYear('created_at', Carbon::now()->format('Y'))
+                $orders = $this->orders()->whereYear('created_at', $request->year)
                                                 ->selectRaw('month(created_at) as month, sum(final_price) as price, sum(sitter) as number')
                                                 ->groupBy('month')
                                                 ->get()
@@ -583,7 +583,7 @@ class StatisticsResource extends Resource
 
             case 'eachMonthIncome':
                 // 获取指定时间月份天数
-                $days = cal_days_in_month(CAL_GREGORIAN, $request->month, Carbon::now()->format('Y'));
+                $days = cal_days_in_month(CAL_GREGORIAN, $request->month, $request->year);
                 $orders = $this->orders()->whereMonth('created_at', $request->month)
                                                 ->selectRaw('day(created_at) as day, sum(final_price) as price, sum(sitter) as number')
                                                 ->groupBy('day')
@@ -613,7 +613,7 @@ class StatisticsResource extends Resource
 
             case 'eachDayIncome':
                 // 组合日期
-                $date = Carbon::now()->format('Y').'-'.$request->month.'-'.$request->day;
+                $date = $request->year.'-'.$request->month.'-'.$request->day;
                 $orders = $this->orders()->whereDate('created_at', $date)->get()->map(function ($item){
                     $item->place_name = Place::where('id', $item->place_id)->value('name');
                     return $item->only('place_name', 'sitter', 'final_price');

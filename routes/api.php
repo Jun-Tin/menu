@@ -146,13 +146,13 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /** 【 报表 】 */
     // 收入报表 -- 总月
-    Route::get('store/{store}/totalMonthIncome', 'Api\StoresController@totalMonthIncome');
+    Route::patch('store/{store}/totalMonthIncome', 'Api\StoresController@totalMonthIncome');
     // 收入报表 -- 每月
     Route::patch('store/{store}/eachMonthIncome', 'Api\StoresController@eachMonthIncome');
     // 收入报表 -- 每天
     Route::patch('store/{store}/eachDayIncome', 'Api\StoresController@eachDayIncome');
     // 收入报表 -- 每周
-    Route::get('store/{store}/eachWeekIncome', 'Api\StoresController@eachWeekIncome');
+    Route::patch('store/{store}/eachWeekIncome', 'Api\StoresController@eachWeekIncome');
 
 
     /** 【 标签 】*/
