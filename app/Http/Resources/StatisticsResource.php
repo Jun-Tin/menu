@@ -675,6 +675,7 @@ class StatisticsResource extends Resource
 
                 foreach ($weekly as $key => $value) {
                     $data[$key] = $this->orders()->whereDate('created_at', $value)
+                    // DATE_FORMAT(created_at,"%Y-%m")
                                                     ->selectRaw('sum(final_price) as price, sum(sitter) as number')
                                                     ->get()
                                                     ->toArray()[0];
@@ -696,13 +697,66 @@ class StatisticsResource extends Resource
                 break;
 
             case 'guestMoment':
+                $weekly = $this->getDateFromRange($request->startday, $request->endday);
+
                 $time = array(0, 6, 12, 18, 24);
-                $betweenDay = [$request->startday.' 00:00:00', $request->endday. ' 23:59:59'];
-                $orders = $this->orders()->whereBetween('created_at', $betweenDay)
-                                                    ->selectRaw('hours(created_at) ,sum(final_price) as price, sum(sitter) as number')
+                for ($i=0; $i < count($time); $i++) { 
+                    for ($j=0; $j < count($weekly); $j++) { 
+                        switch ($i) {
+                            case 0:
+                                $betweenDay[$j] = [$weekly[$j]. ' 00:00:00', $weekly[$j]. ' 00:00:00'];
+                                break;
+                            case 1:
+                                $betweenDay[$j] = [$weekly[$j]. ' 00:00:00', $weekly[$j]. ' 0'. ($time[$i]-1).':59:59'];
+                                break;
+                            case 2:
+                                $betweenDay[$j] = [$weekly[$j]. ' 0'.$time[$i-1]. ':00:00', $weekly[$j]. ' '. ($time[$i]-1).':59:59'];
+                                break;
+                            default:
+                                $betweenDay[$j] = [$weekly[$j]. ' '.$time[$i-1]. ':00:00', $weekly[$j]. ' '. ($time[$i]-1).':59:59'];
+                                break;
+                        }
+                        $number[$i][$j] = (int)$this->orders()->whereBetween('created_at', $betweenDay[$j])
+                                                        ->selectRaw('sum(sitter) as number')
+                                                        ->get()
+                                                        ->toArray()[0]['number']?:0;
+                    }
+                }
+
+                foreach ($number as $key => $value) {
+                    $number[$key] = array_sum($value);
+                }
+
+                for ($i=0; $i < 24; $i++) { 
+                    for ($j=0; $j < count($weekly); $j++) { 
+                        if ($i == 0) {
+                            $betweenDay[$j] = [$weekly[$j]. ' 00:00:00', $weekly[$j]. ' 00:00:00'];
+                        } else if($i < 10){
+                            $betweenDay[$j] = [$weekly[$j]. ' 0'. ($i-1). ':00:00', $weekly[$j]. ' 0'. ($i-1) .':59:59'];
+                        } else {
+                            $betweenDay[$j] = [$weekly[$j]. ' '. ($i-1). ':00:00', $weekly[$j]. ' '. ($i-1) .':59:59'];
+                        }
+
+                        $totalNumber[$i][$j] = $this->orders()->whereBetween('created_at', $betweenDay[$j])
+                                                    ->selectRaw('sum(sitter) as number')
                                                     ->get()
-                                                    ->toArray();
-                dd($orders);
+                                                    ->toArray()[0]['number']?:0;
+                    }
+                }
+
+                foreach ($totalNumber as $key => $value) {
+                    $data[$key]['number'] = array_sum($value);
+                    if ($key < 10) {
+                        $data[$key]['time'] = '0'.$key.':00';
+                    } else {
+                        $data[$key]['time'] = $key.':00';
+                    }
+                }
+                return [
+                    'data' => $data,
+                    'time' => $time,
+                    'number' => $number,
+                ];
                 break;
         }
     }
