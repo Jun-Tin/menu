@@ -679,7 +679,7 @@ class StatisticsResource extends Resource
 
                 $price = array();
                 foreach ($data as $key => $value) {
-                    $data[$key]['date'] = date('m-d', strtotime($week[$key]));
+                    $data[$key]['date'] = $week[$key];
                     $data[$key]['price'] = $value['price']?:0;
                     $data[$key]['number'] = $value['number']?:0;
                     $price[$key] = $value['price']/1000?:0;
