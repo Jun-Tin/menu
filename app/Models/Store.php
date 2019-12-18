@@ -107,7 +107,7 @@ class Store extends Model
         // 保存每天日期
         $date = array();
         for($i=0; $i<$days; $i++){
-            $date[] = date('m-d', $stimestamp+(86400*$i));
+            $date[] = date('Y-m-d', $stimestamp+(86400*$i));
         }
         return $date;
     }

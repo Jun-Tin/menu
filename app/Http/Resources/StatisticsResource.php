@@ -668,9 +668,12 @@ class StatisticsResource extends Resource
                 break;
 
             case 'eachWeekIncome':
-                $week = $this->getDateFromRange($request->startday, $request->endday);
+                $weekly = $this->getDateFromRange($request->startday, $request->endday);
+                foreach ($weekly as $key => $value) {
+                    $week[$key] = date('m-d', strtotime($value));
+                }
 
-                foreach ($week as $key => $value) {
+                foreach ($weekly as $key => $value) {
                     $data[$key] = $this->orders()->whereDate('created_at', $value)
                                                     ->selectRaw('sum(final_price) as price, sum(sitter) as number')
                                                     ->get()
@@ -679,7 +682,7 @@ class StatisticsResource extends Resource
 
                 $price = array();
                 foreach ($data as $key => $value) {
-                    $data[$key]['date'] = $week[$key];
+                    $data[$key]['date'] = $weekly[$key];
                     $data[$key]['price'] = $value['price']?:0;
                     $data[$key]['number'] = $value['number']?:0;
                     $price[$key] = $value['price']/1000?:0;
