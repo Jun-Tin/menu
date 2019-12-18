@@ -118,24 +118,24 @@ class StatisticsResource extends Resource
                 ];
                 break;
 
-            case 'guestMoment':
-                if ($request->exists('start_time') && $request->exists('end_time')) {
-                    $time = [$request->start_day.' '.$request->start_time, $request->end_day.' '.$request->end_time];
-                } else {
-                    $time = [$request->start_day.' 00:00:00', $request->end_day.' 23:59:59'];
-                }
-                // 区间总人数
-                $total = $this->orders()->whereBetween('created_at', $time)->sum('sitter');
+            // case 'guestMoment':
+            //     if ($request->exists('start_time') && $request->exists('end_time')) {
+            //         $time = [$request->start_day.' '.$request->start_time, $request->end_day.' '.$request->end_time];
+            //     } else {
+            //         $time = [$request->start_day.' 00:00:00', $request->end_day.' 23:59:59'];
+            //     }
+            //     // 区间总人数
+            //     $total = $this->orders()->whereBetween('created_at', $time)->sum('sitter');
                 
-                $data = $this->orders()->whereBetween('created_at', $time)->selectRaw('place_id, sum(sitter) as value')->groupBy('place_id')->get()->map(function ($item){
-                    $item->name = Place::where('id', $item->place_id)->value('name');
-                    return $item->only('name', 'value');
-                });
-                return [
-                    'total' => $total,
-                    'data' => $data
-                ];
-                break;
+            //     $data = $this->orders()->whereBetween('created_at', $time)->selectRaw('place_id, sum(sitter) as value')->groupBy('place_id')->get()->map(function ($item){
+            //         $item->name = Place::where('id', $item->place_id)->value('name');
+            //         return $item->only('name', 'value');
+            //     });
+            //     return [
+            //         'total' => $total,
+            //         'data' => $data
+            //     ];
+            //     break;
 
             case 'menuRank':
                 $data = array();
@@ -679,7 +679,7 @@ class StatisticsResource extends Resource
 
                 $price = array();
                 foreach ($data as $key => $value) {
-                    $data[$key]['date'] = $week[$key];
+                    $data[$key]['date'] = date('m-d', strtotime($week[$key]));
                     $data[$key]['price'] = $value['price']?:0;
                     $data[$key]['number'] = $value['number']?:0;
                     $price[$key] = $value['price']/1000?:0;
@@ -690,6 +690,16 @@ class StatisticsResource extends Resource
                     'week' => $week,
                     'price' => $price,
                 ];
+                break;
+
+            case 'guestMoment':
+                $time = array(0, 6, 12, 18, 24);
+                $betweenDay = [$request->startday.' 00:00:00', $request->endday. ' 23:59:59'];
+                $orders = $this->orders()->whereBetween('created_at', $betweenDay)
+                                                    ->selectRaw('hours(created_at) ,sum(final_price) as price, sum(sitter) as number')
+                                                    ->get()
+                                                    ->toArray();
+                dd($orders);
                 break;
         }
     }
