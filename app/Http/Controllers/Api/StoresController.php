@@ -419,6 +419,13 @@ class StoresController extends Controller
         return (new StatisticsResource($store, $param='placeRank'))->additional(['status' => 200]);
     }
 
+    /** 【 员工报表 】 */
+    // 服务
+    public function staffService(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='staffService'))->additional(['status' => 200]);
+    } 
+
 
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 

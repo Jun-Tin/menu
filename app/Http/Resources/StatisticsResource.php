@@ -768,40 +768,42 @@ class StatisticsResource extends Resource
                 $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->get()->map(function ($item){
                     return $item->orders()->where('pid', 0)->selectRaw('id, menu_id, sum(price) as price, sum(number) as number')->get()->toArray()[0];
                 })->filter()->values();
-
-                $newdata = [];
-                foreach($collection as $k=>$v){
-                    if(!isset($newdata[$v['menu_id']])){
-                        $newdata[$v['menu_id']] = $v;
-                    }else{
-                        $newdata[$v['menu_id']]['price'] += $v['price'];
-                        $newdata[$v['menu_id']]['number'] += $v['number'];
-                    }
-                }
-
-                foreach ($newdata as $key => $value) {
-                    if ($key) {
-                        $value['name'] = Menu::where('id', $value['menu_id'])->value('name');
-                        $data[] = $value;
-                    }
-                }
                 
-                foreach ($menus as $key => $value) {
-                    foreach ($data as $k => $v) {
-                        if ($value['id'] == $v['menu_id']) {
-                            $menus[$key]['price'] = $v['price'];
-                            $menus[$key]['number'] = $v['number'];
+                if ($collection->isNotEmpty()) {
+                    $newdata = [];
+                    foreach($collection as $k=>$v){
+                        if(!isset($newdata[$v['menu_id']])){
+                            $newdata[$v['menu_id']] = $v;
+                        }else{
+                            $newdata[$v['menu_id']]['price'] += $v['price'];
+                            $newdata[$v['menu_id']]['number'] += $v['number'];
                         }
                     }
-                }
 
-                switch ($request->type) {
-                    case 'price':
-                        $menus = $menus->sortByDesc('price')->values();
-                        break;
-                    case 'number':
-                        $menus = $menus->sortByDesc('number')->values();
-                        break;
+                    foreach ($newdata as $key => $value) {
+                        if ($key) {
+                            $value['name'] = Menu::where('id', $value['menu_id'])->value('name');
+                            $data[] = $value;
+                        }
+                    }
+                    
+                    foreach ($menus as $key => $value) {
+                        foreach ($data as $k => $v) {
+                            if ($value['id'] == $v['menu_id']) {
+                                $menus[$key]['price'] = $v['price'];
+                                $menus[$key]['number'] = $v['number'];
+                            }
+                        }
+                    }
+
+                    switch ($request->type) {
+                        case 'price':
+                            $menus = $menus->sortByDesc('price')->values();
+                            break;
+                        case 'number':
+                            $menus = $menus->sortByDesc('number')->values();
+                            break;
+                    }
                 }
 
                 return [
@@ -848,14 +850,9 @@ class StatisticsResource extends Resource
                     'data' => $places,
                 ];             
 
+                break;
 
-
-
-                // ->map(function ($item){
-                    
-                // })->filter()->values();
-                dd($collection);
-
+            case 'staffService':
 
                 break;
         }

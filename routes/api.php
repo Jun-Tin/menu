@@ -161,6 +161,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/menuRank', 'Api\StoresController@menuRank');
     // 桌位报表 -- 排行
     Route::patch('store/{store}/placeRank', 'Api\StoresController@placeRank');
+    // 员工报表 -- 服务
+    // Route::patch('store/{store}/')
+
 
 
     /** 【 标签 】*/
