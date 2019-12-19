@@ -768,7 +768,7 @@ class StatisticsResource extends Resource
                 $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->get()->map(function ($item){
                     return $item->orders()->where('pid', 0)->selectRaw('id, menu_id, sum(price) as price, sum(number) as number')->get()->toArray()[0];
                 })->filter()->values();
-                
+
                 if ($collection->isNotEmpty()) {
                     $newdata = [];
                     foreach($collection as $k=>$v){
@@ -828,22 +828,24 @@ class StatisticsResource extends Resource
                                                     return $item;
                                                 });
 
-                $places->map(function ($item) use ($collection){
-                    $collection->map(function ($value) use ($item){
-                        if ($item->id == $value->place_id) {
-                            $item->price = $value->price;
-                            $item->sitter = $value->sitter;
-                        }
+                if ($collection->isNotEmpty()) {
+                    $places->map(function ($item) use ($collection){
+                        $collection->map(function ($value) use ($item){
+                            if ($item->id == $value->place_id) {
+                                $item->price = $value->price;
+                                $item->sitter = $value->sitter;
+                            }
+                        });
                     });
-                });
 
-                switch ($request->type) {
-                    case 'price':
-                        $places = $places->sortByDesc('price')->values();
-                        break;
-                    case 'sitter':
-                        $places = $places->sortByDesc('sitter')->values();
-                        break;
+                    switch ($request->type) {
+                        case 'price':
+                            $places = $places->sortByDesc('price')->values();
+                            break;
+                        case 'sitter':
+                            $places = $places->sortByDesc('sitter')->values();
+                            break;
+                    }
                 }
 
                 return [
