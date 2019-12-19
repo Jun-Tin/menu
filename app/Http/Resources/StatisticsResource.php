@@ -809,6 +809,55 @@ class StatisticsResource extends Resource
                 ];                
 
                 break;
+
+            case 'placeRank':
+                // 门店下所有座位
+                $places = $this->places()->where('floor', '<>', 0)->select('id', 'name')->get()->map(function ($item){
+                    $item->price = 0;
+                    $item->sitter = 0;
+                    return $item;
+                });
+                
+                $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])
+                                                ->selectRaw('place_id, sum(final_price) as price, sum(sitter) as sitter')
+                                                ->groupBy('place_id')
+                                                ->get()->map(function ($item){
+                                                    $item->place_name = Place::where('id', $item->place_id)->value('name');
+                                                    return $item;
+                                                });
+
+                $places->map(function ($item) use ($collection){
+                    $collection->map(function ($value) use ($item){
+                        if ($item->id == $value->place_id) {
+                            $item->price = $value->price;
+                            $item->sitter = $value->sitter;
+                        }
+                    });
+                });
+
+                switch ($request->type) {
+                    case 'price':
+                        $places = $places->sortByDesc('price')->values();
+                        break;
+                    case 'sitter':
+                        $places = $places->sortByDesc('sitter')->values();
+                        break;
+                }
+
+                return [
+                    'data' => $places,
+                ];             
+
+
+
+
+                // ->map(function ($item){
+                    
+                // })->filter()->values();
+                dd($collection);
+
+
+                break;
         }
     }
 }

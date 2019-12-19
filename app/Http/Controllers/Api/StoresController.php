@@ -412,6 +412,13 @@ class StoresController extends Controller
         return (new StatisticsResource($store, $param='menuRank'))->additional(['status' => 200]);
     } 
 
+    /** 【 桌位报表 】 */
+    // 排行
+    public function placeRank(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='placeRank'))->additional(['status' => 200]);
+    }
+
 
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
