@@ -237,140 +237,6 @@ class StoresController extends Controller
         return (new MenuCollection($store->menus()->where($where)->get()))->additional(['status' => 200]);
     }
 
-    // /** 【 客人数量 】 */
-    // public function guestNumber(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='guestNumber'))->additional(['status' => 200]);
-    // }
-
-    // /** 【 客人时刻 】 */ 
-    // public function guestMoment(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='guestMoment'))->additional(['status' => 200]);
-    // }
-
-    // /** 【 菜品排行 】 */
-    // public function menuRank(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='menuRank'))->additional(['status' => 200]);
-    // } 
-
-    // /** 【 金额排行 】 */ 
-    // public function moneyRank(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='menuRank'))->additional(['status' => 200]);
-    // }
-
-    // /** 【 桌位数量 】 */
-    // public function placeNumber(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='placeNumber'))->additional(['status' => 200]);
-    // }
-
-    // /** 【 占位时间 】 */
-    // public function placeHolder(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='placeHolder'))->additional(['status' => 200]);
-    // } 
-
-    // /** 【 出菜时间 】 */
-    // public function menuServed(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='menuServed'))->additional(['status' => 200]);
-    // }
-
-    // /** 【 员工表现 -- part one 】 */
-    // public function staffBehaviorPartOne(Request $request, Store $store)
-    // {
-    //     if ($request->has('id')) {
-    //         switch ($request->id) {
-    //             case '0':
-    //                 $where = [];
-    //                 break;
-    //             case '1':
-    //                 $where[] = ['post', 'waiter'];
-    //                 break;
-    //             case '2':
-    //                 $where[] = ['post', 'chef'];
-    //                 break;
-    //             case '3':
-    //                 $where[] = ['post', 'manager'];
-    //                 break;
-    //         }
-    //     }
-
-    //     $users = $store->users()->where($where)->select('id', 'name', 'account', 'post')->get();
-        
-    //     // 构造数组
-    //     $post = [
-    //         [
-    //             'id' => 0,
-    //             'post' => '所有',
-    //         ],
-    //         [
-    //             'id' => 1,
-    //             'post' => 'waiter',
-    //         ],
-    //         [
-    //             'id' => 2,
-    //             'post' => 'chef',
-    //         ],
-    //         [
-    //             'id' => 3,
-    //             'post' => 'manager',
-    //         ]
-    //     ];
-    //     return response()->json(['data' => $users, 'post' => $post, 'status' => 200]);
-    // }
-
-    // /** 【 员工表现 -- part two 】 */
-    // public function staffBehaviorPartTwo(Request $request, Store $store)
-    // {
-    //     // 初始化变量
-    //     $behaviors = array();
-    //     $user = array();
-    //     if ($request->has('id')) {
-    //         $user = User::find($request->id);
-
-    //         if ($request->exists('start_time') && $request->exists('end_time')) {
-    //             $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
-
-    //             $behaviors = $user->behaviors()->whereBetween('created_at', $time)->selectRaw('category, count(*) as value')->groupBy('category')->get();
-    //         }
-    //     }
-    //     return response()->json(['data' => $behaviors, 'user' => $user, 'status' => 200]);
-    // }
-
-    // /** 【 员工表现 -- part three 】 */
-    // public function staffBehaviorPartThree(Request $request, Store $store)
-    // {
-    //     // 初始化变量
-    //     $behaviors = array();
-    //     $behaviorsList = array();
-    //     if ($request->has('id')) {
-    //         $user = User::find($request->id);
-
-    //         if ($request->exists('start_time') && $request->exists('end_time')) {
-    //             $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
-
-    //             $behaviors = $user->behaviors()->whereBetween('created_at', $time)->selectRaw('category, count(*) as value')->groupBy('category')->get()->map(function ($item) use ($request){
-    //                 if ($request->category == $item['category']) {
-    //                     return $item;
-    //                 }
-    //             })->filter()->values();
-
-    //             $behaviorsList = $user->behaviors()->whereBetween('created_at', $time)->where('category', $request->category)->select('created_at')->get();
-    //         }
-    //     }
-    //     return response()->json(['data' => $behaviorsList, 'title' => $behaviors, 'status' => 200]);
-    // }
-
-    // /** 【 财务报表 -- 收入 】 */
-    // public function income(Request $request, Store $store)
-    // {
-    //     return (new StatisticsResource($store, $param='income'))->additional(['status' => 200]);
-    // } 
-
     /** 【 收入报表 】 */ 
     // 总月
     public function totalMonthIncome(Request $request, Store $store)
@@ -425,6 +291,13 @@ class StoresController extends Controller
     {
         return (new StatisticsResource($store, $param='staffService'))->additional(['status' => 200]);
     } 
+
+    /** 【 后厨报表 】 */
+    // 出菜时间
+    public function menuServed(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='menuServed'))->additional(['status' => 200]);
+    }
 
 
 

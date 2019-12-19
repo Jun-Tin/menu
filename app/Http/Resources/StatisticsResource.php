@@ -25,98 +25,98 @@ class StatisticsResource extends Resource
     public function toArray($request)
     {
         switch ($this->param) {
-            case 'guestNumber':
-                // 当天
-                $today_total = $this->orders()->whereDate('created_at', Carbon::today())->sum('sitter');
-                // 当天日期
-                $today_cycle = Carbon::now()->format('m.d');
+            // case 'guestNumber':
+            //     // 当天
+            //     $today_total = $this->orders()->whereDate('created_at', Carbon::today())->sum('sitter');
+            //     // 当天日期
+            //     $today_cycle = Carbon::now()->format('m.d');
 
-                // 本月
-                $month_total = $this->orders()->whereMonth('created_at', Carbon::now()->month)->sum('sitter');
-                // 本月日期
-                $month_cycle = Carbon::now()->format('m');
+            //     // 本月
+            //     $month_total = $this->orders()->whereMonth('created_at', Carbon::now()->month)->sum('sitter');
+            //     // 本月日期
+            //     $month_cycle = Carbon::now()->format('m');
 
-                if ($request->exists('year')) {
-                    // 按月排序
-                    $month_total_all = $this->orders()->whereYear('created_at', $request->year)
-                                                ->selectRaw('month(created_at) as month, sum(sitter) as value')
-                                                ->groupBy('month')
-                                                ->get()
-                                                ->toArray();
-                    // 按日排序
-                    $date_total_all = $this->orders()->whereYear('created_at', $request->year)
-                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
-                                                ->groupBy('month', 'day')
-                                                ->get()
-                                                ->toArray();
-                    // 当前年 - 查询年（非当年默认显示12个月）
-                    if (Carbon::now()->format('Y') - $request->year != 0) {
-                        $month_cycle = 12;
-                    }
+            //     if ($request->exists('year')) {
+            //         // 按月排序
+            //         $month_total_all = $this->orders()->whereYear('created_at', $request->year)
+            //                                     ->selectRaw('month(created_at) as month, sum(sitter) as value')
+            //                                     ->groupBy('month')
+            //                                     ->get()
+            //                                     ->toArray();
+            //         // 按日排序
+            //         $date_total_all = $this->orders()->whereYear('created_at', $request->year)
+            //                                     ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
+            //                                     ->groupBy('month', 'day')
+            //                                     ->get()
+            //                                     ->toArray();
+            //         // 当前年 - 查询年（非当年默认显示12个月）
+            //         if (Carbon::now()->format('Y') - $request->year != 0) {
+            //             $month_cycle = 12;
+            //         }
 
-                    // 本年
-                    $year_total = $this->orders()->whereYear('created_at', $request->year)->sum('sitter');
-                    // 本年日期
-                    $year_cycle = $request->year;
-                } else {
-                    // 截止当前月份
-                    $month_until = [Carbon::now()->format('Y').'-01-01',Carbon::now()->format('Y').'-'.$month_cycle.'-31'];
-                    // 按月排序
-                    $month_total_all = $this->orders()->whereBetween('created_at', $month_until)
-                                                ->selectRaw('month(created_at) as month, sum(sitter) as value')
-                                                ->groupBy('month')
-                                                ->get()
-                                                ->toArray();
-                    // 按日排序
-                    $date_total_all = $this->orders()->whereBetween('created_at', $month_until)
-                                                ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
-                                                ->groupBy('month', 'day')
-                                                ->get()
-                                                ->toArray();
-                    // 本年
-                    $year_total = $this->orders()->whereYear('created_at', Carbon::now()->year)->sum('sitter');
-                    // 本年日期
-                    $year_cycle = Carbon::now()->format('Y');
-                }
+            //         // 本年
+            //         $year_total = $this->orders()->whereYear('created_at', $request->year)->sum('sitter');
+            //         // 本年日期
+            //         $year_cycle = $request->year;
+            //     } else {
+            //         // 截止当前月份
+            //         $month_until = [Carbon::now()->format('Y').'-01-01',Carbon::now()->format('Y').'-'.$month_cycle.'-31'];
+            //         // 按月排序
+            //         $month_total_all = $this->orders()->whereBetween('created_at', $month_until)
+            //                                     ->selectRaw('month(created_at) as month, sum(sitter) as value')
+            //                                     ->groupBy('month')
+            //                                     ->get()
+            //                                     ->toArray();
+            //         // 按日排序
+            //         $date_total_all = $this->orders()->whereBetween('created_at', $month_until)
+            //                                     ->selectRaw('month(created_at) as month, day(created_at) as day, sum(sitter) as value')
+            //                                     ->groupBy('month', 'day')
+            //                                     ->get()
+            //                                     ->toArray();
+            //         // 本年
+            //         $year_total = $this->orders()->whereYear('created_at', Carbon::now()->year)->sum('sitter');
+            //         // 本年日期
+            //         $year_cycle = Carbon::now()->format('Y');
+            //     }
 
-                $year_total_all = 0;
-                // 按照年度查询
-                if ($request->exists('start_time') && $request->exists('end_time')) {
-                    // 年度
-                    $year_cycle_all = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
-                    // 年度人数
-                    $year_total_all = $this->orders()->whereBetween('created_at', $year_cycle_all)->sum('sitter');
-                }
+            //     $year_total_all = 0;
+            //     // 按照年度查询
+            //     if ($request->exists('start_time') && $request->exists('end_time')) {
+            //         // 年度
+            //         $year_cycle_all = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
+            //         // 年度人数
+            //         $year_total_all = $this->orders()->whereBetween('created_at', $year_cycle_all)->sum('sitter');
+            //     }
 
-                // 构造数组
-                for ($i=0; $i < $month_cycle; $i++) {
-                    $data[$i]['date'] = $i+1;
-                    $data[$i]['value'] = 0;
-                }
+            //     // 构造数组
+            //     for ($i=0; $i < $month_cycle; $i++) {
+            //         $data[$i]['date'] = $i+1;
+            //         $data[$i]['value'] = 0;
+            //     }
 
-                foreach ($data as $key => $value) {
-                    foreach ($month_total_all as $k => $v) {
-                        if ($value['date'] == $v['month']) {
-                            $data[$key]['value'] = $v['value'];
-                        }
-                    }
-                    foreach ($date_total_all as $k => $v) {
-                        if ($value['date'] == $v['month']) {
-                            $data[$key]['data'][] = $v;
-                        }
-                    }
-                }
-                return [
-                    'today_cycle' => $today_cycle, 
-                    'today_total' => $today_total,
-                    'year_total_all' => $year_total_all, 
-                    'month_cycle' => $month_cycle,
-                    'month_total' => $month_total, 
-                    'year_cycle' => $year_cycle,
-                    'year_total' => $year_total,
-                    'data' => $data, 
-                ];
-                break;
+            //     foreach ($data as $key => $value) {
+            //         foreach ($month_total_all as $k => $v) {
+            //             if ($value['date'] == $v['month']) {
+            //                 $data[$key]['value'] = $v['value'];
+            //             }
+            //         }
+            //         foreach ($date_total_all as $k => $v) {
+            //             if ($value['date'] == $v['month']) {
+            //                 $data[$key]['data'][] = $v;
+            //             }
+            //         }
+            //     }
+            //     return [
+            //         'today_cycle' => $today_cycle, 
+            //         'today_total' => $today_total,
+            //         'year_total_all' => $year_total_all, 
+            //         'month_cycle' => $month_cycle,
+            //         'month_total' => $month_total, 
+            //         'year_cycle' => $year_cycle,
+            //         'year_total' => $year_total,
+            //         'data' => $data, 
+            //     ];
+            //     break;
 
             // case 'guestMoment':
             //     if ($request->exists('start_time') && $request->exists('end_time')) {
@@ -390,59 +390,59 @@ class StatisticsResource extends Resource
                 ];
                 break;
 
-            case 'menuServed':
-                // 声明变量 
-                $averages = '0:0:0';
+            // case 'menuServed':
+            //     // 声明变量 
+            //     $averages = '0:0:0';
 
-                if ($request->exists('start_time') && $request->exists('end_time')) {
-                    $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
-                    $collection = $this->order_details()->whereIn('order_details.status', [3,4])->get()->map(function ($item) use ($time){
-                        if ($item->menu_id) {
-                            $item->name = Menu::where('id', $item->menu_id)->value('name');
-                        } else {
-                            $item->name = Menu::where('id', $item->menus_id)->value('name');
-                        }
-                        $item->behaviors = Behavior::where('target_id', $item->id)->where('category', 'serving')->whereBetween('created_at', $time)->first();
-                        return $item->only('behaviors', 'name');
-                    });
+            //     if ($request->exists('start_time') && $request->exists('end_time')) {
+            //         $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
+            //         $collection = $this->order_details()->whereIn('order_details.status', [3,4])->get()->map(function ($item) use ($time){
+            //             if ($item->menu_id) {
+            //                 $item->name = Menu::where('id', $item->menu_id)->value('name');
+            //             } else {
+            //                 $item->name = Menu::where('id', $item->menus_id)->value('name');
+            //             }
+            //             $item->behaviors = Behavior::where('target_id', $item->id)->where('category', 'serving')->whereBetween('created_at', $time)->first();
+            //             return $item->only('behaviors', 'name');
+            //         });
 
-                    $collection = $collection->map(function ($item){
-                        if ($item['behaviors']) {
-                            $item['value'] = floor((carbon::parse($item['behaviors']['updated_at'])->diffInMinutes($item['behaviors']['created_at'],true)/60)).':'.(carbon::parse($item['behaviors']['updated_at'])->diffInMinutes($item['behaviors']['created_at'],true)%60).':'.(carbon::parse($item['behaviors']['updated_at'])->diffInSeconds($item['behaviors']['created_at'],true)%60);
-                            $item['time'] = carbon::parse($item['behaviors']['updated_at'])->diffInSeconds($item['behaviors']['created_at'],true);
+            //         $collection = $collection->map(function ($item){
+            //             if ($item['behaviors']) {
+            //                 $item['value'] = floor((carbon::parse($item['behaviors']['updated_at'])->diffInMinutes($item['behaviors']['created_at'],true)/60)).':'.(carbon::parse($item['behaviors']['updated_at'])->diffInMinutes($item['behaviors']['created_at'],true)%60).':'.(carbon::parse($item['behaviors']['updated_at'])->diffInSeconds($item['behaviors']['created_at'],true)%60);
+            //                 $item['time'] = carbon::parse($item['behaviors']['updated_at'])->diffInSeconds($item['behaviors']['created_at'],true);
 
-                            return [
-                                'name' => $item['name'],
-                                'value' => $item['value'],
-                                'time' => $item['time'],
-                            ];
-                        }
-                    })->filter()->values();
+            //                 return [
+            //                     'name' => $item['name'],
+            //                     'value' => $item['value'],
+            //                     'time' => $item['time'],
+            //                 ];
+            //             }
+            //         })->filter()->values();
 
-                    if (!$collection->isEmpty()) {
-                        // 总条数
-                        $count = $collection->count();
-                        // 总时间数
-                        $time_total = 0;
-                        foreach ($collection as $key => $value) {
-                            $time_total += $value['time'];
-                        }
-                        // 格式化平均时间数
-                        $averages = floor(($time_total/$count)/3600).':'.floor(((($time_total/$count)%3600)/60)).':'.(($time_total/$count)%60);
-                        // 格式化总时间数
-                        $total = floor($time_total/3600).':'.floor((($time_total%3600)/60)).':'.($time_total%60);
-                    } else {
-                        $data = array();
-                    }
-                }
+            //         if (!$collection->isEmpty()) {
+            //             // 总条数
+            //             $count = $collection->count();
+            //             // 总时间数
+            //             $time_total = 0;
+            //             foreach ($collection as $key => $value) {
+            //                 $time_total += $value['time'];
+            //             }
+            //             // 格式化平均时间数
+            //             $averages = floor(($time_total/$count)/3600).':'.floor(((($time_total/$count)%3600)/60)).':'.(($time_total/$count)%60);
+            //             // 格式化总时间数
+            //             $total = floor($time_total/3600).':'.floor((($time_total%3600)/60)).':'.($time_total%60);
+            //         } else {
+            //             $data = array();
+            //         }
+            //     }
 
-                return [
-                    'data' => $collection,
-                    'averages' => $averages,
-                    // 'count' => $count,
-                    // 'total' => $total,
-                ];
-                break;
+            //     return [
+            //         'data' => $collection,
+            //         'averages' => $averages,
+            //         // 'count' => $count,
+            //         // 'total' => $total,
+            //     ];
+            //     break;
 
             case 'income':
                 // 当天
@@ -798,10 +798,10 @@ class StatisticsResource extends Resource
 
                     switch ($request->type) {
                         case 'price':
-                            $menus = $menus->sortByDesc('price')->sortBy('id')->values();
+                            $menus = $menus->sortByDesc('price')->values();
                             break;
                         case 'number':
-                            $menus = $menus->sortByDesc('number')->sortBy('id')->values();
+                            $menus = $menus->sortByDesc('number')->values();
                             break;
                     }
                 }
@@ -840,10 +840,10 @@ class StatisticsResource extends Resource
 
                     switch ($request->type) {
                         case 'price':
-                            $places = $places->sortByDesc('price')->sortBy('id')->values();
+                            $places = $places->sortByDesc('price')->values();
                             break;
                         case 'sitter':
-                            $places = $places->sortByDesc('sitter')->sortBy('id')->values();
+                            $places = $places->sortByDesc('sitter')->values();
                             break;
                     }
                 }
@@ -855,6 +855,7 @@ class StatisticsResource extends Resource
                 break;
 
             case 'staffService':
+                // 门店下所有员工
                 $users = $this->users()->select('id', 'name')->get()->map(function ($item){
                     $item->book = 0;
                     $item->order = 0;
@@ -887,19 +888,19 @@ class StatisticsResource extends Resource
 
                     switch ($request->type) {
                         case 'book':
-                            $users = $users->sortByDesc('book')->sortBy('id')->values();
+                            $users = $users->sortByDesc('book')->values();
                             break;
                         case 'order':
-                            $users = $users->sortByDesc('order')->sortBy('id')->values();
+                            $users = $users->sortByDesc('order')->values();
                             break;
                         case 'serving':
-                            $users = $users->sortByDesc('serving')->sortBy('id')->values();
+                            $users = $users->sortByDesc('serving')->values();
                             break;
                         case 'clean':
-                            $users = $users->sortByDesc('clean')->sortBy('id')->values();
+                            $users = $users->sortByDesc('clean')->values();
                             break;
                         case 'settle':
-                            $users = $users->sortByDesc('settle')->sortBy('id')->values();
+                            $users = $users->sortByDesc('settle')->values();
                             break;
                     }
                 }
@@ -908,6 +909,10 @@ class StatisticsResource extends Resource
                     'data' => $users,
                 ];
 
+                break;
+
+            case 'menuServed':
+                
                 break;
         }
     }

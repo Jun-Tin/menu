@@ -163,6 +163,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/placeRank', 'Api\StoresController@placeRank');
     // 员工报表 -- 服务
     Route::patch('store/{store}/staffService', 'Api\StoresController@staffService');
+    // 后厨报表 -- 出菜时间
+    Route::patch('store/{store}/');
 
 
 
