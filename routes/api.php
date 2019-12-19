@@ -162,7 +162,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 桌位报表 -- 排行
     Route::patch('store/{store}/placeRank', 'Api\StoresController@placeRank');
     // 员工报表 -- 服务
-    // Route::patch('store/{store}/')
+    Route::patch('store/{store}/staffService', 'Api\StoresController@staffService');
 
 
 

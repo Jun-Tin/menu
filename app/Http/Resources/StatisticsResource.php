@@ -798,10 +798,10 @@ class StatisticsResource extends Resource
 
                     switch ($request->type) {
                         case 'price':
-                            $menus = $menus->sortByDesc('price')->values();
+                            $menus = $menus->sortByDesc('price')->sortBy('id')->values();
                             break;
                         case 'number':
-                            $menus = $menus->sortByDesc('number')->values();
+                            $menus = $menus->sortByDesc('number')->sortBy('id')->values();
                             break;
                     }
                 }
@@ -840,10 +840,10 @@ class StatisticsResource extends Resource
 
                     switch ($request->type) {
                         case 'price':
-                            $places = $places->sortByDesc('price')->values();
+                            $places = $places->sortByDesc('price')->sortBy('id')->values();
                             break;
                         case 'sitter':
-                            $places = $places->sortByDesc('sitter')->values();
+                            $places = $places->sortByDesc('sitter')->sortBy('id')->values();
                             break;
                     }
                 }
@@ -855,6 +855,58 @@ class StatisticsResource extends Resource
                 break;
 
             case 'staffService':
+                $users = $this->users()->select('id', 'name')->get()->map(function ($item){
+                    $item->book = 0;
+                    $item->order = 0;
+                    $item->serving = 0;
+                    $item->clean = 0;
+                    $item->settle = 0;
+                    return $item;
+                });
+
+                $collection = $this->users->map(function ($item) use ($request){
+                    return $item->behaviors()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])
+                                        ->whereIn('category', ['book', 'order', 'serving', 'clean', 'settle'])
+                                        ->where('status', 1)
+                                        ->selectRaw('user_id, count(*) as count, category')
+                                        ->groupBy('category')
+                                        ->get()
+                                        ->toArray();
+                })->filter()->values();
+
+                if ($collection->isNotEmpty()) {
+                    $users->map(function ($item, $key) use ($collection){
+                        foreach ($collection[0] as $k => $value) {
+                            if ($item->id == $value['user_id']) {
+                                if ($value['category'] == $key) {
+                                    $item[$value['category']] += $value['count'];
+                                }
+                            }
+                        }
+                    });
+
+                    switch ($request->type) {
+                        case 'book':
+                            $users = $users->sortByDesc('book')->sortBy('id')->values();
+                            break;
+                        case 'order':
+                            $users = $users->sortByDesc('order')->sortBy('id')->values();
+                            break;
+                        case 'serving':
+                            $users = $users->sortByDesc('serving')->sortBy('id')->values();
+                            break;
+                        case 'clean':
+                            $users = $users->sortByDesc('clean')->sortBy('id')->values();
+                            break;
+                        case 'settle':
+                            $users = $users->sortByDesc('settle')->sortBy('id')->values();
+                            break;
+                    }
+                }
+                
+                return [
+                    'data' => $users,
+                ];
 
                 break;
         }
