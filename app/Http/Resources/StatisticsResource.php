@@ -137,59 +137,59 @@ class StatisticsResource extends Resource
             //     ];
             //     break;
 
-            case 'menuRank':
-                $data = array();
-                // 门店下所有标签
-                $category = $this->tags()->where('pid', 0)->where('category', 'class')->select('id', 'name')->get();
-                // 门店下所有菜品
-                $menus = $this->menus()->select('id', 'name', 'category')->get()->map(function ($item){
-                    $item->tags = MenuTag::where('menu_id', $item->id)->orWhere('pid', 0)->distinct()->pluck('target_id')->toArray();
-                    return $item->only('id', 'name', 'category', 'tags');
-                })->toArray();
-                // 查询时间
-                if ($request->exists('start_time') && $request->exists('end_time')) {
-                    $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
-                    $collection = $this->order_details()->whereBetween('orders.created_at', $time)->where('pid', 0)->selectRaw('menu_id, sum(order_details.number) as value, order_details.category')->groupBy('menu_id')->orderBy('value', 'desc')->get()->map(function ($item){
-                        return $item->only('menu_id', 'value');
-                    })->toArray();
+            // case 'menuRank':
+            //     $data = array();
+            //     // 门店下所有标签
+            //     $category = $this->tags()->where('pid', 0)->where('category', 'class')->select('id', 'name')->get();
+            //     // 门店下所有菜品
+            //     $menus = $this->menus()->select('id', 'name', 'category')->get()->map(function ($item){
+            //         $item->tags = MenuTag::where('menu_id', $item->id)->orWhere('pid', 0)->distinct()->pluck('target_id')->toArray();
+            //         return $item->only('id', 'name', 'category', 'tags');
+            //     })->toArray();
+            //     // 查询时间
+            //     if ($request->exists('start_time') && $request->exists('end_time')) {
+            //         $time = [$request->start_time.' 00:00:00', $request->end_time.' 23:59:59'];
+            //         $collection = $this->order_details()->whereBetween('orders.created_at', $time)->where('pid', 0)->selectRaw('menu_id, sum(order_details.number) as value, order_details.category')->groupBy('menu_id')->orderBy('value', 'desc')->get()->map(function ($item){
+            //             return $item->only('menu_id', 'value');
+            //         })->toArray();
 
-                    foreach ($menus as $key => $value) {
-                        $menus[$key]['value'] = 0;
-                        foreach ($collection as $k => $v) {
-                            if ($value['id'] == $v['menu_id']) {
-                                $menus[$key]['value'] = $v['value'];
-                            }
-                        }
-                    }
+            //         foreach ($menus as $key => $value) {
+            //             $menus[$key]['value'] = 0;
+            //             foreach ($collection as $k => $v) {
+            //                 if ($value['id'] == $v['menu_id']) {
+            //                     $menus[$key]['value'] = $v['value'];
+            //                 }
+            //             }
+            //         }
 
-                    switch ($request->category) {
-                        case '0':
-                            $data = $menus;
-                            break;
-                        case 'p':
-                            foreach ($menus as $key => $value) {
-                                if ($value['category'] == 'p') {
-                                    $data[] = $value;
-                                }
-                            }
-                            break;
-                        default:
-                            foreach ($menus as $key => $value) {
-                                if (in_array($request->category, $value['tags'])) {
-                                    $data[] = $value;
-                                }
-                            }
-                            break;
-                    }
-                }
-                // 重新排序
-                array_multisort(array_column($data, 'value'), SORT_DESC, $data);
+            //         switch ($request->category) {
+            //             case '0':
+            //                 $data = $menus;
+            //                 break;
+            //             case 'p':
+            //                 foreach ($menus as $key => $value) {
+            //                     if ($value['category'] == 'p') {
+            //                         $data[] = $value;
+            //                     }
+            //                 }
+            //                 break;
+            //             default:
+            //                 foreach ($menus as $key => $value) {
+            //                     if (in_array($request->category, $value['tags'])) {
+            //                         $data[] = $value;
+            //                     }
+            //                 }
+            //                 break;
+            //         }
+            //     }
+            //     // 重新排序
+            //     array_multisort(array_column($data, 'value'), SORT_DESC, $data);
 
-                return [
-                    'category' => $category, 
-                    'data' => $data
-                ];
-                break;
+            //     return [
+            //         'category' => $category, 
+            //         'data' => $data
+            //     ];
+            //     break;
 
             case 'moneyRank':
                 $data = array();
@@ -757,6 +757,57 @@ class StatisticsResource extends Resource
                     'time' => $time,
                     'number' => $number,
                 ];
+                break;
+
+            case 'menuRank':
+                $menus = $this->menus()->where('status', 1)->select('id', 'name')->get()->map(function ($item){
+                    $item->price = 0;
+                    $item->number = 0;
+                    return $item;
+                });
+                $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->get()->map(function ($item){
+                    return $item->orders()->where('pid', 0)->selectRaw('id, menu_id, sum(price) as price, sum(number) as number')->get()->toArray()[0];
+                })->filter()->values();
+
+                $newdata = [];
+                foreach($collection as $k=>$v){
+                    if(!isset($newdata[$v['menu_id']])){
+                        $newdata[$v['menu_id']] = $v;
+                    }else{
+                        $newdata[$v['menu_id']]['price'] += $v['price'];
+                        $newdata[$v['menu_id']]['number'] += $v['number'];
+                    }
+                }
+
+                foreach ($newdata as $key => $value) {
+                    if ($key) {
+                        $value['name'] = Menu::where('id', $value['menu_id'])->value('name');
+                        $data[] = $value;
+                    }
+                }
+                
+                foreach ($menus as $key => $value) {
+                    foreach ($data as $k => $v) {
+                        if ($value['id'] == $v['menu_id']) {
+                            $menus[$key]['price'] = $v['price'];
+                            $menus[$key]['number'] = $v['number'];
+                        }
+                    }
+                }
+
+                switch ($request->type) {
+                    case 'price':
+                        $menus = $menus->sortByDesc('price')->values();
+                        break;
+                    case 'number':
+                        $menus = $menus->sortByDesc('number')->values();
+                        break;
+                }
+
+                return [
+                    'data' => $menus,
+                ];                
+
                 break;
         }
     }

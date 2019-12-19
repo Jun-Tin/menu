@@ -157,6 +157,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('store/{store}/eachWeekIncome', 'Api\StoresController@eachWeekIncome');
     // 客人报表 -- 时段
     Route::patch('store/{store}/guestMoment', 'Api\StoresController@guestMoment');
+    // 菜品报表 -- 排行
+    Route::patch('store/{store}/menuRank', 'Api\StoresController@menuRank');
 
 
     /** 【 标签 】*/

@@ -405,6 +405,14 @@ class StoresController extends Controller
         return (new StatisticsResource($store, $param='guestMoment'))->additional(['status' => 200]);
     } 
 
+    /** 【 菜品报表 】 */
+    // 排行
+    public function menuRank(Request $request, Store $store)
+    {
+        return (new StatisticsResource($store, $param='menuRank'))->additional(['status' => 200]);
+    } 
+
+
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
     public function computeDays()
