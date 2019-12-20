@@ -44,22 +44,6 @@ class StatisticsResource extends Resource
                                             ->get()
                                             ->toArray();
 
-                $orders = $this->orders()->whereYear('created_at', $request->year)
-                                            ->whereIn('status', [1, 2])
-                                            ->selectRaw('month(created_at) as month, sum(final_price) as price, sum(sitter) as number')
-                                            ->groupBy('month')
-                                            ->get()
-                                            ->map(function ($item) use ($data){
-                                                foreach ($data as $key => $value) {
-                                                    if ($value['month'] == $item->month) {
-                                                        $data[$key]['price'] = $v['price'];
-                                                        $data[$key]['number'] = $v['number'];
-                                                    }
-                                                }
-                                            });
-
-                dd($data);
-
                 foreach ($data as $key => $value) {
                     foreach ($orders as $k => $v) {
                         if ($value['month'] == $v['month']) {
