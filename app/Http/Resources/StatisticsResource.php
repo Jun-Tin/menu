@@ -445,7 +445,6 @@ class StatisticsResource extends Resource
                         return $item;
                     });
                 })->collapse()->toArray();
-                dd($collection);
 
                 if ($collection) {
                     $newdata = [];
@@ -468,7 +467,7 @@ class StatisticsResource extends Resource
                             $newdata[$value['menus_id']]['data'][] = $value['time'];
                         }
                     }
-
+                    dd($newdata);
                     $data = [];
                     foreach ($newdata as $key => $value) {
                         array_multisort($newdata[$key]['data'], SORT_DESC);
