@@ -391,4 +391,15 @@ class UsersController extends Controller
         }
         return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
     } 
+
+    /** 【 我的上线 】 */
+    public function upLine(Request $request, User $user)
+    {
+        $user = auth()->user()->user;
+        if (!$user) {
+            return response()->json(['error' => ['message' => ['没有销售人员！']], 'status' => 404]);
+        }
+
+        return (new UserResource($user))->additional(['status' => 200]);
+    } 
 }

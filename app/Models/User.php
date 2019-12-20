@@ -84,6 +84,12 @@ class User extends Authenticatable
         return $this->hasMany(Bill::class, 'operate', 'id');
     } 
 
+    /** 【 一对一我的上线关联关系 】 */
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    } 
+
     /** 【 自定义验证规则 ] */ 
     public function validatorUserRegister(array $data, string $type)
     {
