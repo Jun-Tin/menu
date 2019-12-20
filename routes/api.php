@@ -64,6 +64,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('user/{user}/edit', 'Api\UsersController@edit');
     // 删除员工信息
     Route::delete('user/{user}/delete', 'Api\UsersController@delete');
+    // 刷新二维码
+    Route::get('user/{user}/refresh', 'Api\UsersController@refresh');
     // 员工表现
     Route::get('user/behavior', 'Api\UsersController@behavior');
     // 更换关联手机 —— 验证手机号码

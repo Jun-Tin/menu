@@ -17,4 +17,10 @@ class OrderDetail extends Model
     {
     	return $this->hasOne(Behavior::class, 'target_id', 'id');
     }
+
+    /** 【 一对一订单关联关系 】 */ 
+    public function order()
+    {
+    	return $this->hasOne(Order::class, 'order', 'order_order');
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Order, Behavior, Store, Place};
+use App\Models\{Order, Behavior, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{OrderResource, OrderCollection};
@@ -17,7 +17,7 @@ class OrdersController extends Controller
     public function index(Request $request, Order $order)
     {
         $order->package = $order->orders()->where('pid', 0)->get();
-        $order->set_time = Store::where('id', $order->store_id)->value('set_time');
+        $order->set_time = $order->store->set_time;
         $order->clean = Behavior::where('target_id', $request->order->id)->where('category', 'clean')->whereDate('created_at', date('Y-m-d'))->orderBy('created_at', 'desc')->first();
 
         return (new OrderResource($order))->additional(['status' => 200]);
@@ -27,7 +27,7 @@ class OrdersController extends Controller
     public function customerIndex(Request $request, Order $order)
     {
         $order->package = $order->orders()->where('pid', 0)->get();
-        $order->set_time = Store::where('id', $order->store_id)->value('set_time');
+        $order->set_time = $order->store->set_time;
 
         return (new OrderResource($order))->additional(['status' => 200]);
     }
@@ -105,7 +105,7 @@ class OrdersController extends Controller
     /** 【 退菜列表 】 */
     public function retreat(Request $request, Order $order)
     {
-        $order->place_name = Place::where('id', $order->place_id)->value('name');
+        $order->place_name = $order->place->name;
         $order->package = $order->orders()->where('status', 0)->where('pid', 0)->get();
 
         return (new OrderResource($order))->additional(['status' => 200]);

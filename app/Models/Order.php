@@ -22,6 +22,12 @@ class Order extends Model
     	return $this->hasOne(Place::class, 'id', 'place_id');
     }
 
+    /** 【 一对一门店关联关系 】 */
+    public function store()
+    {
+        return $this->hasOne(Store::class, 'id', 'store_id');
+    } 
+
     protected function getordersCountAttribute($value)
     {
         return $value ?? $this->orders_count = $this->orders()->count();

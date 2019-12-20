@@ -206,11 +206,32 @@ class UsersController extends Controller
         return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
+    /** 【 刷新员工二维码 】 */ 
+    public function refresh(Request $request, User $user, Place $place)
+    {
+        $path = substr($user->qrcode, strripos($user->qrcode, "images"));
+        unlink($path);
+        // 创建登录二维码写入登录链接
+        $data = [
+            // 默认类型值
+            'type' => $user->post,
+            'store_id' => $user->store_id,
+            'name' => $user->account,
+            'id' => $user->id,
+        ];
+        $result = $place->updateQrcode($data,$user->id);
+        // 更新数据
+        $user->update(['qrcode' => $result['qrcode'], 'link' => $result['link']]);
+
+        if ($result) {
+            return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
+        }
+    }
+
     /** 【 删除员工信息 】 */
     public function delete(User $user)
     {
-        // 如果不是老板，删除员工二维码
-        if ($user->post != 'boss') {
+        if ($user->qrcode) {
             $path = substr($user->qrcode, strripos($user->qrcode, "images"));
             unlink($path);
         }

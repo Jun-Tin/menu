@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Place, Image, Order, User, OrderDetail, Behavior};
+use App\Models\{Place, Order, User, OrderDetail, Behavior};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, File, Redis};
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ class PlacesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Place $place, Image $image)
+    public function store(Request $request, Place $place)
     {
         $place->fill($request->all());
         $place->status = 0;
@@ -36,15 +36,17 @@ class PlacesController extends Controller
      */
     public function update(Request $request, Place $place)
     {
-        $path = Image::where('id', $place->image_id)->value('path');
+        $path = $place->image->path;
         $str = substr($path, strripos($path, "images"));
-        unlink($str);
+        if (file_exists($str)) {
+            unlink($str);
+        }
         $data = $request->all();
         // 默认类型值
         $data['type'] = 'place';
         $place->updateQrcode($data,$place->id);
         $place->update($request->all());
-        Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
+        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -57,11 +59,10 @@ class PlacesController extends Controller
      */
     public function destroy(Place $place)
     {
-        $images = Image::find($place->image_id);
-        $pos = strpos($images->path, 'images');
-        $path = substr($images->path, $pos, strlen($images->path));
-        if (file_exists($path)) {
-            unlink($path);
+        $path = $place->image->path;
+        $str = substr($path, strripos($path, "images"));
+        if (file_exists($str)) {
+            unlink($str);
         }
         $place->delete();
 
@@ -71,9 +72,11 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
-        $str = Image::where('id', $place->image_id)->value('path');
-        $path = substr($str, strripos($str, "images"));
-        unlink($path);
+        $path = $place->image->path;
+        $str = substr($path, strripos($path, "images"));
+        if (file_exists($str)) {
+            unlink($str);
+        }
         $place->fill($request->all());
         $place->update();
         $data = array(
@@ -83,7 +86,7 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $result = $place->updateQrcode($data,$place->id);
-        Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
+        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
 
         if ($result) {
             return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
@@ -408,7 +411,7 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $place->updateQrcode($data,$place->id);
-        Image::where('id', $place->image_id)->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
+        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
     }
 }
