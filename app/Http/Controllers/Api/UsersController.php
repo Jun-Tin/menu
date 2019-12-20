@@ -210,7 +210,9 @@ class UsersController extends Controller
     public function refresh(Request $request, User $user, Place $place)
     {
         $path = substr($user->qrcode, strripos($user->qrcode, "images"));
-        unlink($path);
+        if (file_exists($path)) {
+            unlink($path);
+        }
         // 创建登录二维码写入登录链接
         $data = [
             // 默认类型值
@@ -233,7 +235,9 @@ class UsersController extends Controller
     {
         if ($user->qrcode) {
             $path = substr($user->qrcode, strripos($user->qrcode, "images"));
-            unlink($path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
         $user->delete();
 
