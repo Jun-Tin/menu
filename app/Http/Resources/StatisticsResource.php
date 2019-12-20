@@ -771,12 +771,12 @@ class StatisticsResource extends Resource
 
                 if ($collection->isNotEmpty()) {
                     $newdata = [];
-                    foreach($collection as $k=>$v){
-                        if(!isset($newdata[$v['menu_id']])){
-                            $newdata[$v['menu_id']] = $v;
+                    foreach($collection as $key => $value){
+                        if(!isset($newdata[$value['menu_id']])){
+                            $newdata[$value['menu_id']] = $value;
                         }else{
-                            $newdata[$v['menu_id']]['price'] += $v['price'];
-                            $newdata[$v['menu_id']]['number'] += $v['number'];
+                            $newdata[$value['menu_id']]['price'] += $value['price'];
+                            $newdata[$value['menu_id']]['number'] += $value['number'];
                         }
                     }
 
@@ -912,7 +912,104 @@ class StatisticsResource extends Resource
                 break;
 
             case 'menuServed':
-                
+                // 门店下所有菜品
+                $menus = $this->menus()->where('status', 1)->select('id', 'name')->get()->map(function ($item){
+                    $item->number = 0;
+                    $item->time = 0;
+                    $item->fast_time = '0:0:0';
+                    $item->slow_time = '0:0:0';
+                    $item->averages = '0:0:0';
+                    return $item;
+                });
+                $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->get()->map(function ($item){
+                    return $item->orders()->where('category', 'm')->whereIn('status', [1, 2, 3, 4])->selectRaw('id, menu_id, menus_id, number')->get()->map(function ($item){
+                        $behavior = $item->behavior()->where('category', 'cooking')->where('status', 1)->first();
+                        $item->time = carbon::parse($behavior['updated_at'])->diffInSeconds($behavior['created_at'],true);
+                        if ($item->menu_id) {
+                            $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                        } else {
+                            $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                        }
+                        return $item;
+                    });
+                })->collapse()->toArray();
+
+                $newdata = [];
+                foreach ($collection as $key => $value) {
+                    if ($value['menu_id']) {
+                        if(!isset($newdata[$value['menu_id']])){
+                            $newdata[$value['menu_id']] = $value;
+                        }else{
+                            $newdata[$value['menu_id']]['time'] += $value['time'];
+                            $newdata[$value['menu_id']]['number'] += $value['number'];
+                        }
+                        $newdata[$value['menus_id']]['data'][] = $value['time'];
+                    } else {
+                        if(!isset($newdata[$value['menus_id']])){
+                            $newdata[$value['menus_id']] = $value;
+                        }else{
+                            $newdata[$value['menus_id']]['time'] += $value['time'];
+                            $newdata[$value['menus_id']]['number'] += $value['number'];
+                        }
+                        $newdata[$value['menus_id']]['data'][] = $value['time'];
+                    }
+                }
+
+                $data = [];
+                foreach ($newdata as $key => $value) {
+                    array_multisort($newdata[$key]['data'], SORT_DESC);
+                    $count = count($value['data']);
+                    if ($count == 1) {
+                        $newdata[$key]['fast_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
+                        $newdata[$key]['slow_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
+                    } else {
+                        $newdata[$key]['fast_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
+                        $newdata[$key]['slow_time'] = floor(($value['data'][$count-1])/3600).':'.floor(((($value['data'][$count-1])%3600)/60)).':'.(($value['data'][$count-1])%60);
+                    }
+                }
+                foreach ($newdata as $key => $value) {
+                    // 平均数
+                    $value['averages'] = floor(($value['time']/$value['number'])/3600).':'.floor(((($value['time']/$value['number'])%3600)/60)).':'.(($value['time']/$value['number'])%60);
+                    $data[] = $value;
+                }
+
+                $menus->map(function ($item) use ($data){
+                    foreach ($data as $key => $value) {
+                        if ($value['menu_id']) {
+                            if ($item->id == $value['menu_id']) {
+                                $item->number = $value['number'];
+                                $item->time = $value['time'];
+                                $item->fast_time = $value['fast_time'];
+                                $item->slow_time = $value['slow_time'];
+                                $item->averages = $value['averages'];
+                            }
+                        } else {
+                            if ($item->id == $value['menus_id']) {
+                                $item->number = $value['number'];
+                                $item->time = $value['time'];
+                                $item->fast_time = $value['fast_time'];
+                                $item->slow_time = $value['slow_time'];
+                                $item->averages = $value['averages'];
+                            }
+                        }
+                    }
+                });
+
+                switch ($request->type) {
+                    case 'fast_time':
+                        $menus = $menus->sortByDesc('fast_time')->values();
+                        break;
+                    case 'slow_time':
+                        $menus = $menus->sortByDesc('slow_time')->values();
+                        break;
+                    case 'averages':
+                        $menus = $menus->sortByDesc('averages')->values();
+                        break;
+                }
+
+                return [
+                    'data' => $menus,
+                ];
                 break;
         }
     }

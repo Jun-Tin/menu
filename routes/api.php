@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 员工报表 -- 服务
     Route::patch('store/{store}/staffService', 'Api\StoresController@staffService');
     // 后厨报表 -- 出菜时间
-    Route::patch('store/{store}/');
+    Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
 
 
 
