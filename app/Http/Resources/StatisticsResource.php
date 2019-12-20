@@ -456,7 +456,7 @@ class StatisticsResource extends Resource
                                 $newdata[$value['menu_id']]['time'] += $value['time'];
                                 $newdata[$value['menu_id']]['number'] += $value['number'];
                             }
-                            $newdata[$value['menus_id']]['data'][] = $value['time'];
+                            $newdata[$value['menu_id']]['data'][] = $value['time'];
                         } else {
                             if(!isset($newdata[$value['menus_id']])){
                                 $newdata[$value['menus_id']] = $value;
@@ -467,7 +467,7 @@ class StatisticsResource extends Resource
                             $newdata[$value['menus_id']]['data'][] = $value['time'];
                         }
                     }
-                    dd($newdata);
+
                     $data = [];
                     foreach ($newdata as $key => $value) {
                         array_multisort($newdata[$key]['data'], SORT_DESC);
