@@ -445,6 +445,7 @@ class StatisticsResource extends Resource
                         return $item;
                     });
                 })->collapse()->toArray();
+                dd($collection);
 
                 if ($collection) {
                     $newdata = [];
