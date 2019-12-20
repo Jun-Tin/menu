@@ -224,7 +224,7 @@ class UsersController extends Controller
         $user->update(['qrcode' => $result['qrcode'], 'link' => $result['link']]);
 
         if ($result) {
-            return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
+            return (new UserResource($user))->additional(['status' => 200, 'message' => '刷新成功！']);
         }
     }
 
