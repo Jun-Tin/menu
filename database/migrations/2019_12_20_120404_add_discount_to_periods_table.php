@@ -13,7 +13,7 @@ class AddDiscountToPeriodsTable extends Migration
      */
     public function up()
     {
-        Schema::table('stores', function (Blueprint $table) {
+        Schema::table('periods', function (Blueprint $table) {
             $table->string('discount')->nullable()->after('days')->commit('折扣');
         });
     }
@@ -25,7 +25,7 @@ class AddDiscountToPeriodsTable extends Migration
      */
     public function down()
     {
-        Schema::table('stores', function (Blueprint $table) {
+        Schema::table('periods', function (Blueprint $table) {
             $table->dropColumn('discount');
         });
     }
