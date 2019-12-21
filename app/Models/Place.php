@@ -70,7 +70,8 @@ class Place extends Model
                 break;
         }
         // 设置redis缓存
-        Redis::set($data['name'].'_'.$data['store_id'].'_'.$id, $encrypted);
+        dd(Redis::set($data['name'].'_'.$data['store_id'].'_'.$id, $encrypted));
+
         return [
             'qrcode' => $qrcode,
             'link' => $link,
