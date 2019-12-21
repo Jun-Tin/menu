@@ -20,6 +20,7 @@ class PlacesController extends Controller
      */
     public function store(Request $request, Place $place)
     {
+        dd(Redis::get('新座位123_4_123'));
         $place->fill($request->all());
         $place->status = 0;
         $place->save();
