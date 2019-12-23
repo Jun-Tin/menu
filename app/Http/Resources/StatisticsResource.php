@@ -131,7 +131,6 @@ class StatisticsResource extends Resource
                     $get_week[$key]['price'] = 0;
                     $get_week[$key]['number'] = 0;
                 }
-                dd($period);
 
                 $get_week[($period-1)]['price'] = $orders['price'];
                 $get_week[($period-1)]['number'] = $orders['number'];
