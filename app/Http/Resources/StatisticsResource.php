@@ -120,7 +120,7 @@ class StatisticsResource extends Resource
                         $period = $value['period'];
                     }
                 }
-                $betweenDay = [$get_week[$period]['startday'], $get_week[$period]['endday']];
+                $betweenDay = [$get_week[($period-1)]['startday'], $get_week[($period-1)]['endday']];
                 $orders = $this->orders()->whereBetween('created_at', $betweenDay)
                                                             ->whereIn('status', [1, 2])
                                                             ->selectRaw('sum(final_price) as price, sum(sitter) as number')
@@ -131,9 +131,11 @@ class StatisticsResource extends Resource
                     $get_week[$key]['price'] = 0;
                     $get_week[$key]['number'] = 0;
                 }
+                dd($period);
 
                 $get_week[($period-1)]['price'] = $orders['price'];
                 $get_week[($period-1)]['number'] = $orders['number'];
+
 
                 if (($period-10) >= 0) {
                     for ($i=$period; $i>($period-10); $i--) { 
