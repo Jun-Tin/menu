@@ -114,7 +114,7 @@ class StatisticsResource extends Resource
 
             case 'totalWeekIncome':
                 $get_week = $this->get_week(date('Y', $request->date));
-                dd($get_week);
+
                 foreach ($get_week as $key => $value) {
                     if (strtotime($value['startday']) < $request->date && strtotime($value['endday']) >= $request->date) {
                         $period = $value['period'];
