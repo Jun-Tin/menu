@@ -117,10 +117,9 @@ class StatisticsResource extends Resource
 
                 foreach ($get_week as $key => $value) {
                     if (strtotime($value['startday']) < $request->date && strtotime($value['endday']) >= $request->date) {
-                        $period = $key;
+                        $period = $value['period'];
                     }
                 }
-
                 $betweenDay = [$get_week[$period]['startday'], $get_week[$period]['endday']];
                 $orders = $this->orders()->whereBetween('created_at', $betweenDay)
                                                             ->whereIn('status', [1, 2])
@@ -133,8 +132,8 @@ class StatisticsResource extends Resource
                     $get_week[$key]['number'] = 0;
                 }
 
-                $get_week[$period]['price'] = $orders['price'];
-                $get_week[$period]['number'] = $orders['number'];
+                $get_week[$period-1]['price'] = $orders['price'];
+                $get_week[$period-1]['number'] = $orders['number'];
 
                 if (($period-10) >= 0) {
                     for ($i=$period; $i>($period-10); $i--) { 
