@@ -117,18 +117,24 @@ class StatisticsResource extends Resource
 
                 foreach ($get_week as $key => $value) {
                     if ($value['startday'] < date('Y-m-d', $request->date) && $value['endday'] >= date('Y-m-d', $request->date)) {
-                        $period = $value['period'];
+                        $period = $key;
                     }
-                    $betweenDay[$key] = [$value['startday'], $value['endday']];
-                    $orders[$key] = $this->orders()->whereBetween('created_at', $betweenDay[$key])
-                                                        ->whereIn('status', [1, 2])
-                                                        ->selectRaw('sum(final_price) as price, sum(sitter) as number')
-                                                        ->get()
-                                                        ->toArray();
-
-                    $get_week[$key]['price'] = $orders[$key][0]['price']?:0;
-                    $get_week[$key]['number'] = $orders[$key][0]['number']?:0;
                 }
+
+                $betweenDay = [$get_week[$period]['startday'], $get_week[$period]['endday']];
+                $orders = $this->orders()->whereBetween('created_at', $betweenDay)
+                                                            ->whereIn('status', [1, 2])
+                                                            ->selectRaw('sum(final_price) as price, sum(sitter) as number')
+                                                            ->get()
+                                                            ->toArray()[0];
+
+                foreach ($get_week as $key => $value) {
+                    $get_week[$key]['price'] = 0;
+                    $get_week[$key]['number'] = 0;
+                }
+
+                $get_week[$period]['price'] = $orders['price'];
+                $get_week[$period]['number'] = $orders['number'];
 
                 if (($period-10) >= 0) {
                     for ($i=$period; $i>($period-10); $i--) { 
