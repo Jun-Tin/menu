@@ -21,7 +21,7 @@ class BehaviorObserver
 					$status = $all->contains(function ($value, $key) {
 					    return $value['status'] >= 4;
 					});
-					dd($all);
+					dd($status);
 					if ($status) {
 						// 修改套餐状态
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
