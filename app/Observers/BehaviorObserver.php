@@ -55,7 +55,15 @@ class BehaviorObserver
 						'status' => 1 
 					]);
 				} else {
-					$order->increment('finish_number');
+					// 判断是否属于套餐内的单品
+					if ($order_detail->pid) {
+						if ($status) {
+							// 套餐内的单品全部完成后才 +1
+							$order->increment('finish_number');
+						}
+					} else {
+						$order->increment('finish_number');
+					}
 				}
 
                 // 将原先撤销的记录删除
