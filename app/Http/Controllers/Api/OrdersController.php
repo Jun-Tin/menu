@@ -66,7 +66,7 @@ class OrdersController extends Controller
         });
         $order->finished = $order->map(function ($item, $key){
             // 已完成的菜品
-            return $item->orders()->where('status', '>=', 2)->where('category', 'm')->get();
+            return $item->orders()->whereIn('status', [2, 3, 4])->where('category', 'm')->get();
         });
         $order->behavior = $order->map(function ($item, $key){
             // 正在做的菜品
