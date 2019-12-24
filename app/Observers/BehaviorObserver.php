@@ -19,7 +19,7 @@ class BehaviorObserver
 					// 获取套餐内单品状态
 					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
-					    return $value['status'] = 4;
+					    return $value['status'] >= 4;
 					});
 					if ($status) {
 						// 修改套餐状态
