@@ -20,7 +20,7 @@ class BehaviorObserver
 					$all = OrderDetail::where('pid', $order_detail->pid)->get();
 					$status = $all->contains(function ($value, $key) {
 						dump($value);
-					    return $value['value'] = 4;
+					    return $value['value'] >= 4;
 					});
 					dd($status);
 					if ($status) {
