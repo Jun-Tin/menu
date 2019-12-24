@@ -20,7 +20,7 @@ class BehaviorObserver
 					$collection = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
 						return $item->status;
 					})->flatten();
-
+					dd($collection);
 					$status = $collection->contains(function ($value, $key) {
 					    return $value > 3;
 					});
