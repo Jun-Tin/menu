@@ -51,9 +51,9 @@ class BehaviorObserver
 				// 获取原订单信息
 				$order = $behavior->order;
 				// 完成个数 == 最终个数
-				if ($order->finish_number + 1 == $order->final_number) {
+				if ((int)$order->finish_number + 1 == (int)$order->final_number) {
 					$order->update([
-						'finish_number' => $order->finish_number + 1,
+						'finish_number' => (int)$order->finish_number + 1,
 						'status' => 1 
 					]);
 				} else {
