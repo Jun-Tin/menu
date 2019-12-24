@@ -19,7 +19,7 @@ class BehaviorObserver
 					// 获取套餐内单品状态
 					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
 					$status = $all->containsStrict(function ($value, $key) {
-						dd($value['value']);
+						dd($value['status']);
 					    return $value['value'] = 4;
 					});
 					dd($status);
