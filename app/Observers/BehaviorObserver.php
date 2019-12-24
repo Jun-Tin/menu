@@ -63,16 +63,12 @@ class BehaviorObserver
 						$order->increment('finish_number');
 					}
 				} else {
-					// 完成个数 == 最终个数
-					if ((int)$order->finish_number + 1 == (int)$order->final_number) {
-						$order->update([
-							'finish_number' => (int)$order->finish_number + 1,
-							'status' => 1 
-						]);
-					} else {
-						$order->increment('finish_number');
-					}
+					$order->increment('finish_number');
 				}
+				// 完成个数 == 最终个数
+				if ($order->finish_number == $order->final_number) {
+					$order->update(['status' => 1 ]);
+				} 
 
                 // 将原先撤销的记录删除
                 Behavior::where('target_id', $behavior->target_id)->where('category', 'backout')->delete();
