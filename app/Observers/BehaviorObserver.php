@@ -18,7 +18,7 @@ class BehaviorObserver
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
 					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
-					$status = $all->all()->containsStrict(function ($value, $key) {
+					$status = $all->containsStrict(function ($value, $key) {
 						var_dump($value);
 					    return $value['value'] = 4;
 					});
