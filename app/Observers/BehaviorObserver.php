@@ -17,8 +17,9 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $order_detail->pid)->get()->only(['status'])->all();
-					dd($all);
+					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
+					$status = $all->only(['status']);
+					dd($status->all());
 					$status = $all->contains(function ($value, $key) {
 					    return $value >= 4;
 					});
