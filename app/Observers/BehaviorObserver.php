@@ -19,7 +19,7 @@ class BehaviorObserver
 					// 获取套餐内单品状态
 					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
-					    return $value['status'] >= 4;
+					    return $value >= 4;
 					});
 					dd($status);
 					if ($status) {
@@ -93,6 +93,6 @@ class BehaviorObserver
 				$count = OrderDetail::where('store_id', $store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
 				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
-		}
+		}	
 	}
 } 
