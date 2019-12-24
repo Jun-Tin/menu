@@ -121,32 +121,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 门店售罄菜品一键恢复
     Route::get('store/{store}/returnMenus', 'Api\StoresController@returnMenus');
 
-    // /** 【 销售报表 】 */
-    // // 客人数量
-    // Route::patch('store/{store}/guestNumber', 'Api\StoresController@guestNumber');
-    // // 客人时刻
-    // Route::patch('store/{store}/guestMoment', 'Api\StoresController@guestMoment');
-    // // 菜品排行
-    // Route::patch('store/{store}/menuRank', 'Api\StoresController@menuRank');
-    // // 金额排行
-    // Route::patch('store/{store}/moneyRank', 'Api\StoresController@moneyRank');
-    // // 桌位数量
-    // Route::patch('store/{store}/placeNumber', 'Api\StoresController@placeNumber');
-    // // 占位时间
-    // Route::patch('store/{store}/placeHolder', 'Api\StoresController@placeHolder');
-    // /** 【 员工表现报表 】 */ 
-    // // 出菜时间
-    // Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
-    // // part1
-    // Route::patch('store/{store}/staffBehaviorPartOne', 'Api\StoresController@staffBehaviorPartOne');
-    // // part2
-    // Route::patch('store/staffBehaviorPartTwo', 'Api\StoresController@staffBehaviorPartTwo');
-    // // part3
-    // Route::patch('store/staffBehaviorPartThree', 'Api\StoresController@staffBehaviorPartThree');
-    // /** 【 财务报表 】 */
-    // // 收入
-    // Route::patch('store/{store}/income', 'Api\StoresController@income');
-    // // 支出 
 
     /** 【 报表 】 */
     // 收入报表 -- 总月
@@ -331,6 +305,11 @@ Route::group(['middleware' => 'auth:api'], function(){
 Route::get('store/{store}/customerShow', 'Api\StoresController@customerShow'); 
 /** 【 座位状态 】 */
 Route::get('place/{place}/customerStatus', 'Api\PlacesController@customerStatus'); 
+/** 【 客户预约 】 */
+// 创建
+Route::post('book/customerStore', 'Api\BooksController@customerStore');
+// 详情
+Route::get('book/{book}/customerIndex', 'Api\BooksController@customerIndex');
 
 /** 【 自定义验证类接口 】 */ 
 Route::group(['middleware' => 'Code'], function(){

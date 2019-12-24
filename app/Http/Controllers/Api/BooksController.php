@@ -82,4 +82,20 @@ class BooksController extends Controller
         $book->delete();
         return response()->json(['message' => '删除成功！', 'status' => 200]);
     }
+
+    /** 【 客户预约 -- 创建 】 */ 
+    public function customerStore(Request $request, Book $book)
+    {
+        $book->fill($request->all());
+        $book->date = strtotime($request->date);
+        $book->save();
+
+        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+    }
+
+    /** 【 客户预约 -- 详情 】 */
+    public function customerIndex(Book $book)
+    {
+        return (new BookResource($book))->additional(['status' => 200]);
+    } 
 }
