@@ -21,8 +21,8 @@ class BehaviorObserver
 						return $item->status;
 					})->flatten();
 
-					$status = $all->containsStrict(function ($value, $key) {
-					    return $value >= 4;
+					$status = $all->contains(function ($value, $key) {
+					    return $value > 3;
 					});
 					if ($status) {
 						// 修改套餐状态
@@ -45,7 +45,7 @@ class BehaviorObserver
 					})->flatten();
 
 					$status = $all->contains(function ($value, $key) {
-					    return $value >= 2;
+					    return $value > 1;
 					});
 					if ($status) {
 						// 修改套餐状态
