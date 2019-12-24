@@ -1,7 +1,7 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Behavior, Place, Order, OrderDetail, User};
+use App\Models\{Behavior, OrderDetail, User};
 use GatewayWorker\Lib\Gateway;
 
 class BehaviorObserver
