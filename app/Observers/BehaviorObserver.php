@@ -12,6 +12,7 @@ class BehaviorObserver
 			// 上菜
 			case 'serving':
 				$order_detail = $behavior->order_detail;
+				dd($order_detail);
 				// 修改菜品状态
 				$order_detail->update(['status' => 4]);
 				// 判断是否属于套餐内的单品
