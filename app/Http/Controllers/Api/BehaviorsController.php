@@ -97,6 +97,8 @@ class BehaviorsController extends Controller
                 }
                 // 修改菜单内容状态 -- 撤销状态
                 $order_detail->update(['status' => 0]);
+                // 订单完成数量 -1
+                $order_detail->order->decrement('finish_number');
                 // 将原先制作的记录删除
                 Behavior::where('target_id', $request->target_id)->where('category', 'cooking')->delete();
                 $behavior->status = 1;
