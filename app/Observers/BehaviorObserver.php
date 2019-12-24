@@ -21,9 +21,11 @@ class BehaviorObserver
 						return $item->status;
 					})->flatten();
 
+					dd($all);
 					$status = $all->contains(function ($value, $key) {
 					    return $value > 3;
 					});
+					dd($status);
 					if ($status) {
 						// 修改套餐状态
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
