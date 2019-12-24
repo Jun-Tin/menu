@@ -12,13 +12,12 @@ class BehaviorObserver
 			// 上菜
 			case 'serving':
 				$order_detail = $behavior->order_detail;
-				dd($order_detail);
 				// 修改菜品状态
 				$order_detail->update(['status' => 4]);
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$status = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->contains(function ($value, $key) {
+					$status = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->containsStrict(function ($value, $key) {
 					    return $value['value'] = 4;
 					});
 					if ($status) {
