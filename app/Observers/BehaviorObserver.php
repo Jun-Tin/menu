@@ -23,7 +23,7 @@ class BehaviorObserver
 					// dd($collection);
 					$status = $collection->contains(function ($value, $key) {
 						dump($value);
-					    return $value > 4;
+					    return $value >= 4;
 					});
 					dd($status);
 					if ($status) {
