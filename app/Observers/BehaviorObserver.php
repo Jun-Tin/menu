@@ -9,30 +9,21 @@ class BehaviorObserver
 	public function updated(Behavior $behavior)
 	{
 		switch ($behavior->category) {
-			// 清洁
-			// case 'clean':
-			// 	$order = Order::find($behavior->target_id);
-			// 	// 更新原订单已完成打扫
-			// 	Order::where('id',$order->id)->update(['finish'=>2]);
-			// 	// 修改座位状态--无人状态
-			// 	Place::where('id',$order->place_id)->update(['status'=>0]);
-			// 	break;
 			// 上菜
 			case 'serving':
-				// OrderDetail::where('id',$behavior->target_id)->update(['status' => 4]);
-				$OrderDetail = OrderDetail::find($behavior->target_id);
+				$order_detail = $behavior->order_detail;
 				// 修改菜品状态
-				$OrderDetail->update(['status' => 4]);
+				$order_detail->update(['status' => 4]);
 				// 判断是否属于套餐内的单品
-				if ($OrderDetail->pid) {
+				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $OrderDetail->pid)->select('status')->get();
+					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
 					    return $value['status'] = 4;
 					});
 					if ($status) {
 						// 修改套餐状态
-						OrderDetail::where('id', $OrderDetail->pid)->update(['status' => 4]);
+						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
 					}
 				}
 
@@ -42,33 +33,31 @@ class BehaviorObserver
 				break;
 			// 做菜
 			case 'cooking':
-				$OrderDetail = OrderDetail::find($behavior->target_id);
+				$order_detail = $behavior->order_detail;
 				// 判断是否属于套餐内的单品
-				if ($OrderDetail->pid) {
+				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $OrderDetail->pid)->select('status')->get();
+					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
 					$status = $all->contains(function ($value, $key) {
-					    return $value['status'] > 0;
+					    return $value['status'] >= 2;
 					});
 					if ($status) {
 						// 修改套餐状态
-						OrderDetail::where('id', $OrderDetail->pid)->update(['status' => 2]);
+						OrderDetail::where('id', $order_detail->pid)->update(['status' => 2]);
 					}
 				}
 				// 修改菜品状态
-				$OrderDetail->update(['status' => 2]);
-				// 获取原订单号
-				$order_order = OrderDetail::where('id', $behavior->target_id)->value('order_order');
+				$order_detail->update(['status' => 2]);
 				// 获取原订单信息
-				$order = Order::where('order', $order_order)->first();
+				$order = $behavior->order;
 				// 完成个数 == 最终个数
 				if ($order->finish_number + 1 == $order->final_number) {
-					Order::where('order', $order_order)->update([
+					$order->update([
 						'finish_number' => $order->finish_number + 1,
 						'status' => 1 
 					]);
 				} else {
-					Order::where('order', $order_order)->increment('finish_number');
+					$order->increment('finish_number');
 				}
 
                 // 将原先撤销的记录删除
@@ -80,11 +69,11 @@ class BehaviorObserver
 				break;
 			// 撤销
 			case 'retreat':
-				$OrderDetail = OrderDetail::find($behavior->target_id);
+				$order_detail = $behavior->order_detail;
 				// 判断是否属于套餐内的单品
-				if ($OrderDetail->pid) {					
+				if ($order_detail->pid) {					
 					// 修改套餐状态
-					OrderDetail::where('id', $OrderDetail->pid)->update(['status' => 0]);
+					OrderDetail::where('id', $order_detail->pid)->update(['status' => 0]);
 				}
 
 				$store_id = (User::find($behavior->user_id))->store_id;
