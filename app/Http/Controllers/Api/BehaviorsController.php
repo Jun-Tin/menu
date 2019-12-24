@@ -20,10 +20,10 @@ class BehaviorsController extends Controller
     {
         $user = auth()->user();
         // 避免重复创建
-        $first = $behavior->where('target_id', $request->target_id)->where('category', $request->category)->first();
-        if ($first && $first->category != 'clean') {
-            return response()->json(['error' => ['message' => ['非法操作！']], 'status' => 404]);
-        }
+        // $first = $behavior->where('target_id', $request->target_id)->where('category', $request->category)->first();
+        // if ($first && $first->category != 'clean') {
+        //     return response()->json(['error' => ['message' => ['非法操作！']], 'status' => 404]);
+        // }
         
         $behavior->fill($request->all());
         $behavior->user_id = $user->id;
