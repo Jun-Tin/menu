@@ -18,7 +18,7 @@ class BehaviorObserver
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
 					$status = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->contains(function ($value, $key) {
-					    return $value['value'] >= 4;
+					    return $value['value'] = 4;
 					});
 					if ($status) {
 						// 修改套餐状态
