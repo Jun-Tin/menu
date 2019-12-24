@@ -17,10 +17,10 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$status = OrderDetail::where('pid', $order_detail->pid)->get()->contains(function ($value, $key) {
-					    return $value->value >= 4;
+					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get();
+					$status = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->containsStrict(function ($value, $key) {
+					    return $value['status'] >= 4;
 					});
-					dd($status);
 					if ($status) {
 						// 修改套餐状态
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
