@@ -56,19 +56,19 @@ class BehaviorObserver
 				}
 				// 获取原订单信息
 				$order = $order_detail->order;
-				// 完成个数 == 最终个数
-				if ((int)$order->finish_number + 1 == (int)$order->final_number) {
-					$order->update([
-						'finish_number' => (int)$order->finish_number + 1,
-						'status' => 1 
-					]);
+				// 判断是否属于套餐内的单品
+				if ($order_detail->pid) {
+					if ($status) {
+						// 套餐内的单品全部完成后才 +1
+						$order->increment('finish_number');
+					}
 				} else {
-					// 判断是否属于套餐内的单品
-					if ($order_detail->pid) {
-						if ($status) {
-							// 套餐内的单品全部完成后才 +1
-							$order->increment('finish_number');
-						}
+					// 完成个数 == 最终个数
+					if ((int)$order->finish_number + 1 == (int)$order->final_number) {
+						$order->update([
+							'finish_number' => (int)$order->finish_number + 1,
+							'status' => 1 
+						]);
 					} else {
 						$order->increment('finish_number');
 					}
