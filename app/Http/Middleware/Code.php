@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\{Place, User};
+use App\Models\{Place, User, Store};
 use Illuminate\Support\Facades\Redis;
 
 class Code
@@ -39,6 +39,11 @@ class Code
             }
         } else {
             return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
+        }
+        // 检查门店是否上线状态
+        $active = Store::where('id', $store_id)->value('active');
+        if (!$active) {
+            return response()->json(['error' => ['message' => ['门店未上线！']], 'status' => 404]);
         }
         return $next($request);
     }

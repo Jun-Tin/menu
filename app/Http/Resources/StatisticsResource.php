@@ -116,7 +116,7 @@ class StatisticsResource extends Resource
                 $get_week = $this->get_week(date('Y', $request->date));
 
                 foreach ($get_week as $key => $value) {
-                    if ($value['startday'] < date('Y-m-d', $request->date) && $value['endday'] >= date('Y-m-d', $request->date)) {
+                    if (strtotime($value['startday']) < $request->date && strtotime($value['endday']) >= $request->date) {
                         $period = $value['period'];
                     }
                     $betweenDay[$key] = [$value['startday'], $value['endday']];
