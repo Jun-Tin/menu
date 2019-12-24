@@ -67,7 +67,7 @@ class OrderCollection extends ResourceCollection
                             return $item;
                         })->values(),
                         'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                            $behavior = Behavior::where('target_id', $item->id)->where('category', 'cooking')->first();
+                            $behavior = Behavior::where('target_id', $item->id)->where('category', 'cooking')->orderBy('id', 'DESC')->first();
                             if ($behavior) {
                                 if ($behavior->user_id == auth()->id()) {
                                     $item->place_name = Place::where('id', $item->place_id)->value('name');
@@ -123,7 +123,7 @@ class OrderCollection extends ResourceCollection
                         }
                     })->values(),
                     'myself' => $this->collection['behavior']->flatten()->filter(function ($item){
-                        $behavior = Behavior::where('target_id', $item->id)->where('category', 'serving')->first();
+                        $behavior = Behavior::where('target_id', $item->id)->where('category', 'serving')->orderBy('id', 'DESC')->first();
                         if ($behavior) {
                             if ($behavior->user_id == auth()->id()) {
                                 $item->place_name = Place::where('id', $item->place_id)->value('name');
