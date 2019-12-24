@@ -11,6 +11,7 @@ class BehaviorObserver
 		switch ($behavior->category) {
 			// 上菜
 			case 'serving':
+				dd(123123123);
 				$order_detail = $behavior->order_detail;
 				dd($order_detail);
 				// 修改菜品状态
