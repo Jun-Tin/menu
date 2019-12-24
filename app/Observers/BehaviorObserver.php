@@ -20,12 +20,10 @@ class BehaviorObserver
 					$collection = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
 						return $item->status;
 					})->flatten();
-					// dd($collection);
-					$status = $collection->contains(function ($value, $key) {
-						dump($value);
+
+					$status = $collection->every(function ($value, $key) {
 					    return $value >= 4;
 					});
-					dd($status);
 					if ($status) {
 						// 修改套餐状态
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
@@ -42,12 +40,12 @@ class BehaviorObserver
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
-					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
+					$collection = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
 						return $item->status;
 					})->flatten();
 
-					$status = $all->contains(function ($value, $key) {
-					    return $value > 1;
+					$status = $collection->every(function ($value, $key) {
+					    return $value >= 2;
 					});
 					if ($status) {
 						// 修改套餐状态
@@ -88,11 +86,11 @@ class BehaviorObserver
 				$order_detail = $behavior->order_detail;
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
-					$all = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
+					$collection = OrderDetail::where('pid', $order_detail->pid)->select('status')->get()->map(function ($item){
 						return $item->status;
 					})->flatten();
 
-					$status = $all->contains(function ($value, $key) {
+					$status = $collection->every(function ($value, $key) {
 					    return $value = 5;
 					});
 					if ($status) {
