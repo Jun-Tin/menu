@@ -37,6 +37,8 @@ class BehaviorObserver
 			// 做菜
 			case 'cooking':
 				$order_detail = $behavior->order_detail;
+				// 修改菜品状态
+				$order_detail->update(['status' => 2]);
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
@@ -52,8 +54,6 @@ class BehaviorObserver
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 2]);
 					}
 				}
-				// 修改菜品状态
-				$order_detail->update(['status' => 2]);
 				// 获取原订单信息
 				$order = $order_detail->order;
 				// 完成个数 == 最终个数
