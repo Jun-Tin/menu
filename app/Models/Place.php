@@ -37,7 +37,7 @@ class Place extends Model
         $filename = $data['name'] . '.png';
         switch ($data['type']) {
             case 'place':
-                $dir = public_path('images/qrcodes/'.$data['store_id']. '/' .$data['floor']);
+                $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
                 // 判断图片是否存在
                 if (file_exists($dir. '/' .$filename)) {
                     unlink($dir. '/' .$filename);

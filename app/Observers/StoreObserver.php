@@ -1,7 +1,7 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Store, Tag};
+use App\Models\{Store, Tag, Area};
 
 class StoreObserver
 {
@@ -42,6 +42,58 @@ class StoreObserver
 					'category' => 'perfer',
 				]);
 			}
+		}
+
+		// 创建入座区域
+		$area = [
+			[
+				'store_id' => $store->id,
+				'name' => 'A',
+				'section_left' => 1,
+				'section_right' => 4,
+				'section_number' => 4,
+				'sign' => 'A',
+				'show' => '1-4'
+			],
+			[
+				'store_id' => $store->id,
+				'name' => 'B',
+				'section_left' => 5,
+				'section_right' => 8,
+				'section_number' => 4,
+				'sign' => 'B',
+				'show' => '5-8'
+			],
+			[
+				'store_id' => $store->id,
+				'name' => 'C',
+				'section_left' => 9,
+				'section_right' => 12,
+				'section_number' => 4,
+				'sign' => 'C',
+				'show' => '9-12'
+			],
+			[
+				'store_id' => $store->id,
+				'name' => 'D',
+				'section_left' => 12,
+				'section_right' => NULL,
+				'section_number' => NULL,
+				'sign' => 'D',
+				'show' => '12-'
+			]
+		];
+
+		foreach ($area as $key => $value) {
+			Area::create([
+				'store_id' => $value['store_id'],
+				'name' => $value['name'],
+				'section_left' => $value['section_left'],
+				'section_right' => $value['section_right'],
+				'section_number' => $value['section_number'],
+				'sign' => $value['sign'],
+				'show' => $value['show']
+			]);
 		}
 	}
 } 

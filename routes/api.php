@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('user/member', 'Api\UsersController@member');
     /**【 退出登录 】*/
     Route::get('user/logout', 'Api\UsersController@logout');
+    
 
     /**【 员工 】*/ 
     // 员工信息详情
@@ -120,6 +121,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/searchMenus', 'Api\StoresController@searchMenus');
     // 门店售罄菜品一键恢复
     Route::get('store/{store}/returnMenus', 'Api\StoresController@returnMenus');
+    // 预约选位 
+    Route::post('store/{store}/index', 'Api\StoresController@index');
+    // 预约列表 
+    Route::get('store/{store}/book', 'Api\StoresController@book');
 
 
     /** 【 报表 】 */
@@ -224,14 +229,23 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('book/{book}/update', 'Api\BooksController@update');
     // 删除预约 
     Route::delete('book/{book}/destroy', 'Api\BooksController@destroy');
-    // 预约选位 
-    Route::post('store/{store}/index', 'Api\StoresController@index');
-    // 预约列表 
-    Route::get('store/{store}/book', 'Api\StoresController@book');
     // 预约详情
     Route::get('book/{book}/index', 'Api\BooksController@index');
     // 预约状态修改按钮
     Route::patch('book/{book}/edit', 'Api\BooksController@edit');
+
+
+    /** 【 区域人员 】 */
+    // 创建区域
+    Route::post('area/store', 'Api\AreasController@store');
+    // 修改区域
+    Route::patch('area/{area}/update', 'Api\AreasController@update');
+    // 删除区域
+    Route::delete('area/{area}/destroy', 'Api\AreasController@destroy');
+    // 区域列表 
+    Route::get('store/{store}/area', 'Api\AreasController@area');
+    // 区域详情
+    Route::get('area/{area}/index', 'Api\AreasController@index');
 
 
     /** 【 购物车 】 */ 

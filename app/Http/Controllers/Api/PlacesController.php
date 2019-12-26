@@ -46,7 +46,7 @@ class PlacesController extends Controller
         $data['type'] = 'place';
         $place->updateQrcode($data,$place->id);
         $place->update($request->all());
-        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
+        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -86,7 +86,7 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $result = $place->updateQrcode($data,$place->id);
-        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
+        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
 
         if ($result) {
             return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);

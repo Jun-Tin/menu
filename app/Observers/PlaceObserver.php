@@ -11,7 +11,7 @@ class PlaceObserver
 	{
 		if ($place->floor != 0) {
 			$encrypted = substr(Crypt::encryptString('新座位'.$place->id.'_'.$place->id.'_code'), 0, 15);
-			$dir = public_path('images/qrcodes/'.$place->store_id. '/' .$place->floor);
+			$dir = public_path('images/qrcodes/'.$place->store_id. '/place/' .$place->floor);
 	        if (!is_dir($dir)) {
 	            File::makeDirectory($dir, 0777, true);
 	        }
@@ -23,7 +23,7 @@ class PlaceObserver
 	        // 保存二维码
 	        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$place->store_id.'/'.$place->id.'/'.$encrypted, $dir. '/'. $filename);
 	        // 返回url链接
-	        $url = env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' .$place->floor. '/' .$filename;
+	        $url = env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' .$place->floor. '/' .$filename;
 	        // 保存在数据库
 	        $image = Image::create([
 	            'user_id' => auth()->user()->id,
