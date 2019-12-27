@@ -360,7 +360,7 @@ Route::group(['middleware' => 'Code'], function(){
     Route::put('order/{order}/customerIndex', 'Api\OrdersController@customerIndex'); 
 
     /** 【 排队 】 */
-     
+    Route::patch('line/store', 'Api\LinesController@store'); 
 
     /** 【 免登录验证 】 */ 
     // 检测用户正确性

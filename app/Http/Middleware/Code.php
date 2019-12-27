@@ -17,7 +17,7 @@ class Code
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($request->header('placeid') || $request->header('userid') || $request->header('storeid') || $request->header('category') && $request->header('code')) {
+        if ($request->header('placeid') || $request->header('userid') || $request->header('storeid') && $request->header('code')) {
             if ($request->header('placeid')) {
                 // 获取座位
                 $place = Place::find($request->header('placeid'));
@@ -39,10 +39,10 @@ class Code
                 $store = Store::find($request->header('storeid'));
                 switch ($request->header('category')) {
                     case 'screen':
-                        $name = $store->name.'_screen_';
+                        $name = $store->name.'_screen';
                         break;
                     case 'line':
-                        $name = $store->name.'_line_';
+                        $name = $store->name.'_line';
                         break;
                 }
                 $id = $store->id;

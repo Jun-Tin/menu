@@ -71,7 +71,7 @@ class Place extends Model
                 }
                 switch ($data['category']) {
                     case 'screen':
-                        $encrypted = substr(Crypt::encryptString($data['name']. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
+                        $encrypted = substr(Crypt::encryptString($data['name']. '_'. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
                         $screen = 'screen.png';
                         // 判断图片是否存在
                         if (file_exists($dir. '/'. $screen)) {
@@ -83,7 +83,7 @@ class Place extends Model
                         $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted;
                         break;
                     case 'line':
-                        $encrypted = substr(Crypt::encryptString($data['name']. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
+                        $encrypted = substr(Crypt::encryptString($data['name']. '_'. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
                         $line = 'line.png';
                         if (file_exists($dir. '/'. $line)) {
                             unlink($dir. '/'. $line);

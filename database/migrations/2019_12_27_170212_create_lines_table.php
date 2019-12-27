@@ -21,6 +21,7 @@ class CreateLinesTable extends Migration
             $table->integer('number')->nullable()->commit('人数');
             $table->string('name')->nullable()->commit('姓名');
             $table->string('phone')->nullable()->commit('手机号');
+            $table->integer('status')->nullable()->commit('状态');
             $table->timestamps();
         });
     }
