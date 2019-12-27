@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Line;
+use App\Models\{Line, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LineResource;
@@ -38,7 +38,12 @@ class LinesController extends Controller
      */
     public function store(Request $request, Line $line)
     {
-        dd($line);
+        // 获取门店区域
+        $store = Store::find($request->store_id);
+        dd($store->);
+        $line->fill($request->all());
+
+        $line->save();
     }
 
     /**

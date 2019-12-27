@@ -78,7 +78,7 @@ class StoreObserver
 			[
 				'store_id' => $store->id,
 				'name' => 'D',
-				'section_left' => 12,
+				'section_left' => 13,
 				'section_right' => NULL,
 				'section_number' => NULL,
 				'sign' => 'D',
