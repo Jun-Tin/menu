@@ -125,6 +125,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('store/{store}/index', 'Api\StoresController@index');
     // 预约列表 
     Route::get('store/{store}/book', 'Api\StoresController@book');
+    /** 【 区域 】 */
+    // 区域列表
+    Route::get('store/{store}/area', 'Api\StoresController@area'); 
+    // 刷新门店二维码 -- 排队/大屏幕
+    Route::patch('store/{store}/refresh', 'Api\StoresController@refresh');
 
 
     /** 【 报表 】 */
@@ -242,8 +247,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::patch('area/{area}/update', 'Api\AreasController@update');
     // 删除区域
     Route::delete('area/{area}/destroy', 'Api\AreasController@destroy');
-    // 区域列表 
-    Route::get('store/{store}/area', 'Api\AreasController@area');
     // 区域详情
     Route::get('area/{area}/index', 'Api\AreasController@index');
 

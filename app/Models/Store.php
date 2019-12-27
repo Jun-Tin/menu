@@ -58,6 +58,18 @@ class Store extends Model
         return $this->hasManyThrough(OrderDetail::class, Order::class, 'store_id', 'order_order', 'id', 'order');
     } 
 
+    /** 【 一对一门店区域链接关联关系 】 */
+    public function area()
+    {
+        return $this->hasOne(StoreArea::class, 'store_id', 'id');
+    }
+
+    /** 【 一对多门店区域关联关系 】 */
+    public function areas(){
+        return $this->hasMany(Area::class);
+    }
+    
+
     /** 【 周数统计 】 */
     public function get_week($year) {
         $year_start = $year . "-01-01";

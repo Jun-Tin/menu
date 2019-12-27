@@ -1,7 +1,9 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Store, Tag, Area};
+use App\Models\{Store, Tag, Area, StoreArea};
+use Illuminate\Support\Facades\{Auth, Storage, File, Crypt, Redis};
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class StoreObserver
 {
@@ -85,7 +87,7 @@ class StoreObserver
 		];
 
 		foreach ($area as $key => $value) {
-			Area::create([
+			Area::updateOrCreate([
 				'store_id' => $value['store_id'],
 				'name' => $value['name'],
 				'section_left' => $value['section_left'],
@@ -95,5 +97,36 @@ class StoreObserver
 				'show' => $value['show']
 			]);
 		}
+
+		$dir = public_path('images/qrcodes/'. $store->id. '/screen/');
+        if (!is_dir($dir)) {
+            File::makeDirectory($dir, 0777, true);
+        }
+
+        $screen = 'screen.png';
+		$screen_code = substr(Crypt::encryptString($store->name. '_screen_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+        // 判断图片是否存在
+        if (file_exists($dir. '/'. $screen)) {
+            unlink($dir. '/'. $screen);
+        }
+        // 保存二维码
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_SCREEN'). $store->id. '/screen/'. $screen_code, $dir. '/'. $screen);
+        // 设置redis缓存
+    	Redis::set($store->name. '_screen_'. $store->id. '_'. $store->id, $screen_code);
+        
+        $line = 'line.png';
+        if (file_exists($dir. '/'. $line)) {
+            unlink($dir. '/'. $line);
+        }
+		$line_code = substr(Crypt::encryptString($store->name. '_line_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+       	QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_LINE'). $store->id. '/line/'.  $line_code, $dir. '/'. $line);
+    	Redis::set($store->name. '_line_'. $store->id. '_'. $store->id, $line_code);
+
+        StoreArea::updateOrCreate([
+        	'store_id' => $store->id,
+        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $screen_code,
+        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $screen,
+        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $line,
+        ]);
 	}
 } 

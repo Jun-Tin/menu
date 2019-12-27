@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Store, User, MenuTag, Bill, Period};
+use App\Models\{Store, User, MenuTag, Bill, Period, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource};
 use Carbon\Carbon;
 
 class StoresController extends Controller
@@ -36,7 +36,6 @@ class StoresController extends Controller
         // 先给定默认值，后期做修改（删除）
         $store->clean = 1;
         $store->settle = 1;
-
         $store->save();
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
@@ -78,6 +77,44 @@ class StoresController extends Controller
         $store->delete();
 
         return response()->json(['message' => '删除成功！', 'status' => 200]);
+    }
+
+    /** 【 门店区域列表 】 */
+    public function area(Request $request, Store $store)
+    {
+        return (AreaResource::collection($store->areas))->additional(['area' => $store->area, 'status' => 200]); 
+    } 
+
+    /** 【 刷新门店二维码 -- 排队/大屏幕 】 */ 
+    public function refresh(Request $request, Store $store, Place $place)
+    {
+        switch ($request->category) {
+            case 'screen':
+                $data = [
+                    'type' => 'store',
+                    'name' => $store->name.'_screen_',
+                    'store_id' => $store->id,
+                    'category' => 'screen',
+                ];
+                $result = $place->updateQrcode($data,$store->id);
+                $store->area->update([
+                    'screen_qrcode' => $result['qrcode'],
+                    'screen_link' => $result['link']
+                ]);
+                break;
+            case 'line':
+                $data = [
+                    'type' => 'store',
+                    'name' => $store->name.'_line_',
+                    'store_id' => $store->id,
+                    'category' => 'line',
+                ];
+                $result = $place->updateQrcode($data,$store->id);
+                $store->area->update(['link_qrcode' => $result['qrcode']]);
+                break;
+        }
+
+        return response()->json(['message' => '刷新成功！', 'status' => 200]);
     }
 
     /** 【 激活门店 】 */

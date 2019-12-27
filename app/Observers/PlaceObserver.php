@@ -27,7 +27,7 @@ class PlaceObserver
 	        // 保存在数据库
 	        $image = Image::create([
 	            'user_id' => auth()->user()->id,
-	            'type' => 'qrcodes/'.$place->store_id,
+	            'type' => 'qrcodes/'.$place->store_id.'/place',
 	            'path' => $url,
 	        ]);
 

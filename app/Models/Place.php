@@ -64,6 +64,37 @@ class Place extends Model
                 QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
+            case 'store':
+                $dir = public_path('images/qrcodes/'. $data['store_id']. '/screen/');
+                if (!is_dir($dir)) {
+                    File::makeDirectory($dir, 0777, true);
+                }
+                switch ($data['category']) {
+                    case 'screen':
+                        $encrypted = substr(Crypt::encryptString($data['name']. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
+                        $screen = 'screen.png';
+                        // 判断图片是否存在
+                        if (file_exists($dir. '/'. $screen)) {
+                            unlink($dir. '/'. $screen);
+                        }
+                        // 保存二维码
+                        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted, $dir. '/'. $screen);
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $screen;
+                        $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted;
+                        break;
+                    case 'line':
+                        $encrypted = substr(Crypt::encryptString($data['name']. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
+                        $line = 'line.png';
+                        if (file_exists($dir. '/'. $line)) {
+                            unlink($dir. '/'. $line);
+                        }
+                        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_LINE'). $data['store_id']. '/line/'. $encrypted, $dir. '/'. $line);
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $line;
+                        $link = '';
+                        break;
+                }
+
+                break;
             default :
                 $qrcode = '';
                 $link = '';

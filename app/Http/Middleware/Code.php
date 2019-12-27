@@ -17,7 +17,7 @@ class Code
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($request->header('placeid') || $request->header('userid') && $request->header('code')) {
+        if ($request->header('placeid') || $request->header('userid') || $request->header('storeid') || $request->header('category') && $request->header('code')) {
             if ($request->header('placeid')) {
                 // 获取座位
                 $place = Place::find($request->header('placeid'));
@@ -32,6 +32,21 @@ class Code
                 $name = $user->account;
                 $id = $user->id;
                 $store_id = $user->store_id;
+            }
+
+            if ($request->header('storeid') && $request->header('category')) {
+                // 获取门店
+                $store = Store::find($request->header('storeid'));
+                switch ($request->header('category')) {
+                    case 'screen':
+                        $name = $store->name.'_screen_';
+                        break;
+                    case 'line':
+                        $name = $store->name.'_line_';
+                        break;
+                }
+                $id = $store->id;
+                $store_id = $store->id;
             }
             // 执行动作，判断该值是否存在redis数组
             if (substr(Redis::get($name.'_'.$store_id.'_'.$id), 0, 20) != $request->header('code')) {

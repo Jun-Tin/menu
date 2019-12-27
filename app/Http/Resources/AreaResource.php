@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Store;
 use Illuminate\Http\Resources\Json\Resource;
 
 class AreaResource extends Resource
