@@ -359,6 +359,9 @@ Route::group(['middleware' => 'Code'], function(){
     // 订单详情
     Route::put('order/{order}/customerIndex', 'Api\OrdersController@customerIndex'); 
 
+    /** 【 排队 】 */
+     
+
     /** 【 免登录验证 】 */ 
     // 检测用户正确性
     Route::patch('user/confirm', 'Api\UsersController@confirm');

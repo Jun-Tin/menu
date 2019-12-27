@@ -28,6 +28,7 @@ class AreasController extends Controller
     public function store(Request $request, Area $area)
     {
         $area->fill($request->all());
+        $area->section_number = $request->section_right - $request->section_left +1;
         $area->show = $request->section_left. '-'. $request->section_right;
         $area->save();
 
@@ -44,6 +45,7 @@ class AreasController extends Controller
     public function update(Request $request, Area $area)
     {
         $area->fill($request->all());
+        $area->section_number = $request->section_right - $request->section_left +1;
         $area->show = $request->section_left. '-'. $request->section_right;
         $area->update();
 
