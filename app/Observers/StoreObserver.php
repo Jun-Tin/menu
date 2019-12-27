@@ -82,7 +82,7 @@ class StoreObserver
 				'section_right' => NULL,
 				'section_number' => NULL,
 				'sign' => 'D',
-				'show' => '12-'
+				'show' => '13-'
 			]
 		];
 
