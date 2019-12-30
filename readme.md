@@ -73,7 +73,7 @@ php artisan passport:keys --force
 	order, 		payment_method 		1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他
 	user,		created_by			0：系统，{id}：用户id
 	bill, 		method 				1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他，7：coins
-	line,		status 				0：未开始，1：正在服务，2：结束服务，3：已作废，
+	line,		status 				0：未开始，1：正在服务，2：结束服务，3：已作废，4：切号
 
 
 <!-- 设置socket registerAddress -->

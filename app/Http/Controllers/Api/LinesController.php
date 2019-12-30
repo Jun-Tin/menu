@@ -19,7 +19,7 @@ class LinesController extends Controller
     {
         $user = auth()->user();
         $collection = $user->store->areas->map(function ($item){
-            $item->lines = $item->lines()->whereNotIn('status', [2, 3])->orderBy('status', 'desc')->get();
+            $item->lines = $item->lines()->where('status', '<>', 4)->orderBy('status', 'desc')->get();
             return $item;
         });
         return (new LineCollection($collection))->additional(['status' => 200]);
@@ -85,7 +85,7 @@ class LinesController extends Controller
     {
         $store = Store::find($request->header('storeid'));
         $collection = $store->areas->map(function ($item){
-            $item->lines = $item->lines()->whereNotIn('status', [2, 3])->orderBy('status', 'desc')->get();
+            $item->lines = $item->lines()->where('status', '<>', 4)->orderBy('status', 'desc')->get();
             return $item;
         });
 
