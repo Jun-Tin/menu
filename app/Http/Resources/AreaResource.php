@@ -24,6 +24,8 @@ class AreaResource extends Resource
             'section_number' => $this->section_number,
             'sign' => $this->sign,
             'show' => $this->show,
+            'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
         ];
     }
 }

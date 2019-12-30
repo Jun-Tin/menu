@@ -57,7 +57,7 @@ class User extends Authenticatable
     /** 【 一对一门店关联关系 】 */ 
     public function store()
     {
-        return $this->hasOne(Store::class);
+        return $this->hasOne(Store::class, 'id', 'store_id');
     }
 
     /** 【 一对多标签关联关系 】 */

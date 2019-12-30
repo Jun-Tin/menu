@@ -308,6 +308,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('period/{period}/destroy', 'Api\PeriodController@destroy');
 
 
+    /** 【 排队 】 */
+    // 列表
+    Route::get('line/index', 'Api\LinesController@index');
+    // 修改状态值
+    Route::patch('line/{line}/update', 'Api\LinesController@update');
+
+
     /** 
      * 【 功能类接口 】
      */ 
@@ -360,7 +367,10 @@ Route::group(['middleware' => 'Code'], function(){
     Route::put('order/{order}/customerIndex', 'Api\OrdersController@customerIndex'); 
 
     /** 【 排队 】 */
-    Route::patch('line/store', 'Api\LinesController@store'); 
+    // 创建
+    Route::patch('line/store', 'Api\LinesController@store');
+    // 大屏幕列表
+    Route::get('line/screen', 'Api\LinesController@screen');
 
     /** 【 免登录验证 】 */ 
     // 检测用户正确性
