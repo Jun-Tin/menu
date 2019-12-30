@@ -97,10 +97,10 @@ class StoresController extends Controller
                     'category' => 'screen',
                 ];
                 $result = $place->updateQrcode($data,$store->id);
-                $store->area->update([
+                $update = [
                     'screen_qrcode' => $result['qrcode'],
                     'screen_link' => $result['link']
-                ]);
+                ];
                 break;
             case 'line':
                 $data = [
@@ -110,9 +110,11 @@ class StoresController extends Controller
                     'category' => 'line',
                 ];
                 $result = $place->updateQrcode($data,$store->id);
-                $store->area->update(['link_qrcode' => $result['qrcode']]);
+                $update = ['link_qrcode' => $result['qrcode']];
                 break;
+
         }
+        $store->area->update($update);
 
         return response()->json(['message' => '刷新成功！', 'status' => 200]);
     }

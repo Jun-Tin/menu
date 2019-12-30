@@ -38,11 +38,7 @@ class Place extends Model
         switch ($data['type']) {
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
-                // 判断图片是否存在
-                if (file_exists($dir. '/' .$filename)) {
-                    unlink($dir. '/' .$filename);
-                }
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted, $dir. '/'. $filename);
+                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted;
                 $qrcode = true;
                 $link = true;
                 break;
@@ -52,7 +48,6 @@ class Place extends Model
                     File::makeDirectory($dir, 0777, true);
                 }
                 $link = env('APP_STAFF').$id.'/'.$encrypted;
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'chef':
@@ -61,7 +56,6 @@ class Place extends Model
                     File::makeDirectory($dir, 0777, true);
                 }
                 $link = env('APP_CHEF').$id.'/'.$encrypted;
-                QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'store':
@@ -71,35 +65,24 @@ class Place extends Model
                 }
                 switch ($data['category']) {
                     case 'screen':
-                        $encrypted = substr(Crypt::encryptString($data['name']. '_'. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
-                        $screen = 'screen.png';
-                        // 判断图片是否存在
-                        if (file_exists($dir. '/'. $screen)) {
-                            unlink($dir. '/'. $screen);
-                        }
-                        // 保存二维码
-                        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted, $dir. '/'. $screen);
-                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $screen;
+                        $filename = 'screen.png';
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted;
                         break;
                     case 'line':
-                        $encrypted = substr(Crypt::encryptString($data['name']. '_'. $data['store_id']. '_'. $data['store_id']. '_code'), 0, 15);
-                        $line = 'line.png';
-                        if (file_exists($dir. '/'. $line)) {
-                            unlink($dir. '/'. $line);
-                        }
-                        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_LINE'). $data['store_id']. '/line/'. $encrypted, $dir. '/'. $line);
-                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $line;
-                        $link = '';
+                        $filename = 'line.png';
+                        $link = env('APP_LINE'). $data['store_id']. '/line/'. $encrypted;
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
                 }
-
-                break;
-            default :
-                $qrcode = '';
-                $link = '';
                 break;
         }
+        // 判断图片是否存在
+        if (file_exists($dir. '/' .$filename)) {
+            unlink($dir. '/' .$filename);
+        }
+        // 保存二维码
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
         // 设置redis缓存
         Redis::set($data['name'].'_'.$data['store_id'].'_'.$id, $encrypted);
         return [
