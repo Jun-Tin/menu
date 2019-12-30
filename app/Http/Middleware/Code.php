@@ -48,6 +48,7 @@ class Code
                 $id = $store->id;
                 $store_id = $store->id;
             }
+            dd(Redis::get('海底捞_line_9_9'), 0, 20));
             // 执行动作，判断该值是否存在redis数组
             if (substr(Redis::get($name.'_'.$store_id.'_'.$id), 0, 20) != $request->header('code')) {
                 return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
