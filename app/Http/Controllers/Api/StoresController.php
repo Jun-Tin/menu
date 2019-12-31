@@ -114,7 +114,6 @@ class StoresController extends Controller
                 break;
 
         }
-        dd($update);
         $store->area->update($update);
 
         return response()->json(['message' => '刷新成功！', 'status' => 200]);
