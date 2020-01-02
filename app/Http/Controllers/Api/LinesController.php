@@ -108,7 +108,7 @@ class LinesController extends Controller
     {
         $store = Store::find($request->header('storeid'));
         $collection = $store->areas->map(function ($item){
-            $item->lines = $item->lines()->where('status', '<>', 2)->get();
+            $item->lines = $item->lines()->where('status', '<>', 2)->orderBy('status' , 'asc')->get();
             return $item;
         });
 
