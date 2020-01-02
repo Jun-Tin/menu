@@ -66,8 +66,8 @@ class Place extends Model
                 switch ($data['category']) {
                     case 'screen':
                         $filename = 'screen.png';
-                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted;
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
                     case 'line':
                         $filename = 'line.png';

@@ -129,7 +129,7 @@ class StoresController extends Controller
             return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
         }
         $user->decrement('coins', $period->number);
-        if ($store->days == 0) {
+        if ($store->days == 0 && empty($store->actived_at)) {
             $days = $period->days+1;
             $store->increment('days', $days);
         } else {
