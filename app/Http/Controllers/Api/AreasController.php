@@ -48,10 +48,10 @@ class AreasController extends Controller
 
         foreach ($data as $key => $value) {
             Area::where('id', (int)$value['id'])->update([
-                'section_left' => (int)$value['left'],
-                'section_right' => (int)$value['right']?:NULL,
-                'section_number' => (int)$value['right']?(int)$value['right'] - (int)$value['left'] + 1:NULL,
-                'show' => (int)$value['right']?(int)$value['left']. '-'. (int)$value['right']:(int)$value['left']. '-',
+                'section_left' => (int)$value['section_left'],
+                'section_right' => (int)$value['section_right']?:NULL,
+                'section_number' => (int)$value['section_right']?(int)$value['section_right'] - (int)$value['section_left'] + 1:NULL,
+                'show' => (int)$value['section_right']?(int)$value['section_left']. '-'. (int)$value['section_right']:(int)$value['section_left']. '-',
             ]);
         }
 

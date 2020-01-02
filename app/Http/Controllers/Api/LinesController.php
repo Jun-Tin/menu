@@ -19,7 +19,7 @@ class LinesController extends Controller
     {
         $user = auth()->user();
         $collection = $user->store->areas->map(function ($item){
-            $item->lines = $item->lines()->where('status', '<>', 4)->get();
+            $item->lines = $item->lines()->where('status', '<>', 2)->get();
             return $item;
         });
         return (new LineCollection($collection))->additional(['status' => 200]);
@@ -72,7 +72,20 @@ class LinesController extends Controller
      */
     public function update(Request $request, Line $line)
     {
-        $line->fill($request->all());
+        switch ($request->category) {
+            case 'd':
+                // 将自身恢复成未叫号状态
+                $line->update(['status' => 0]);
+                // 找到上一位号码，改成正在叫号状态
+                $line = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'desc')->update(['status' => 1]);
+                break;
+            case 'u':
+                $line->status = 2;
+                break;
+            case 'c':
+                $line->status = 1;
+                break;
+        }
         $line->update();
 
         Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
@@ -85,7 +98,7 @@ class LinesController extends Controller
     {
         $store = Store::find($request->header('storeid'));
         $collection = $store->areas->map(function ($item){
-            $item->lines = $item->lines()->where('status', '<>', 4)->get();
+            $item->lines = $item->lines()->where('status', '<>', 2)->get();
             return $item;
         });
 
