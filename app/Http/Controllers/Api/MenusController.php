@@ -67,7 +67,7 @@ class MenusController extends Controller
         }
         $menu->update($request->all());
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '编辑成功！']);
     }
 
     /**
@@ -203,6 +203,6 @@ class MenusController extends Controller
         $menuTag = MenuTag::find($request->id);
         $menus = $menu::find($menuTag->menu_id)->menus($request->id)->get();
 
-        return (new StoreCollection($menus))->additional(['status' => 200, 'message' => '获取成功！']);
+        return (new StoreCollection($menus))->additional(['status' => 200]);
     }
 }

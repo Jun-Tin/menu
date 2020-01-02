@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Area;
+use App\Models\{Area, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
@@ -44,12 +44,20 @@ class AreasController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        $area->fill($request->all());
-        $area->section_number = $request->section_right - $request->section_left +1;
-        $area->show = $request->section_left. '-'. $request->section_right;
-        $area->update();
+        $data = json_decode($request->data, true);
 
-        return (new AreaResource($area))->additional(['status' => 200, 'message' => '修改成功！']);
+        foreach ($data as $key => $value) {
+            Area::where('id', (int)$value['id'])->update([
+                'section_left' => (int)$value['left'],
+                'section_right' => (int)$value['right']?:NULL,
+                'section_number' => (int)$value['right']?(int)$value['right'] - (int)$value['left'] + 1:NULL,
+                'show' => (int)$value['right']?(int)$value['left']. '-'. (int)$value['right']:(int)$value['left']. '-',
+            ]);
+        }
+
+        $areas = Store::find($request->id)->areas;
+
+        return (AreaResource::collection($areas))->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**

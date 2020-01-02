@@ -194,7 +194,7 @@ class StoresController extends Controller
     /** 【 员工列表 】 */
     public function users(Store $store)
     {
-        return UserResource::collection($store->users()->get())->additional(['status' => 200]);
+        return UserResource::collection($store->users()->where('post', 'waiter')->get())->additional(['status' => 200]);
     }
 
     /** 【 删除座位--整层 】 */

@@ -1,12 +1,46 @@
 <?php 
 namespace App\Observers;
 
-use App\Models\{Store, Tag, Area, StoreArea};
+use App\Models\{Store, Tag, Area, StoreArea, User};
 use Illuminate\Support\Facades\{Auth, Storage, File, Crypt, Redis};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class StoreObserver
 {
+	public function created(Store $store)
+	{
+		// 创建默认厨师账号
+		$user = User::create([
+			'name' => '后厨管理员',
+			'store_id' => $store->id,
+			'account' => str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT),
+			'gender' => 1,
+			'post' => 'chef',
+			'password' => bcrypt('secret'),
+			'pro_password' => 'secret',
+		]);
+
+		$encrypted = substr(Crypt::encryptString($user->account.'_'.$user->id.'_code'), 0, 15);
+        $filename = $user->account . '.png';
+        $dir = public_path('images/qrcodes/'.$store->id.'/user');
+        if (!is_dir($dir)) {
+            File::makeDirectory($dir, 0777, true);
+        }
+        $link = env('APP_CHEF').$user->id.'/'.$encrypted;
+        $qrcode = env('APP_URL').'/images/qrcodes/'. $store->id. '/user/'. $filename;
+        // 判断图片是否存在
+        if (file_exists($dir. '/' .$filename)) {
+            unlink($dir. '/' .$filename);
+        }
+        // 保存二维码
+        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
+        // 设置redis缓存
+        Redis::set($user->account.'_'.$store->id.'_'.$user->id, $encrypted);
+        $user->update([
+        	'qrcode' => $qrcode,
+			'link' => $link,
+        ]);
+	}
 	public function saved(Store $store)
 	{
 		//  分类

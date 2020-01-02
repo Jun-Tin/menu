@@ -244,7 +244,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     // 创建区域
     Route::post('area/store', 'Api\AreasController@store');
     // 修改区域
-    Route::patch('area/{area}/update', 'Api\AreasController@update');
+    Route::patch('area/{id}/update', 'Api\AreasController@update');
     // 删除区域
     Route::delete('area/{area}/destroy', 'Api\AreasController@destroy');
     // 区域详情
