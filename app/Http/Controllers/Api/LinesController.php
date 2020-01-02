@@ -112,6 +112,6 @@ class LinesController extends Controller
             return $item;
         });
 
-        return (new LineCollection($collection))->additional(['status' => 200]);
+        return (new LineCollection($collection))->additional(['qrcode' => $store->area, 'status' => 200]);
     } 
 }

@@ -14,6 +14,11 @@ class LineCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+        // dd($this);
         return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            // 'qrcode' => 
+        ];
     }
 }
