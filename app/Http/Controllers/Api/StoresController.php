@@ -200,7 +200,7 @@ class StoresController extends Controller
     /** 【 员工列表 -- 后厨 】 */
     public function chef(Store $store)
     {
-        return (new UserResource($store->users()->where('post', 'chef')->first())->additional(['status' => 200]);
+        return (new UserResource($store->users()->where('post', 'chef')->first()))->additional(['status' => 200]);
     }
 
     /** 【 删除座位--整层 】 */
