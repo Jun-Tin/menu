@@ -191,10 +191,16 @@ class StoresController extends Controller
         return (new PlaceCollection($store->places()->where('floor', 0)->get(), $param='retreat'))->additional(['status' => 200]);
     } 
 
-    /** 【 员工列表 】 */
+    /** 【 员工列表 -- 服务员 】 */
     public function users(Store $store)
     {
         return UserResource::collection($store->users()->where('post', 'waiter')->get())->additional(['status' => 200]);
+    }
+
+    /** 【 员工列表 -- 后厨 】 */
+    public function chef(Store $store)
+    {
+        return (new UserResource($store->users()->where('post', 'chef')->first())->additional(['status' => 200]);
     }
 
     /** 【 删除座位--整层 】 */

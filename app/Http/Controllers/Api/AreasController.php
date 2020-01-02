@@ -57,7 +57,7 @@ class AreasController extends Controller
 
         $areas = Store::find($request->id)->areas;
 
-        return (AreaResource::collection($areas))->additional(['status' => 200, 'message' => '修改成功！']);
+        return AreaResource::collection($areas)->additional(['status' => 200, 'message' => '修改成功！']);
     }
 
     /**

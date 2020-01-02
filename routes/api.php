@@ -109,8 +109,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/scrPlaces/{number}', 'Api\StoresController@scrPlaces');
     // 门店座位列表--退菜
     Route::get('store/{store}/retreatPlaces', 'Api\StoresController@retreatPlaces');
-    // 门店员工列表
+    // 门店员工列表 -- 服务员
     Route::get('store/{store}/users', 'Api\StoresController@users');
+    // 门店员工列表 -- 后厨
+    Route::get('store/{store}/chef', 'Api\StoresController@chef');
     // 删除座位--整层
     Route::delete('store/{store}/delete/{floor}', 'Api\StoresController@delete');
     // 售罄菜品列表
