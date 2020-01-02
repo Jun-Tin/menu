@@ -74,19 +74,29 @@ class LinesController extends Controller
     {
         switch ($request->category) {
             case 'd':
+                // 找到上一位号码，改成正在叫号状态
+                $upLine = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'desc')->first();
+                if (empty($upLine)) {
+                    return response()->json(['error' => ['message' => ['没有上一位号码！']], 'status' => 202]);
+                }
+                $upLine->update(['status' => 1]);
                 // 将自身恢复成未叫号状态
                 $line->update(['status' => 0]);
-                // 找到上一位号码，改成正在叫号状态
-                $line = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'desc')->update(['status' => 1]);
                 break;
             case 'u':
-                $line->status = 2;
+                // 找到下一位号码，改成正在叫号状态
+                $downLine = line::where('area_id', $line->area_id)->where('status', 0)->orderBy('id', 'asc')->first();
+                if (empty($downLine)) {
+                    return response()->json(['error' => ['message' => ['没有下一位号码！']], 'status' => 202]);
+                }
+                $downLine->update(['status' => 1]);
+                // 将自身修改成已叫号状态
+                $line->update(['status' => 2]);
                 break;
             case 'c':
-                $line->status = 1;
+                $line->update(['status' => 1]);
                 break;
         }
-        $line->update();
 
         Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
 
