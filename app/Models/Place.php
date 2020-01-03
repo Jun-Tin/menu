@@ -80,7 +80,6 @@ class Place extends Model
         if (file_exists($dir. '/' .$filename)) {
             unlink($dir. '/' .$filename);
         }
-        dd($data);
         // 保存二维码
         QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
         // 设置redis缓存
