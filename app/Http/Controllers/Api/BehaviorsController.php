@@ -67,7 +67,7 @@ class BehaviorsController extends Controller
                 if ($order->final_price - $behavior->order_detail->price == 0) {
                     $order->status = 3;
                     // 桌子恢复状态 -- 无人
-                    $behavior->order->place->update(['status' => 0]);
+                    $order->place->update(['status' => 0]);
                 }
 
                 $order->final_price = $order->final_price - $behavior->order_detail->price;
