@@ -74,6 +74,11 @@ class Place extends Model
                         $link = env('APP_LINE'). $data['store_id']. '/line/'. $encrypted;
                         $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
+                    case 'book':
+                        $filename = 'book.png';
+                        $link = env('APP_BOOK'). $data['store_id']. '/book/'. $encrypted;
+                        $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
+                        break;
                 }
                 break;
         }

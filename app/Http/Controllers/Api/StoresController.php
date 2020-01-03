@@ -112,6 +112,16 @@ class StoresController extends Controller
                 $result = $place->updateQrcode($data,$store->id);
                 $update = ['link_qrcode' => $result['qrcode']];
                 break;
+            case 'book':
+                $data = [
+                    'type' => 'store',
+                    'name' => $store->name.'_book',
+                    'store_id' => $store->id,
+                    'category' => 'book',
+                ];
+                $result = $place->updateQrcode($data,$store->id);
+                $update = ['book_qrcode' => $result['qrcode']];
+                break;
 
         }
         $store->area->update($update);
