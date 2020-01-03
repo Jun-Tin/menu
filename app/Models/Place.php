@@ -38,9 +38,9 @@ class Place extends Model
         switch ($data['type']) {
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
-                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted;
                 $qrcode = true;
                 $link = true;
+                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted;
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
