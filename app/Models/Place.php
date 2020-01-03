@@ -44,25 +44,16 @@ class Place extends Model
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
-                if (!is_dir($dir)) {
-                    File::makeDirectory($dir, 0777, true);
-                }
                 $link = env('APP_STAFF').$id.'/'.$encrypted;
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'chef':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
-                if (!is_dir($dir)) {
-                    File::makeDirectory($dir, 0777, true);
-                }
                 $link = env('APP_CHEF').$id.'/'.$encrypted;
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'store':
                 $dir = public_path('images/qrcodes/'. $data['store_id']. '/screen/');
-                if (!is_dir($dir)) {
-                    File::makeDirectory($dir, 0777, true);
-                }
                 switch ($data['category']) {
                     case 'screen':
                         $filename = 'screen.png';
@@ -81,6 +72,9 @@ class Place extends Model
                         break;
                 }
                 break;
+        }
+        if (!is_dir($dir)) {
+            File::makeDirectory($dir, 0777, true);
         }
         // 判断图片是否存在
         if (file_exists($dir. '/' .$filename)) {
