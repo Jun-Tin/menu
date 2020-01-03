@@ -18,8 +18,8 @@ class LinesController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $collection = $user->store->areas->map(function ($item){
-            $item->lines = $item->lines()->where('status', '<>', 2)->get();
+        $collection = $user->store->areas->map(function ($item) use ($user){
+            $item->lines = $item->lines()->where('store_id', $user->store_id)->where('status', '<>', 2)->get();
             return $item;
         });
         return (new LineCollection($collection))->additional(['status' => 200]);
@@ -107,8 +107,8 @@ class LinesController extends Controller
     public function screen(Request $request, Store $store)
     {
         $store = Store::find($request->header('storeid'));
-        $collection = $store->areas->map(function ($item){
-            $item->lines = $item->lines()->where('status', '<>', 2)->orderBy('status' , 'asc')->get();
+        $collection = $store->areas->map(function ($item) use ($store){
+            $item->lines = $item->lines()->where('store_id', $store->id)->where('status', '<>', 2)->orderBy('status' , 'asc')->get();
             return $item;
         });
 
