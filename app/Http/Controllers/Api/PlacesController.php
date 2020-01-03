@@ -72,11 +72,6 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
-        $path = $place->image->path;
-        $str = substr($path, strripos($path, "images"));
-        if (file_exists($str)) {
-            unlink($str);
-        }
         $place->fill($request->all());
         $place->update();
         $data = array(
