@@ -40,15 +40,14 @@ class StoreObserver
         	'qrcode' => $qrcode,
 			'link' => $link,
         ]);
-	}
-	public function saved(Store $store)
-	{
+	// }
+	// public function saved(Store $store)
+	// {
 		//  分类
 		$class = array('推荐', '前菜', '主食', '酒水/饮料');
 		
 		// 插入默认值
 		foreach ($class as $key => $value) {
-			// 获取软删除与正常一起的记录
 			Tag::updateOrCreate([
 				'pid' => 0,
 				'store_id' => $store->id,
