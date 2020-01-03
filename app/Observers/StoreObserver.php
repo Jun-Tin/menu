@@ -136,30 +136,43 @@ class StoreObserver
             File::makeDirectory($dir, 0777, true);
         }
 
-        $screen = 'screen.png';
-		$screen_code = substr(Crypt::encryptString($store->name. '_screen_'. $store->id. '_'. $store->id. '_code'), 0, 15);
-        // 判断图片是否存在
-        if (file_exists($dir. '/'. $screen)) {
-            unlink($dir. '/'. $screen);
+        $data = [
+        	[
+        		'filename' => 'screen.png',
+        		'type' => 'screen',
+        		'link' => env('APP_SCREEN')
+        	],
+        	[
+        		'filename' => 'line.png',
+        		'type' => 'line',
+        		'link' => env('APP_LINE')
+        	],
+        	[
+        		'filename' => 'book.png',
+        		'type' => 'book',
+        		'link' => env('APP_BOOK')
+        	]
+        ];
+
+        for ($i=0; $i < count($data); $i++) { 
+        	$code[$i] = substr(Crypt::encryptString($store->name. '_'.$data[$i]['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+        	// 判断图片是否存在
+	        if (file_exists($dir. '/'. $data[$i]['filename'])) {
+	            unlink($dir. '/'. $data[$i]['filename']);
+	        }
+	        // 保存二维码
+	        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($data[$i]['link']. $store->id. '/screen/'. $code[$i], $dir. '/'. $data[$i]['filename']);
+	        // 设置redis缓存
+	    	Redis::set($store->name. '_'.$data[$i]['type'].'_'. $store->id. '_'. $store->id, $code[$i]);
+
         }
-        // 保存二维码
-        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_SCREEN'). $store->id. '/screen/'. $screen_code, $dir. '/'. $screen);
-        // 设置redis缓存
-    	Redis::set($store->name. '_screen_'. $store->id. '_'. $store->id, $screen_code);
-        
-        $line = 'line.png';
-        if (file_exists($dir. '/'. $line)) {
-            unlink($dir. '/'. $line);
-        }
-		$line_code = substr(Crypt::encryptString($store->name. '_line_'. $store->id. '_'. $store->id. '_code'), 0, 15);
-       	QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_LINE'). $store->id. '/line/'.  $line_code, $dir. '/'. $line);
-    	Redis::set($store->name. '_line_'. $store->id. '_'. $store->id, $line_code);
 
         StoreArea::updateOrCreate([
         	'store_id' => $store->id,
-        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $screen_code,
-        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $screen,
-        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $line,
+        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0],
+        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[0]['filename'],
+        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[1]['filename'],
+        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
         ]);
 	}
 } 
