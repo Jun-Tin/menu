@@ -84,6 +84,7 @@ class Place extends Model
         QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($link, $dir. '/'. $filename);
         // 设置redis缓存
         Redis::set($data['name'].'_'.$data['store_id'].'_'.$id, $encrypted);
+        dd($data);
         return [
             'qrcode' => $qrcode,
             'link' => $link,
