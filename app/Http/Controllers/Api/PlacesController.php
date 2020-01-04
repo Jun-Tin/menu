@@ -48,10 +48,10 @@ class PlacesController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
-        $result = $place->updateQrcode($data, $place->id);
+        $result = $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         if ($result) {
-            $place->image->update(['path' => $result['link']]);
+            $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']]);
         }
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
@@ -93,8 +93,9 @@ class PlacesController extends Controller
         );
         $result = $place->updateQrcode($data,$place->id);
 
+
         if ($result) {
-            $place->image->update(['path' => $result['link']]);
+            $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
             return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
         }
     }
