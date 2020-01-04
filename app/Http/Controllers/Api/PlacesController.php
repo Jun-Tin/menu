@@ -87,7 +87,11 @@ class PlacesController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
-        
+        $path = $place->image->path;
+        $str = substr($path, strripos($path, "images"));
+        if (file_exists($str)) {
+            unlink($str);
+        }
         $place->fill($request->all());
         $place->update();
         $data = array(
