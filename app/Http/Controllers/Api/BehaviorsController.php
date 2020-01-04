@@ -70,7 +70,24 @@ class BehaviorsController extends Controller
                     $order->place->update(['status' => 0]);
                 }
 
-                $order->final_price = $order->final_price - $behavior->order_detail->price;
+                // 判断是否属于套餐内的单品
+                if ($behavior->order_detail->pid) {
+                    $collection = OrderDetail::where('pid', $behavior->order_detail->pid)->select('status')->get()->map(function ($item){
+                        return $item->status;
+                    })->flatten();
+
+                    $status = $collection->every(function ($value, $key) {
+                        return $value = 5;
+                    });
+                    if ($status) {
+                        // 修改套餐状态
+                        OrderDetail::where('id', $behavior->order_detail->pid)->update(['status' => 5]);
+                    }
+
+                    $order->final_price = $order->final_price - OrderDetail::where('pid', $behavior->order_detail->pid)->value('price');
+                } else {
+                    $order->final_price = $order->final_price - $behavior->order_detail->price;
+                }
                 $order->final_number = $order->final_number - 1;
                 $order->save();
 
