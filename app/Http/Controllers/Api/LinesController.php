@@ -19,7 +19,7 @@ class LinesController extends Controller
     {
         $user = auth()->user();
         $collection = $user->store->areas->map(function ($item) use ($user){
-            $item->lines = $item->lines()->where('store_id', $user->store_id)->where('status', '<>', 2)->get();
+            $item->lines = $item->lines()->where('store_id', $user->store_id)->where('status', '<>', 2)->orderBy('status' , 'ASC')->get();
             return $item;
         });
         return (new LineCollection($collection))->additional(['status' => 200]);
