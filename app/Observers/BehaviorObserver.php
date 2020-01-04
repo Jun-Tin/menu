@@ -12,6 +12,7 @@ class BehaviorObserver
 			// 上菜
 			case 'serving':
 				$order_detail = $behavior->order_detail;
+				dd($order_detail);
 				// 修改菜品状态
 				$order_detail->update(['status' => 4]);
 				// 判断是否属于套餐内的单品
@@ -28,6 +29,18 @@ class BehaviorObserver
 						// 修改套餐状态
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 4]);
 					}
+				}
+
+				// 检测订单菜品是否全部上完
+				$data = OrderDetail::where('order_order', $order_detail->order)->where('status', '<>', 5)->select('status')->get()->map(function ($item){
+					return $item->status;
+				})->flatten();
+				$all = $data->every(function ($value, $key) {
+				    return $value >= 4;
+				});
+				if ($all) {
+					// 修改订单状态为已上完
+					$order_detail->order->update(['status' => 4]);
 				}
 
 				$store_id = (User::find($behavior->user_id))->store_id;
