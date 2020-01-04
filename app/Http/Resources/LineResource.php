@@ -23,8 +23,8 @@ class LineResource extends Resource
             'name' => $this->name,
             'phone' => $this->phone,
             'status' => $this->status?:0,
-            'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
         ];
     }
 }

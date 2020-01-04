@@ -25,8 +25,8 @@ class PlaceResource extends Resource
                     'number' => $this->number,
                     'floor' => $this->floor,
                     'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
                     'order' => $this->order,
                 ];
                 break;
@@ -39,8 +39,8 @@ class PlaceResource extends Resource
                     'number' => $this->number,
                     'floor' => $this->floor,
                     'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
                 ];
                 break;
         }

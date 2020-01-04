@@ -29,8 +29,8 @@ class MenuResource extends Resource
                     'type' => $this->type,
                     'category' => $this->category,
                     'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
                     'class' => new MenuCollection($this->tags()->where('category', 'class')->get()),
                     'perfer' => new MenuCollection($this->tags()->where('category', 'perfer')->get()->map(function ($item, $key){
                         $item->category = new TagCollection(Tag::where('pid', $item->pivot->target_id)->get());
@@ -53,8 +53,8 @@ class MenuResource extends Resource
                     'type' => $this->type,
                     'category' => $this->category,
                     'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
                     'tags' => new MenuTagCollection($this->menuTag()->where('pid', 0)->get()),
                 ];
                 break;
@@ -71,8 +71,8 @@ class MenuResource extends Resource
                     'type' => $this->type,
                     'category' => $this->category,
                     'status' => $this->status,
-                    'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-                    'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+                    'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+                    'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
                     'tags' => TagResource::collection($this->tags()->wherePivot('pid', 0)->get()),
                 ];
                 break;

@@ -28,12 +28,12 @@ class UserResource extends Resource
             'gender' => $this->gender,
             'birthday' => $this->birthday,
             'post' => $this->post,
-            'entry_time' => $this->entry_time?date('Y-m-d',$this->entry_time):'',
+            'entry_time' => $this->entry_time?date('Y/m/d',$this->entry_time):'',
             'password' => $this->pro_password,
             'link' => $this->link,
             'qrcode' => $this->qrcode,
-            'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
         ];
     }
 }

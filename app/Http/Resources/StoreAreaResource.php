@@ -22,8 +22,8 @@ class StoreAreaResource extends Resource
             'line_qrcode' => $this->line_qrcode,
             'section_number' => $this->section_number,
             'book_qrcode' => $this->book_qrcode,
-            'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
         ];
     }
 }

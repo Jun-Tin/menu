@@ -27,8 +27,8 @@ class ShopcartResource extends Resource
             'price' => $this->price,
             'remark' => $this->remark,
             'sitter' => $this->sitter?:0,
-            'created_at' => $this->created_at?$this->created_at->format('Y-m-d H:i:s'):'',
-            'updated_at' => $this->updated_at?$this->updated_at->format('Y-m-d H:i:s'):'',
+            'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
+            'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
         ];
     }
 }
