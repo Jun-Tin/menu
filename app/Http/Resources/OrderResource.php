@@ -29,6 +29,7 @@ class OrderResource extends Resource
             'sitter' => $this->sitter,
             'status' => $this->status,
             'finish' => $this->finish,
+            'state' => $this->state,
             'package' => $this->package->map(function ($item){
                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                 $item->category = Menu::where('id', $item->menu_id)->value('category');
