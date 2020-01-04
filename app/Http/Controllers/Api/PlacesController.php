@@ -85,7 +85,8 @@ class PlacesController extends Controller
         ];
         $validator = $place->validatorPlaceName($arr, $place->id);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors(), 'status' => 401]);
+            // return response()->json(['error' => $validator->errors(), 'status' => 401]);
+            return response()->json(['error' => ['message' => $validator->errors()], 'status' => 401]);
         }
         $path = $place->image->path;
         $str = substr($path, strripos($path, "images"));
