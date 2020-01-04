@@ -36,6 +36,11 @@ class PlacesController extends Controller
      */
     public function update(Request $request, Place $place)
     {
+        $validator = $place->validatorPlaceName($data, $place->id);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
+        }
+        dd(123);
         $path = $place->image->path;
         $str = substr($path, strripos($path, "images"));
         if (file_exists($str)) {
@@ -44,10 +49,6 @@ class PlacesController extends Controller
         $data = $request->all();
         // 默认类型值
         $data['type'] = 'place';
-        $validator = $place->validatorPlaceName($data, $place->id);
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors(), 'status' => 401]);
-        }
         $result = $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         
