@@ -75,7 +75,7 @@ class LinesController extends Controller
         switch ($request->category) {
             case 'd':
                 // 找到上一位号码，改成正在叫号状态
-                $upLine = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'desc')->first();
+                $upLine = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'DESC')->first();
                 if (empty($upLine)) {
                     return response()->json(['error' => ['message' => ['没有上一位号码！']], 'status' => 202]);
                 }
@@ -85,7 +85,7 @@ class LinesController extends Controller
                 break;
             case 'u':
                 // 找到下一位号码，改成正在叫号状态
-                $downLine = line::where('area_id', $line->area_id)->where('status', 0)->orderBy('id', 'asc')->first();
+                $downLine = line::where('area_id', $line->area_id)->where('status', 0)->orderBy('id', 'ASC')->first();
                 if (empty($downLine)) {
                     return response()->json(['error' => ['message' => ['没有下一位号码！']], 'status' => 202]);
                 }
@@ -108,7 +108,7 @@ class LinesController extends Controller
     {
         $store = Store::find($request->header('storeid'));
         $collection = $store->areas->map(function ($item) use ($store){
-            $item->lines = $item->lines()->where('store_id', $store->id)->where('status', '<>', 2)->orderBy('status' , 'asc')->get();
+            $item->lines = $item->lines()->where('store_id', $store->id)->where('status', '<>', 2)->orderBy('status' , 'ASC')->get();
             return $item;
         });
 
