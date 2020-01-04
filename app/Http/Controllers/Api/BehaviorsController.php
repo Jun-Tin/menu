@@ -82,13 +82,16 @@ class BehaviorsController extends Controller
                     if ($status) {
                         // 修改套餐状态
                         OrderDetail::where('id', $behavior->order_detail->pid)->update(['status' => 5]);
+                        // 套餐数量 -1
+                        $order->final_number = $order->final_number - 1;
                     }
 
                     $order->final_price = $order->final_price - OrderDetail::where('pid', $behavior->order_detail->pid)->value('price');
                 } else {
                     $order->final_price = $order->final_price - $behavior->order_detail->price;
+                    $order->final_number = $order->final_number - 1;
                 }
-                $order->final_number = $order->final_number - 1;
+                
                 $order->save();
 
                 Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'retreat', 'message' => '退菜了！'), JSON_UNESCAPED_UNICODE));
