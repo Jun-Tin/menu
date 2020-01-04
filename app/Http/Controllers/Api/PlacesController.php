@@ -44,9 +44,15 @@ class PlacesController extends Controller
         $data = $request->all();
         // 默认类型值
         $data['type'] = 'place';
-        $place->updateQrcode($data,$place->id);
+        $validator = $place->validatorPlaceName($data, $place->id);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
+        }
+        $result = $place->updateQrcode($data, $place->id);
         $place->update($request->all());
-        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
+        if ($result) {
+            $place->image->update(['path' => $result['link']]);
+        }
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
     }
@@ -72,6 +78,11 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
+        $path = $place->image->path;
+        $str = substr($path, strripos($path, "images"));
+        if (file_exists($str)) {
+            unlink($str);
+        }
         $place->fill($request->all());
         $place->update();
         $data = array(
@@ -81,9 +92,9 @@ class PlacesController extends Controller
             'type' => 'place',
         );
         $result = $place->updateQrcode($data,$place->id);
-        $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
 
         if ($result) {
+            $place->image->update(['path' => $result['link']]);
             return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
         }
     }

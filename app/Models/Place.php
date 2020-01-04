@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\{Redis, Crypt, File};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -88,5 +90,21 @@ class Place extends Model
             'qrcode' => $qrcode,
             'link' => $link,
         ];
+    } 
+
+    /** 【 自定义验证规则 】 */
+    public  function validatorPlaceName($data, $id)
+    {
+        return Validator::make($data, [
+            'name' => [
+                'required',
+                Rule::unique('places')->ignore($id)->where(function ($query) use($data){
+                    $query->where('floor', $data['floor']);
+                })
+            ],
+        ], [
+            'name.required' => '座位名称不能为空',
+            'name.unique' => '座位名称已存在',
+        ]);
     } 
 }
