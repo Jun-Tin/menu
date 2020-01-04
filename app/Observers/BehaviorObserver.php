@@ -39,7 +39,7 @@ class BehaviorObserver
 				});
 				if ($all) {
 					// 修改订单状态为已上完
-					$order_detail->order->update(['status' => 4]);
+					$order_detail->order->update(['state' => 2]);
 				}
 
 				$store_id = (User::find($behavior->user_id))->store_id;
@@ -79,7 +79,7 @@ class BehaviorObserver
 				}
 				// 完成个数 == 最终个数
 				if ($order->finish_number == $order->final_number) {
-					$order->update(['status' => 1 ]);
+					$order->update(['state' => 1 ]);
 				} 
 
                 // 将原先撤销的记录删除
