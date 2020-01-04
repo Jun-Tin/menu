@@ -6,7 +6,7 @@ use App\Models\{Store, User, MenuTag, Bill, Period, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource};
 use Carbon\Carbon;
 
 class StoresController extends Controller
@@ -84,6 +84,12 @@ class StoresController extends Controller
     {
         return (AreaResource::collection($store->areas))->additional(['area' => $store->area, 'status' => 200]); 
     } 
+
+    /** 【 门店预约二维码 】 */
+    public function bookQrcode(Request $request, Store $store)
+    {
+        return (new StoreAreaResource($store->area))->additional(['status' => 200]);
+    }
 
     /** 【 刷新门店二维码 -- 排队/大屏幕 】 */ 
     public function refresh(Request $request, Store $store, Place $place)

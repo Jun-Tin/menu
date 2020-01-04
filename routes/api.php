@@ -132,6 +132,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('store/{store}/area', 'Api\StoresController@area'); 
     // 刷新门店二维码 -- 排队/大屏幕
     Route::patch('store/{store}/refresh', 'Api\StoresController@refresh');
+    // 门店预约二维码
+    Route::get('store/{store}/bookQrcode', 'Api\StoresController@bookQrcode');
 
 
     /** 【 报表 】 */
