@@ -79,6 +79,11 @@ class PlacesController extends Controller
     /** 【 刷新座位二维码 】 */ 
     public function refresh(Request $request, Place $place)
     {
+        $data = $request->all();
+        $validator = $place->validatorPlaceName($data, $place->id);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors(), 'status' => 401]);
+        }
         $path = $place->image->path;
         $str = substr($path, strripos($path, "images"));
         if (file_exists($str)) {
