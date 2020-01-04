@@ -106,6 +106,7 @@ class BehaviorObserver
 						OrderDetail::where('id', $order_detail->pid)->update(['status' => 5]);
 					}
 				}
+				$order_detail->update(['status' => 5]);
 
 				$store_id = (User::find($behavior->user_id))->store_id;
 				$count = OrderDetail::where('store_id', $store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
