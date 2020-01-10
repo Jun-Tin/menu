@@ -44,6 +44,9 @@ class Code
                     case 'line':
                         $name = $store->name.'_line';
                         break;
+                    case 'book':
+                        $name = $store->name.'_book';
+                        break;
                 }
                 $id = $store->id;
                 $store_id = $store->id;

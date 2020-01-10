@@ -82,6 +82,7 @@ class LinesController extends Controller
                 $upLine->update(['status' => 1]);
                 // 将自身恢复成未叫号状态
                 $line->update(['status' => 0]);
+                $message = "切号成功！";
                 break;
             case 'u':
                 // 找到下一位号码，改成正在叫号状态
@@ -92,15 +93,17 @@ class LinesController extends Controller
                 $downLine->update(['status' => 1]);
                 // 将自身修改成已叫号状态
                 $line->update(['status' => 2]);
+                $message = "回号成功！";
                 break;
             case 'c':
                 $line->update(['status' => 1]);
+                $message = "呼叫成功！";
                 break;
         }
 
         Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
 
-        return (new LineResource($line))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new LineResource($line))->additional(['status' => 200, 'message' => $message]);
     }
 
     /** 【 大屏幕列表 】 */
