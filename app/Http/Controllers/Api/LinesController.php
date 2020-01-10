@@ -82,7 +82,7 @@ class LinesController extends Controller
                 $upLine->update(['status' => 1]);
                 // 将自身恢复成未叫号状态
                 $line->update(['status' => 0]);
-                $message = "回号成功！";
+                $message = "回退成功！";
                 break;
             case 'u':
                 // 找到下一位号码，改成正在叫号状态
