@@ -177,7 +177,7 @@ class StoreObserver
 		        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
 		        ]);
 				
-				break;
+				// break;
 
 			// case 1:
 			// 	dd($store);
