@@ -19,7 +19,7 @@ class BehaviorsController extends Controller
      */
     public function store(Request $request, Behavior $behavior)
     {
-        dd(Carbon::parse('2020-01-18')->dayOfWeek);
+        // dd(Carbon::parse('2020-01-18')->dayOfWeek);
         $user = auth()->user();
         // 避免重复创建
         // $first = $behavior->where('target_id', $request->target_id)->where('category', $request->category)->first();

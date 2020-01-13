@@ -30,19 +30,18 @@ class StoresController extends Controller
      */
     public function store(Request $request,Store $store)
     {
-        $user = auth()->user();
         $store->fill($request->all());
-        $store->user_id = $user->id;
-        switch ($request->category) {
-            case 0:
+        $store->user_id = auth()->id();
+        // switch ($request->category) {
+        //     case 0:
                 // 先给定默认值，后期做修改（删除）
                 $store->clean = 1;
                 $store->settle = 1;
-                break;
-            case 1:
-                
-                break;
-        }
+                // break;
+        //     case 1:
+        //         $store->open = $request->open;
+        //         break;
+        // }
         $store->save();
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);

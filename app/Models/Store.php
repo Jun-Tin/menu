@@ -68,6 +68,12 @@ class Store extends Model
     public function areas(){
         return $this->hasMany(Area::class);
     }
+
+    /** 【 一对多门店营业时间关联关系 】 */
+    public function offs()
+    {
+        return $this->hasMany(StoreOff::class);
+    } 
     
 
     /** 【 周数统计 】 */
