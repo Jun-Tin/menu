@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BehaviorResource;
 use GatewayWorker\Lib\Gateway;
+use Carbon\Carbon;
 
 class BehaviorsController extends Controller
 {
@@ -18,6 +19,7 @@ class BehaviorsController extends Controller
      */
     public function store(Request $request, Behavior $behavior)
     {
+        dd(Carbon::parse('2020-01-18')->dayOfWeek);
         $user = auth()->user();
         // 避免重复创建
         // $first = $behavior->where('target_id', $request->target_id)->where('category', $request->category)->first();
@@ -126,7 +128,7 @@ class BehaviorsController extends Controller
             // 结账
             case 'settle':
                 // 修改原订单状态 -- 已支付
-                $behavior->order->update(['status' => 2, 'payment_method' => $request->payment_method]);
+                $behavior->order->update(['status' => 2, 'payment_method' => $request->payment_method, 'paid_at' => Carbon::now()->toDateTimeString()]);
                 // 查询门店设置清理桌子状态的规则
                 $store = $user->store;
                 // 判断规则

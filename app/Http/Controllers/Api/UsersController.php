@@ -157,9 +157,9 @@ class UsersController extends Controller
             'gender' => $request->gender,
             'birthday' => $request->birthday,
             'entry_time' => strtotime($request->entry_time),
-            'post' => $request->post,
-            'password' => bcrypt($request->password),
-            'pro_password' => $request->password,
+            'post' => 'waiter',
+            'password' => $request->password?bcrypt($request->password):bcrypt('secret'),
+            'pro_password' => $request->password?:'secret',
             'store_id' => $request->store_id,
             'account' => $user->random(),
         ]);
@@ -167,7 +167,7 @@ class UsersController extends Controller
         // 创建登录二维码写入登录链接
         $data = [
             // 默认类型值
-            'type' => $request->post,
+            'type' => 'waiter',
             'store_id' => $request->store_id,
             'name' => $user->account,
             'id' => $user->id,

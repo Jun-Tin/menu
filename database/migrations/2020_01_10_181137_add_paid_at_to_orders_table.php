@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIntervalsTable extends Migration
+class AddPaidAtToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateIntervalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('intervals', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('unit')->nullable()->default(5)->commit('单位，默认分钟');           
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->timestamp('paid_at')->nullable()->after('payment_method')->commit('支付时间');
         });
     }
 
@@ -27,6 +25,8 @@ class CreateIntervalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('intervals');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('paid_at');
+        });
     }
 }

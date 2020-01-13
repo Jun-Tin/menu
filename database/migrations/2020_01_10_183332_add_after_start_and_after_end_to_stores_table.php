@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCategoryToStoresTable extends Migration
+class AddAfterStartAndAfterEndToStoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddCategoryToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('category')->nullable()->default(0)->after('actived_at')->commit('门店分类');
+            $table->string('after_end')->nullable()->after('start_time')->commit('午休结束时间');
+            $table->string('after_start')->nullable()->after('start_time')->commit('午休开始时间');
         });
     }
 
@@ -26,7 +27,8 @@ class AddCategoryToStoresTable extends Migration
     public function down()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn('category');
+            $table->dropColumn('after_end');
+            $table->dropColumn('after_start');
         });
     }
 }

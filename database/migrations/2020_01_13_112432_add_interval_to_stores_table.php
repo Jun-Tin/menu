@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCategoryToStoresTable extends Migration
+class AddIntervalToStoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddCategoryToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('category')->nullable()->default(0)->after('actived_at')->commit('门店分类');
+            $table->integer('condition')->nullable()->default(1)->after('category')->commit('是否为空才能预约：0：否，1：是');
+            $table->integer('interval')->nullable()->after('category')->commit('时间间隔');
         });
     }
 
@@ -26,7 +27,8 @@ class AddCategoryToStoresTable extends Migration
     public function down()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn('category');
+            $table->dropColumn('condition');
+            $table->dropColumn('interval');
         });
     }
 }

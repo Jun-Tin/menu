@@ -23,6 +23,8 @@ class StoreResource extends Resource
             'image' => new ImageResource($this->image),
             'phone' => $this->phone,
             'start_time' => $this->start_time,
+            'after_start' => $this->after_start,
+            'after_end' => $this->after_end,
             'end_time' => $this->end_time,
             'intro' => $this->intro,
             'set_time' => $this->set_time,

@@ -30,6 +30,7 @@ class OrderResource extends Resource
             'status' => $this->status,
             'finish' => $this->finish,
             'state' => $this->state,
+            'paid_at' => $this->$this->paid_at?$this->created_at->format('Y/m/d H:i:s'):'',
             'package' => $this->package->map(function ($item){
                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                 $item->category = Menu::where('id', $item->menu_id)->value('category');
