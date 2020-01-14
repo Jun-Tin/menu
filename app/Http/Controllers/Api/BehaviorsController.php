@@ -128,7 +128,7 @@ class BehaviorsController extends Controller
             // 结账
             case 'settle':
                 // 修改原订单状态 -- 已支付
-                $behavior->order->update(['status' => 2, 'payment_method' => $request->payment_method, 'paid_at' => Carbon::now()->toDateTimeString()]);
+                $behavior->order->update(['status' => 2, 'payment_method' => $request->payment_method, 'paid_at' => Carbon::now()]);
                 // 查询门店设置清理桌子状态的规则
                 $store = $user->store;
                 // 判断规则

@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Order extends Model
 {
     protected $fillable = [
         'order', 'store_id', 'place_id', 'price', 'final_price', 'number', 'final_number', 'finish_number', 'status', 'sitter', 'payment_method', 'finish', 'state', 'paid_at'
     ];
+
+    protected $dates = ['paid_at'];
 
     /** 【 一对多订单详情关联关系 】 */
     public function orders()

@@ -30,7 +30,6 @@ class OrderResource extends Resource
             'status' => $this->status,
             'finish' => $this->finish,
             'state' => $this->state,
-            'paid_at' => $this->paid_at?$this->paid_at->format('Y/m/d H:i:s'):'',
             'package' => $this->package->map(function ($item){
                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
                 $item->category = Menu::where('id', $item->menu_id)->value('category');
@@ -60,6 +59,7 @@ class OrderResource extends Resource
             }),
             'clean' => $this->clean,
             'place_name' => $this->place_name,
+            'paid_at' => $this->paid_at?$this->paid_at->format('Y/m/d H:i:s'):'',
             'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
         ];
