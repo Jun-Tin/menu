@@ -118,7 +118,7 @@ class PlacesController extends Controller
             File::makeDirectory($dir, 0777, true);
         }
         $zipper = new Zipper();
-        $arr = glob(public_path('images/qrcodes/'. $request->store_id . '/' . $request->floor));
+        $arr = glob(public_path('images/qrcodes/'. $request->store_id . '/place/' . $request->floor));
         $zipper->make($dir . '/' . $zipname)->add($arr)->close();
 
         if (file_exists($dir. '/' .$zipname)) {
