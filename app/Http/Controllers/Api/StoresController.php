@@ -30,8 +30,8 @@ class StoresController extends Controller
      */
     public function store(Request $request,Store $store)
     {
-        echo trans('message');
-        dd(123);
+        // echo trans('message');
+        // dd(123);
         $store->fill($request->all());
         $store->user_id = auth()->id();
         // switch ($request->category) {
@@ -46,8 +46,8 @@ class StoresController extends Controller
         // }
         $store->save();
 
-        // return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
-        return (new StoreResource($store))->additional(['status' => 200, 'message' => trans('store.message')]);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
+        // return (new StoreResource($store))->additional(['status' => 200, 'message' => trans('store.message')]);
     }
 
     /**
