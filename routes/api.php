@@ -342,7 +342,7 @@ Route::post('book/customerStore', 'Api\BooksController@customerStore');
 Route::get('book/{book}/customerIndex', 'Api\BooksController@customerIndex');
 
 /** 【 自定义验证类接口 】 */ 
-Route::group(['middleware' => 'Code'], function(){
+Route::group(['middleware' => ['Code', 'setLocale']], function(){
     // Route::get('store/index/{store}/{place}/{code}', 'Api\StoresController@index');
     // 
     /** 【 菜品列表--全部 】 */ 
