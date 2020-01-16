@@ -241,7 +241,7 @@ class UsersController extends Controller
         }
         $user->delete();
 
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
     /** 【 员工表现 】 */ 

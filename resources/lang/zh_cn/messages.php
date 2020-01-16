@@ -3,7 +3,7 @@
 return [
     'store' => '创建成功！',
     'update' => '更新成功！',
-    'destory' => '删除成功！',
+    'destroy' => '删除成功！',
     'refresh' => '刷新成功！',
     'upline' => '上线成功！',
     'do' => '操作成功！',

@@ -69,6 +69,6 @@ class AreasController extends Controller
     public function destroy(Area $area)
     {
         $area->delete();
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 }

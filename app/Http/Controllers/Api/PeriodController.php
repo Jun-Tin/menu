@@ -57,6 +57,6 @@ class PeriodController extends Controller
     {
         $period->delete();
 
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 }

@@ -234,7 +234,7 @@ class StoresController extends Controller
         $store->places()->where('id', $request->floor)->delete();
         $store->places()->where('floor', $request->floor)->delete();
 
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
     /** 【 预约列表 】 */

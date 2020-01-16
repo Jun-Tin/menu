@@ -86,7 +86,7 @@ class MenusController extends Controller
             $menu->delete();
         }
 
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
     /** 【 菜品售罄、恢复 -- 多选 】 */
@@ -167,7 +167,7 @@ class MenusController extends Controller
         MenuTag::whereIn('id', $ids)->delete();
         MenuTag::whereIn('pid', $ids)->delete();
     
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destory')]);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destroy')]);
     }
 
     /** 【 新套餐 -- 添加菜品 】 */
@@ -194,7 +194,7 @@ class MenusController extends Controller
         $ids = json_decode($request->ids, true);
         MenuTag::whereIn('id', $ids)->delete();
     
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destory')]);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destroy')]);
     }
 
     /** 【 新套餐 -- 获取菜品列表 】 */ 

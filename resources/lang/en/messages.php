@@ -3,7 +3,7 @@
 return [
     'store' => 'Created successfully！',
     'update' => 'Update successfully！',
-    'destory' => 'Deleted successfully！',
+    'destroy' => 'Deleted successfully！',
     'refresh' => 'Refreshed successfully！',
     'upline' => 'Online successfully！',
     'do' => 'Operation successful！',

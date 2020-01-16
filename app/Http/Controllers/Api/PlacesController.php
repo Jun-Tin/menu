@@ -73,7 +73,7 @@ class PlacesController extends Controller
         }
         $place->delete();
 
-        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
     /** 【 刷新座位二维码 】 */ 
