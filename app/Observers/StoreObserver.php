@@ -133,9 +133,9 @@ class StoreObserver
 					]);
 				}
 
-				$dir = public_path('images/qrcodes/'. $store->id. '/screen/');
-		        if (!is_dir($dir)) {
-		            File::makeDirectory($dir, 0777, true);
+				$screen_dir = public_path('images/qrcodes/'. $store->id. '/screen/');
+		        if (!is_dir($screen_dir)) {
+		            File::makeDirectory($screen_dir, 0777, true);
 		        }
 
 		        $data = [
@@ -157,15 +157,15 @@ class StoreObserver
 		        ];
 
 		        foreach ($data as $key => $value) {
-		        	$code = substr(Crypt::encryptString($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+		        	$code[$key] = substr(Crypt::encryptString($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
 		        	// 判断图片是否存在
-			        if (file_exists($dir. '/'. $value['filename'])) {
-			            unlink($dir. '/'. $value['filename']);
+			        if (file_exists($screen_dir. '/'. $value['filename'])) {
+			            unlink($screen_dir. '/'. $value['filename']);
 			        }
 			        // 保存二维码
-			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/screen/'. $code, $dir. '/'. $value['filename']);
+			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/screen/'. $code[$key], $screen_dir. '/'. $value['filename']);
 			        // 设置redis缓存
-			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code);
+			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code[$key]);
 		        }
 
 		        StoreArea::updateOrCreate([
