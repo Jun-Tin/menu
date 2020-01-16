@@ -29,7 +29,6 @@ class AreacodesController extends Controller
         // session()->put('locale', $request->locale);
         // 通过全局辅助函数...
 		session(['locale' => $request->locale]);
-        dd($request->session()->all());
 
         return response()->json(['status' => 200, 'message' => __('messages.set_success')]);
     } 
