@@ -48,6 +48,6 @@ class MessageCodesController extends Controller
                                             'expired_at' => $expiredAt->toDateTimeString()
                                 ], 
                                 'status' => 200 ,
-                                'message' => '发送成功！']);
+                                'message' => __('messages.send')]);
     }
 }

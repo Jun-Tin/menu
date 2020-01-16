@@ -16,7 +16,7 @@ class ImagesController extends Controller
         header('Content-type: application/json');
         
         if (!$request->type) {
-            return response()->json(['error' => ['message' => '图片类型不能为空'], 'status' => 201]);
+            return response()->json(['error' => ['message' => __('messages.picture_type')], 'status' => 201]);
         }
         
         // 文件是否上传成功
@@ -32,7 +32,7 @@ class ImagesController extends Controller
 
             $extArr = array('jpg','jpeg','png','gif');
             if(!in_array($ext,$extArr)){
-                return response()->json(['error' => ['message' => '文件格式不正确'], 'status' => 201]);
+                return response()->json(['error' => ['message' => __('messages.picture_format')], 'status' => 201]);
             }
 
             // 拼接文件名称
@@ -50,13 +50,13 @@ class ImagesController extends Controller
                 	'path' => $url,
                 ]);
 
-                return response()->json(['message' => '上传成功', 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
+                return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
             }else{
-                return response()->json(['error' => ['message' => '上传失败'], 'status' => 201]);
+                return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
             }
 
         }else{
-            return response()->json(['error' => ['message' => '上传失败'], 'status' => 201]);
+            return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
         }
     }
 
@@ -67,7 +67,7 @@ class ImagesController extends Controller
         header('Content-type: application/json');
         
         if (!$request->type) {
-            return response()->json(['error' => ['message' => '图片类型不能为空'], 'status' => 201]);
+            return response()->json(['error' => ['message' => __('messages.picture_type')], 'status' => 201]);
         }
 
         $filePath =[];  // 定义空数组用来存放图片路径
@@ -85,7 +85,7 @@ class ImagesController extends Controller
 
                 $extArr = array('jpg','jpeg','png','gif');
                 if(!in_array($ext,$extArr)){
-                    return response()->json(['error' => ['message' => '文件格式不正确'], 'status' => 201]);
+                    return response()->json(['error' => ['message' => __('messages.picture_format')], 'status' => 201]);
                 }
 
                 // 拼接文件名称
@@ -105,14 +105,14 @@ class ImagesController extends Controller
                     ]);
                     $data[] = $image->id;
                 }else{
-                    return response()->json(['error' => ['message' => '上传失败'], 'status' => 201]);
+                    return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
                 }
             }else{
-                return response()->json(['error' => ['message' => '上传失败'], 'status' => 201]);
+                return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
             }
         }
 
-        return response()->json(['message' => '上传成功', 'success' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
+        return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
     }
 
     /** [生成二维码] */
@@ -140,6 +140,6 @@ class ImagesController extends Controller
             'path' => $url,
         ]);
 
-        return response()->json(['message' => '上传成功', 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
+        return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
     }
 }

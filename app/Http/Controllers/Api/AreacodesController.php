@@ -18,4 +18,19 @@ class AreacodesController extends Controller
     {
         return (new AreacodeResource($areacode::where('show', 1)->orderBy('order_number', 'desc')->get()))->additional(['status' => 200]);
     }
+
+    /** 【 切换语言 】 */
+    public function changeLocale(Request $request)
+    {
+        if (!in_array($request->locale, ['en', 'zh_cn', 'zh_hk'])) {
+        	return response()->json(['error' => ['message' => __('messages.set_fail')], 'status' => 202]);
+        }
+        // 设置session值
+        // session()->put('locale', $request->locale);
+        // 通过全局辅助函数...
+		session(['locale' => $request->locale]);
+        dd($request->session()->all());
+
+        return response()->json(['status' => 200, 'message' => __('messages.set_success')]);
+    } 
 }

@@ -50,7 +50,7 @@ class OrdersController extends Controller
             'status' => 1,
         ]);
 
-        return response()->json(['status' => 200, 'message' => '修改成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 所有未完成订单 】 */

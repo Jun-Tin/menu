@@ -32,7 +32,7 @@ class AreasController extends Controller
         $area->show = $request->section_left. '-'. $request->section_right;
         $area->save();
 
-        return (new AreaResource($area))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new AreaResource($area))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -57,7 +57,7 @@ class AreasController extends Controller
 
         $areas = Store::find($request->id)->areas;
 
-        return AreaResource::collection($areas)->additional(['status' => 200, 'message' => '修改成功！']);
+        return AreaResource::collection($areas)->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -69,6 +69,6 @@ class AreasController extends Controller
     public function destroy(Area $area)
     {
         $area->delete();
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 }

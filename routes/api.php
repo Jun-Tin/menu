@@ -27,6 +27,8 @@ Route::post('user/login', 'Api\UsersController@login');
 Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
 /**【 获取区号 】*/ 
 Route::get('areacode', 'Api\AreacodesController@index');
+/**【 切换语言 】*/
+Route::get('changeLocale/{locale}','Api\AreacodesController@changeLocale')->middleware('setLocale');
 
 // paypal支付
 Route::get('paypal/pay', 'Api\PaypalsController@pay');
@@ -49,7 +51,7 @@ Route::post('socket/test', 'Api\SocketsController@test');
 
 
 /**【 验证类接口 】*/ 
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     /**【 个人信息 】*/ 
     Route::get('user/member', 'Api\UsersController@member');
     /**【 退出登录 】*/

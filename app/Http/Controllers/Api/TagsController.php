@@ -33,7 +33,7 @@ class TagsController extends Controller
         $tag->fill($request->all());
         $tag->save();
 
-        return (new TagResource($tag))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new TagResource($tag))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -47,7 +47,7 @@ class TagsController extends Controller
     {
         $tag->update($request->all());
 
-        return (new TagResource($tag))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new TagResource($tag))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -66,7 +66,7 @@ class TagsController extends Controller
             $tag::where('id', $value)->delete();
         }
 
-        return response()->json(['status' => 200, 'message' => '删除成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.destroy')]);
     }
 
     /** 【 菜品列表--标签 】 */ 

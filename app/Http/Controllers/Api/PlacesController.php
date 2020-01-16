@@ -24,7 +24,7 @@ class PlacesController extends Controller
         $place->status = 0;
         $place->save();
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -55,7 +55,7 @@ class PlacesController extends Controller
             $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
         }
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -73,7 +73,7 @@ class PlacesController extends Controller
         }
         $place->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 
     /** 【 刷新座位二维码 】 */ 
@@ -105,7 +105,7 @@ class PlacesController extends Controller
 
         if ($result) {
             $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
-            return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
+            return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.update')]);
         }
     }
 
@@ -120,13 +120,12 @@ class PlacesController extends Controller
         $zipper = new Zipper();
         $arr = glob(public_path('images/qrcodes/'. $request->store_id . '/place/' . $request->floor));
         $zipper->make($dir . '/' . $zipname)->add($arr)->close();
-
         if (file_exists($dir. '/' .$zipname)) {
             // return response()->json(['message' => '压缩成功！', 'status' => 200, 'url' => env('APP_URL').'/zips/' .$zipname]);
             return response()->download($dir . '/' . $zipname)->deleteFileAfterSend(true);
         }
         
-        return response()->json(['error' => ['message' => '压缩失败'], 'status' => 201]);
+        return response()->json(['error' => ['message' => __('messages.unzip_fail')], 'status' => 201]);
     }
 
     /** 【 创建楼层 】 */
@@ -136,7 +135,7 @@ class PlacesController extends Controller
         $place->floor = 0;
         $place->save();
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /** 【 修改楼层 】 */
@@ -144,7 +143,7 @@ class PlacesController extends Controller
     {
         $place->update($request->all());
 
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 购物车详情 】 */
@@ -184,7 +183,7 @@ class PlacesController extends Controller
     {
         $shopcarts = $place->shopcarts;
         if ($shopcarts->isEmpty()) {
-            return response()->json(['error' => ['message' => ['购物车为空！']], 'status' => 404]);
+            return response()->json(['error' => ['message' => [__('messages.shopcart')]], 'status' => 404]);
         }
 
         $total = $shopcarts->reduce(function ($sum, $value){
@@ -291,9 +290,9 @@ class PlacesController extends Controller
             'status' => 1,
         ]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => '做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => __('messages.cooking')), JSON_UNESCAPED_UNICODE));
 
-        return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
+        return response()->json(['id' => $order->id, 'status' => 200, 'message' => __('messages.order')]);
     } 
 
     /** 【 客户端--创建订单 】 */
@@ -301,7 +300,7 @@ class PlacesController extends Controller
     {
         $shopcarts = $place->shopcarts;
         if ($shopcarts->isEmpty()) {
-            return response()->json(['error' => ['message' => ['购物车为空！']], 'status' => 404]);
+            return response()->json(['error' => ['message' => [__('messages.shopcart')]], 'status' => 404]);
         }
 
         $total = $shopcarts->reduce(function ($sum, $value){
@@ -401,9 +400,9 @@ class PlacesController extends Controller
         // 修改座位状态
         $place->update(['status'=>1]);
 
-        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => '做饭了！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('chef_'.$place->store_id, json_encode(array('type' => 'cooking', 'message' => __('messages.cooking')), JSON_UNESCAPED_UNICODE));
 
-        return response()->json(['id' => $order->id, 'status' => 200, 'message' => '下单成功！']);
+        return response()->json(['id' => $order->id, 'status' => 200, 'message' => __('messages.order')]);
     } 
 
     /** 【 客户端--座位状态 】*/
@@ -428,6 +427,6 @@ class PlacesController extends Controller
         );
         $place->updateQrcode($data,$place->id);
         $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
-        return (new PlaceResource($place))->additional(['status' => 200, 'message' => '绑定成功！']);
+        return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.bind')]);
     }
 }

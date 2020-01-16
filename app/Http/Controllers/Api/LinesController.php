@@ -58,9 +58,9 @@ class LinesController extends Controller
         }
         $line->save();
 
-        Gateway::sendToGroup('waiter_'.$store->id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('waiter_'.$store->id, json_encode(array('type' => 'lining', 'message' => __('messages.queue')), JSON_UNESCAPED_UNICODE));
 
-        return (new LineResource($line))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new LineResource($line))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -77,31 +77,31 @@ class LinesController extends Controller
                 // 找到上一位号码，改成正在叫号状态
                 $upLine = line::where('area_id', $line->area_id)->where('status', 2)->orderBy('id', 'DESC')->first();
                 if (empty($upLine)) {
-                    return response()->json(['error' => ['message' => ['没有上一位号码！']], 'status' => 202]);
+                    return response()->json(['error' => ['message' => [__('messages.up')]], 'status' => 202]);
                 }
                 $upLine->update(['status' => 1]);
                 // 将自身恢复成未叫号状态
                 $line->update(['status' => 0]);
-                $message = "回退成功！";
+                $message = __('messages.rollback');
                 break;
             case 'u':
                 // 找到下一位号码，改成正在叫号状态
                 $downLine = line::where('area_id', $line->area_id)->where('status', 0)->orderBy('id', 'ASC')->first();
                 if (empty($downLine)) {
-                    return response()->json(['error' => ['message' => ['没有下一位号码！']], 'status' => 202]);
+                    return response()->json(['error' => ['message' => [__('messages.down')]], 'status' => 202]);
                 }
                 $downLine->update(['status' => 1]);
                 // 将自身修改成已叫号状态
                 $line->update(['status' => 2]);
-                $message = "切号成功！";
+                $message = __('messages.cut');
                 break;
             case 'c':
                 $line->update(['status' => 1]);
-                $message = "呼叫成功！";
+                $message = __('messages.call');
                 break;
         }
 
-        Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => __('messages.queue')), JSON_UNESCAPED_UNICODE));
 
         return (new LineResource($line))->additional(['status' => 200, 'message' => $message]);
     }

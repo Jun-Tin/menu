@@ -33,7 +33,7 @@ class BooksController extends Controller
         $book->date = strtotime($request->date);
         $book->save();
 
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new BookResource($book))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -49,7 +49,7 @@ class BooksController extends Controller
         $book->date = strtotime($request->date);
         $book->update();
 
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new BookResource($book))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 预约状态修改按钮 】 */ 
@@ -68,7 +68,7 @@ class BooksController extends Controller
                 $book->update(['status' => $status]);
                 break;
         }
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new BookResource($book))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -80,7 +80,7 @@ class BooksController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 
     /** 【 客户预约 -- 创建 】 */ 
@@ -90,7 +90,7 @@ class BooksController extends Controller
         $book->date = strtotime($request->date);
         $book->save();
 
-        return (new BookResource($book))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new BookResource($book))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /** 【 客户预约 -- 详情 】 */

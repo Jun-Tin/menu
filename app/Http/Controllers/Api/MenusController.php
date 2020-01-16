@@ -44,7 +44,7 @@ class MenusController extends Controller
             }
         }
         
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -67,7 +67,7 @@ class MenusController extends Controller
         }
         $menu->update($request->all());
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '编辑成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -86,7 +86,7 @@ class MenusController extends Controller
             $menu->delete();
         }
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 
     /** 【 菜品售罄、恢复 -- 多选 】 */
@@ -103,7 +103,7 @@ class MenusController extends Controller
                 $menu::whereIn('id', $ids)->update(['status' => 1]);
                 break;
         }
-        return response()->json(['message' => '修改成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.update'), 'status' => 200]);
     }
 
     /** 【 菜品售罄、恢复 -- 单选 】 */
@@ -121,13 +121,13 @@ class MenusController extends Controller
 
         switch ($user->post) {
             case 'waiter':
-                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
+                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => __('messages.menu_sale'), JSON_UNESCAPED_UNICODE)));
                 break;
             case 'chef':
-                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
+                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => __('messages.menu_sale'), JSON_UNESCAPED_UNICODE)));
                 break;
         }
-        return response()->json(['message' => '修改成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.update'), 'status' => 200]);
     }
 
     /** 【 新套餐 -- 添加标签 】 */
@@ -135,7 +135,7 @@ class MenusController extends Controller
     {
         $menu->tags()->wherePivot('pid', 0)->attach(0, ['pid' => 0, 'order_number' => 0]);
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '添加成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.add')]);
     } 
 
     /** 【 新套餐 -- 修改标签 】 */ 
@@ -143,7 +143,7 @@ class MenusController extends Controller
     {
         $menu->menuTag()->where('id', $request->tags_id)->update(['name' => $request->name]);
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 新套餐 -- 排序标签 】 */
@@ -156,7 +156,7 @@ class MenusController extends Controller
             MenuTag::where('id', $value['id'])->update(['order_number' => $value['order_number']]);
         }
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '排序成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.sort')]);
     }
 
     /** 【 新套餐 -- 删除标签 】 */
@@ -167,7 +167,7 @@ class MenusController extends Controller
         MenuTag::whereIn('id', $ids)->delete();
         MenuTag::whereIn('pid', $ids)->delete();
     
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destory')]);
     }
 
     /** 【 新套餐 -- 添加菜品 】 */
@@ -185,7 +185,7 @@ class MenusController extends Controller
             }
         }
 
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '保存成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 新套餐 -- 删除菜品 】 */
@@ -194,7 +194,7 @@ class MenusController extends Controller
         $ids = json_decode($request->ids, true);
         MenuTag::whereIn('id', $ids)->delete();
     
-        return (new MenuResource($menu))->additional(['status' => 200, 'message' => '删除成功！']);
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.destory')]);
     }
 
     /** 【 新套餐 -- 获取菜品列表 】 */ 

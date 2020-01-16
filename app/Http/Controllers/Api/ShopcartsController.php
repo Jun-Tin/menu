@@ -20,7 +20,7 @@ class ShopcartsController extends Controller
         $menu = Menu::find($request->menu_id);
 
         if (!$menu->status) {
-            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+            return response()->json(['message' => __('messages.sale_out'), 'status' => 200]);
         }
         switch ($menu->type) {
             case 'o':
@@ -45,7 +45,7 @@ class ShopcartsController extends Controller
         $shopcart->category = $menu->category;
         $shopcart->save();
 
-        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => __('messages.add')]);
     }
 
     /** 【 客户端--创建购物车 】 */ 
@@ -54,7 +54,7 @@ class ShopcartsController extends Controller
         $menu = Menu::find($request->menu_id);
 
         if (!$menu->status) {
-            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+            return response()->json(['message' => __('messages.sale_out'), 'status' => 200]);
         }
         switch ($menu->type) {
             case 'o':
@@ -79,7 +79,7 @@ class ShopcartsController extends Controller
         $shopcart->category = $menu->category;     
         $shopcart->save();
 
-        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => __('messages.add')]);
     }
 
     /**
@@ -111,7 +111,7 @@ class ShopcartsController extends Controller
                 break;
         }
 
-        return response()->json(['status' => 200, 'message' => '修改成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 客户端--购物车增加、减少商品】 */ 
@@ -137,7 +137,7 @@ class ShopcartsController extends Controller
                 break;
         }
 
-        return response()->json(['status' => 200, 'message' => '修改成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 创建购物车（加入商品 -- 直接点击‘+’添加） 】 */ 
@@ -146,7 +146,7 @@ class ShopcartsController extends Controller
         $menu = Menu::find($request->menu_id);
 
         if (!$menu->status) {
-            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+            return response()->json(['message' => __('messages.sale_out'), 'status' => 200]);
         }
         switch ($menu->type) {
             case 'o':
@@ -175,7 +175,7 @@ class ShopcartsController extends Controller
         $shopcart->remark = '[""]';
         $shopcart->save();
 
-        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => __('messages.add')]);
     }
 
     /** 【 客户端--创建购物车（加入商品 -- 直接点击‘+’添加） 】 */ 
@@ -184,7 +184,7 @@ class ShopcartsController extends Controller
         $menu = Menu::find($request->menu_id);
 
         if (!$menu->status) {
-            return response()->json(['message' => '菜品已售罄！', 'status' => 200]);
+            return response()->json(['message' => __('messages.sale_out'), 'status' => 200]);
         }
         switch ($menu->type) {
             case 'o':
@@ -213,7 +213,7 @@ class ShopcartsController extends Controller
         $shopcart->remark = '[""]';
         $shopcart->save();
 
-        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => '加入成功！']);
+        return (new ShopcartResource($shopcart))->additional(['status' => 200, 'message' => __('messages.add')]);
     }
 
     /** 【 创建购物车（减少商品 -- 直接点击‘-’减少） 】 */ 
@@ -223,7 +223,7 @@ class ShopcartsController extends Controller
         Shopcart::where('id', $id)->delete();
         $shopcart = Shopcart::where('place_id', $request->place_id)->get();
 
-        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => '减少成功！']);
+        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => __('messages.reduce')]);
     }
 
     /** 【 客户端--创建购物车（减少商品 -- 直接点击‘-’减少） 】 */ 
@@ -233,6 +233,6 @@ class ShopcartsController extends Controller
         Shopcart::where('id', $id)->delete();
         $shopcart = Shopcart::where('place_id', $request->place_id)->get();
 
-        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => '减少成功！']);
+        return (ShopcartResource::collection($shopcart))->additional(['status' => 200, 'message' => __('messages.reduce')]);
     }
 }

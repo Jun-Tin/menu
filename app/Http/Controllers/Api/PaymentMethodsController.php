@@ -30,7 +30,7 @@ class PaymentMethodsController extends Controller
         $paymentmethod->fill($request->all());
         $paymentmethod->save();
 
-        return (new PaymentMethodResource($paymentmethod))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new PaymentMethodResource($paymentmethod))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
 
     /**
@@ -44,7 +44,7 @@ class PaymentMethodsController extends Controller
     {
         $paymentmethod->update($request->all());
 
-        return (new PaymentMethodResource($paymentmethod))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new PaymentMethodResource($paymentmethod))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -57,6 +57,6 @@ class PaymentMethodsController extends Controller
     {
         $paymentmethod->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 }

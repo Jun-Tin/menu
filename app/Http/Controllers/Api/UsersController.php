@@ -22,7 +22,7 @@ class UsersController extends Controller
         }
 
         if (! $user) {
-            return response()->json(['error' => ['message' => ['用户不存在！']], 'status' => 401]);
+            return response()->json(['error' => ['message' => [__('messages.user_error')]], 'status' => 401]);
         }
 
         if ($user->post == 'boss') {
@@ -45,11 +45,11 @@ class UsersController extends Controller
                 DB::table('oauth_access_tokens')->where('user_id', $user->id)->where('name', 'MyApp')->delete();
                 // 获取新的token
                 $success['token'] =  $user->createToken('MyApp', [$scopes])->accessToken;
-                return response()->json(['success' => $success, 'status' => 200, 'message' => '登录成功！']);
+                return response()->json(['success' => $success, 'status' => 200, 'message' => __('messages.login')]);
             }
-            return response()->json(['error' => ['message' => ['没有权限登录！']], 'status' => 203]);
+            return response()->json(['error' => ['message' => [__('messages.permission')]], 'status' => 203]);
         }
-        return response()->json(['error' => ['message' => ['密码错误！']], 'status' => 401]);
+        return response()->json(['error' => ['message' => [__('messages.password')]], 'status' => 401]);
     }
  
     /**【 注册 】*/
@@ -58,11 +58,11 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+            return response()->json(['error' => ['message' => [__('messages.code_expired')]], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+            return response()->json(['error' => ['message' => [__('messages.code_fail')]], 'status' => 402]);
         }
         
         $data = $request->all();
@@ -92,7 +92,7 @@ class UsersController extends Controller
                                     'token' => $user->createToken('MyApp', ['boss'])->accessToken
                                 ], 
                                 'status' => 200 ,
-                                'message' => '注册成功！' ]);
+                                'message' => __('messages.register')]);
     }
 
     /**【 个人信息 】*/
@@ -109,11 +109,11 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+            return response()->json(['error' => ['message' => [__('messages.code_expired')]], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+            return response()->json(['error' => ['message' => [__('messages.code_fail')]], 'status' => 402]);
         }
 
         $validator = $user->validatorUserRegister($request->all(), 'password');
@@ -135,7 +135,7 @@ class UsersController extends Controller
                                     'name' => $user->name,
                                 ], 
                                 'status' => 200, 
-                                'message' => '密码修改成功！']);
+                                'message' => __('messages.password_reset')]);
     }
 
     /**【 修改密码 / 手机号码 】*/
@@ -176,7 +176,7 @@ class UsersController extends Controller
         // 更新数据
         $user->update(['qrcode' => $result['qrcode'], 'link' => $result['link']]);
         
-        return (new UserResource($user))->additional(['status' => 200,  'message' => '创建成功！']);
+        return (new UserResource($user))->additional(['status' => 200,  'message' => __('messages.store')]);
     }
 
     /** 【 修改员工信息 】 */ 
@@ -203,7 +203,7 @@ class UsersController extends Controller
 
         $user->update();
 
-        return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new UserResource($user))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 刷新员工二维码 】 */ 
@@ -226,7 +226,7 @@ class UsersController extends Controller
         $user->update(['qrcode' => $result['qrcode'], 'link' => $result['link']]);
 
         if ($result) {
-            return (new UserResource($user))->additional(['status' => 200, 'message' => '刷新成功！']);
+            return (new UserResource($user))->additional(['status' => 200, 'message' => __('messages.refresh')]);
         }
     }
 
@@ -241,7 +241,7 @@ class UsersController extends Controller
         }
         $user->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 
     /** 【 员工表现 】 */ 
@@ -259,7 +259,7 @@ class UsersController extends Controller
             Auth::guard('api')->user()->token()->revoke();
         }
 
-        return response()->json(['message' => '退出成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.logout'), 'status' => 200]);
     }
 
     /** 【 更换关联手机 —— 验证手机号码 】 */ 
@@ -268,17 +268,17 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+            return response()->json(['error' => ['message' => [__('messages.code_expired')]], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+            return response()->json(['error' => ['message' => [__('messages.code_fail')]], 'status' => 402]);
         }
 
         // 清除验证码缓存
         \Cache::forget($request->key);
 
-        return response()->json(['message' => '验证通过！', 'status' => 200]);
+        return response()->json(['message' => __('messages.pass'), 'status' => 200]);
     }
 
     /** 【 更换关联手机 —— 新手机号码 】 */ 
@@ -287,11 +287,11 @@ class UsersController extends Controller
         // 获取缓存的手机号和区号，以及验证码
         $verifyData = \Cache::get($request->key);
         if ( ! $verifyData) {
-            return response()->json(['error' => ['message' => ['验证码已失效']], 'status' => 422]);
+            return response()->json(['error' => ['message' => [__('messages.code_expired')]], 'status' => 422]);
         }
 
         if ( ! hash_equals($verifyData['code'], $request->code)) {
-            return response()->json(['error' => ['message' => ['验证码错误']], 'status' => 402]);
+            return response()->json(['error' => ['message' => [__('messages.code_fail')]], 'status' => 402]);
         }
 
         $data = $request->all();
@@ -310,7 +310,7 @@ class UsersController extends Controller
         // 清除验证码缓存
         \Cache::forget($request->key);
 
-        return (new UserResource($user))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new UserResource($user))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 销售人员创建账号 】 */
@@ -340,7 +340,7 @@ class UsersController extends Controller
                                     // 'token' => $user->createToken('MyApp', ['boss'])->accessToken
                                 ], 
                                 'status' => 200 ,
-                                'message' => '创建成功！' ]);
+                                'message' => __('messages.store') ]);
 
     }
 
@@ -369,7 +369,7 @@ class UsersController extends Controller
             'number' => $request->number,
             'method' => $request->method,
         ]);
-        return response()->json(['status' => 200, 'message' => '修改成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /** 【 我的账单 】 */
@@ -385,15 +385,15 @@ class UsersController extends Controller
         $user = $user::find($request->header('userid'));
         if ($user) {
             if ($user->post != $request->identity) {
-                return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
+                return response()->json(['error' => ['message' => [__('messages.illegal')]], 'status' => 404]);
             }
 
             return response()->json(['success' => [ 'token' => $user->createToken('MyApp', [$user->post])->accessToken],
                                     'status' => 200,
-                                    'message' => '登录成功！'
+                                    'message' => __('messages.login')
             ]);
         }
-        return response()->json(['error' => ['message' => ['非法访问！']], 'status' => 404]);
+        return response()->json(['error' => ['message' => [__('messages.illegal')]], 'status' => 404]);
     } 
 
     /** 【 我的上线 】 */
@@ -401,7 +401,7 @@ class UsersController extends Controller
     {
         $user = auth()->user()->user;
         if (!$user) {
-            return response()->json(['error' => ['message' => ['没有销售人员！']], 'status' => 404]);
+            return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
         }
 
         return (new UserResource($user))->additional(['status' => 200]);

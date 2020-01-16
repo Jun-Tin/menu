@@ -30,8 +30,7 @@ class StoresController extends Controller
      */
     public function store(Request $request,Store $store)
     {
-        // echo trans('message');
-        // dd(123);
+        dd(__('messages.store'));
         $store->fill($request->all());
         $store->user_id = auth()->id();
         // switch ($request->category) {
@@ -46,7 +45,7 @@ class StoresController extends Controller
         // }
         $store->save();
 
-        return (new StoreResource($store))->additional(['status' => 200, 'message' => '创建成功！']);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => __('messages.store')]);
         // return (new StoreResource($store))->additional(['status' => 200, 'message' => trans('store.message')]);
     }
 
@@ -72,7 +71,7 @@ class StoresController extends Controller
     {
         $store->update($request->all());
 
-        return (new StoreResource($store))->additional(['status' => 200, 'message' => '修改成功！']);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 
     /**
@@ -85,7 +84,7 @@ class StoresController extends Controller
     {
         $store->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
     /** 【 门店区域列表 】 */
@@ -141,7 +140,7 @@ class StoresController extends Controller
         }
         $store->area->update($update);
 
-        return response()->json(['message' => '刷新成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.refresh'), 'status' => 200]);
     }
 
     /** 【 激活门店 】 */
@@ -151,7 +150,7 @@ class StoresController extends Controller
         // 上线周期
         $period = Period::find($request->id);
         if ($user->coins - $period->number <0) {
-            return response()->json(['error' => ['message' => ['金币数不足！']], 'status' => 202]);
+            return response()->json(['error' => ['message' => [__('messages.coins')]], 'status' => 202]);
         }
         $user->decrement('coins', $period->number);
         if ($store->days == 0 && empty($store->actived_at)) {
@@ -176,7 +175,7 @@ class StoresController extends Controller
             'method' => 7,
         ]);
 
-        return (new StoreResource($store))->additional(['status' => 200, 'message' => '上线成功！']);
+        return (new StoreResource($store))->additional(['status' => 200, 'message' => __('messages.upline')]);
     } 
 
     /** 【 菜品列表 】 */
@@ -236,7 +235,7 @@ class StoresController extends Controller
         $store->places()->where('id', $request->floor)->delete();
         $store->places()->where('floor', $request->floor)->delete();
 
-        return response()->json(['message' => '删除成功！', 'status' => 200]);
+        return response()->json(['message' => __('messages.destory'), 'status' => 200]);
     }
 
     /** 【 预约列表 】 */
@@ -282,7 +281,7 @@ class StoresController extends Controller
     public function returnMenus(Store $store)
     {
         $store->menus()->update(['status' => 1]);
-        return response()->json(['status' => 200, 'message' => '操作成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.do')]);
     } 
 
     /** 【 客户端--门店详情 】 */ 

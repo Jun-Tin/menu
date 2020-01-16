@@ -39,6 +39,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Session\Middleware\StartSession::class,
             'throttle:200,1',
             'bindings',
         ],
@@ -62,5 +64,6 @@ class Kernel extends HttpKernel
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'Code'  => \App\Http\Middleware\Code::class,
+        'setLocale' => \App\Http\Middleware\SetLocale::class,
     ];
 }

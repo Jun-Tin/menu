@@ -54,7 +54,7 @@ class BehaviorsController extends Controller
                 // 修改订单菜品状态 -- 上菜状态
                 $behavior->order_detail->update(['status' => 3]);
                 $count = OrderDetail::where('store_id', $user->store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
-                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
+                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'update serving', 'message' => __('messages.update_serving'), 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
                 break;
             // 退菜
             case 'retreat':
@@ -64,7 +64,7 @@ class BehaviorsController extends Controller
                 // 修改原订单价格，数量
                 $order = $behavior->order_detail->order;
                 if ($order->status == 3) {
-                    return response()->json(['error' => ['message' => ['非法操作，订单已取消！']], 'status' => 201]);
+                    return response()->json(['error' => ['message' => [__('messages.illegals')]], 'status' => 201]);
                 }
                 if ($order->final_price - $behavior->order_detail->price == 0) {
                     $order->status = 3;
@@ -96,7 +96,7 @@ class BehaviorsController extends Controller
                 
                 $order->save();
 
-                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'retreat', 'message' => '退菜了！'), JSON_UNESCAPED_UNICODE));
+                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'retreat', 'message' => __('messages.out')), JSON_UNESCAPED_UNICODE));
                 break;
             // 做菜
             case 'cooking':
@@ -146,7 +146,7 @@ class BehaviorsController extends Controller
         }
         $behavior->save();
 
-        return (new BehaviorResource($behavior))->additional(['status' => 200, 'message' => '操作成功！']);
+        return (new BehaviorResource($behavior))->additional(['status' => 200, 'message' => __('messages.do')]);
     }
 
     /**
@@ -161,8 +161,8 @@ class BehaviorsController extends Controller
         if (auth()->id() == $behavior->user_id) {
             $behavior->update(['status' => 1]);
 
-            return (new BehaviorResource($behavior))->additional(['status' => 200, 'message' => '修改成功！']);
+            return (new BehaviorResource($behavior))->additional(['status' => 200, 'message' => __('messages.update')]);
         }
-        return response()->json(['error' => ['message' => ['非法操作！']], 'status' => 404]);
+        return response()->json(['error' => ['message' => [__('messages.illegal')]], 'status' => 404]);
     }
 }

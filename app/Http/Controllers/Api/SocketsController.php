@@ -13,7 +13,7 @@ class SocketsController extends Controller
     {
         Gateway::joinGroup($request->client_id, $request->group.'_'.$request->store_id);
 
-        return response()->json(['status' => 200, 'message' => '加入成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.join')]);
     } 
 
     /** 【 离开端口 】 */
@@ -21,7 +21,7 @@ class SocketsController extends Controller
     {
         Gateway::leaveGroup($request->client_id, $request->group.'_'.$request->store_id);
 
-        return response()->json(['status' => 200, 'message' => '离开成功！']);
+        return response()->json(['status' => 200, 'message' => __('messages.leave')]);
     } 
 
     /** 【 测试socket通讯 】 */
