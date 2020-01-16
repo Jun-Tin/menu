@@ -156,17 +156,16 @@ class StoreObserver
 		        	]
 		        ];
 
-		        for ($i=0; $i < count($data); $i++) { 
-		        	$code[$i] = substr(Crypt::encryptString($store->name. '_'.$data[$i]['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+		        foreach ($data as $key => $value) {
+		        	$code = substr(Crypt::encryptString($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
 		        	// 判断图片是否存在
-			        if (file_exists($dir. '/'. $data[$i]['filename'])) {
-			            unlink($dir. '/'. $data[$i]['filename']);
+			        if (file_exists($dir. '/'. $value['filename'])) {
+			            unlink($dir. '/'. $value['filename']);
 			        }
 			        // 保存二维码
-			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($data[$i]['link']. $store->id. '/screen/'. $code[$i], $dir. '/'. $data[$i]['filename']);
+			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/screen/'. $code, $dir. '/'. $value['filename']);
 			        // 设置redis缓存
-			    	Redis::set($store->name. '_'.$data[$i]['type'].'_'. $store->id. '_'. $store->id, $code[$i]);
-
+			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code);
 		        }
 
 		        StoreArea::updateOrCreate([
