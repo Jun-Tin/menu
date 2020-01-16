@@ -184,11 +184,11 @@ class UsersController extends Controller
     {
         $data = $request->all();
         $data['id'] = $user->id;
-        $validator = $user->validatorUserRegister($data, 'updated');
+        // $validator = $user->validatorUserRegister($data, 'updated');
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors(), 'status' => 401]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors(), 'status' => 401]);
+        // }
 
         $user->fill($request->all());
         $user->password = bcrypt($request->password);
