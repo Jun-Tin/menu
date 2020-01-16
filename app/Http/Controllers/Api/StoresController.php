@@ -30,7 +30,6 @@ class StoresController extends Controller
      */
     public function store(Request $request,Store $store)
     {
-        dd(__('messages.store'));
         $store->fill($request->all());
         $store->user_id = auth()->id();
         // switch ($request->category) {
