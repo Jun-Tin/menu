@@ -163,7 +163,7 @@ class StoreObserver
 			            unlink($screen_dir. '/'. $value['filename']);
 			        }
 			        // 保存二维码
-			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/screen/'. $code[$key], $screen_dir. '/'. $value['filename']);
+			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/'. $value['type'].'/'. $code[$key], $screen_dir. '/'. $value['filename']);
 			        // 设置redis缓存
 			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code[$key]);
 		        }
