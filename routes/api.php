@@ -29,6 +29,8 @@ Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
 Route::get('areacode', 'Api\AreacodesController@index');
 /**【 切换语言 】*/
 Route::get('changeLocale/{locale}','Api\AreacodesController@changeLocale')->middleware('setLocale');
+/**【 获取门店设置语言 】*/
+Route::get('store/{store}/language', 'Api\StoresController@language') 
 
 // paypal支付
 Route::get('paypal/pay', 'Api\PaypalsController@pay');

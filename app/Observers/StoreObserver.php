@@ -45,7 +45,7 @@ class StoreObserver
 			// }
 			// public function saved(Store $store)
 			// {
-				switch ($store->language) {
+				switch ($store->language_id) {
 					case 1:
 						//  分类
 						$class = array('Recommend', 'Appetizers', 'Staple food', 'Drinks');
