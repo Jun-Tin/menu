@@ -48,7 +48,6 @@ class PlacesController extends Controller
         }
         // 默认类型值
         $data['type'] = 'place';
-        $data['language'] = $place->store->language->name_en;
         $result = $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         
@@ -101,7 +100,6 @@ class PlacesController extends Controller
             'store_id' => $place->store_id,
             'floor' => $place->floor,
             'type' => 'place',
-            'language' => $place->store->language->name_en,
         );
         $result = $place->updateQrcode($data,$place->id);
 

@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Order::observe(\App\Observers\OrderObserver::class);
         \App\Models\Behavior::observe(\App\Observers\BehaviorObserver::class);
         \App\Models\Place::observe(\App\Observers\PlaceObserver::class);
+        \App\Models\OrderDetail::observe(\App\Observers\OrderDetailObserver::class);
+        \App\Models\Line::observe(\App\Observers\LineObserver::class);
     }
 
     /**
