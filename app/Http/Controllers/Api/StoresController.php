@@ -372,6 +372,8 @@ class StoresController extends Controller
     /** 【 获取门店设置语言 】 */
     public function language(Request $request, Store $store)
     {
+        // 通过全局辅助函数...
+        session(['locale' => $store->language->name_en]);
         return (new LanguageResource($store->language))->additional(['status' => 200]);
     }
 
