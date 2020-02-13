@@ -6,7 +6,7 @@ use App\Models\{Store, User, MenuTag, Bill, Period, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource, LanguageResource};
 use Carbon\Carbon;
 
 class StoresController extends Controller
@@ -367,6 +367,12 @@ class StoresController extends Controller
     public function menuServed(Request $request, Store $store)
     {
         return (new StatisticsResource($store, $param='menuServed'))->additional(['status' => 200]);
+    }
+
+    /** 【 获取门店设置语言 】 */
+    public function language(Request $request, Store $store)
+    {
+        return (new LanguageResource($store->language))->additional(['status' => 200]);
     }
 
 
