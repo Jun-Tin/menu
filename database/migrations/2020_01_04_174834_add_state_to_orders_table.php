@@ -14,7 +14,7 @@ class AddStateToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('state')->nullable()->default(0)->after('finish')->commit('上菜状态');
+            $table->integer('state')->nullable()->default(0)->after('finish')->comment('上菜状态');
         });
     }
 

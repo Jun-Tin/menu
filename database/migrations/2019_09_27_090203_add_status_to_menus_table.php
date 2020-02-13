@@ -14,7 +14,7 @@ class AddStatusToMenusTable extends Migration
     public function up()
     {
         Schema::table('menus', function (Blueprint $table) {
-            $table->integer('status')->nullable()->after('category')->default(1)->commit('菜品情况');
+            $table->integer('status')->nullable()->after('category')->default(1)->comment('菜品情况');
         });
     }
 

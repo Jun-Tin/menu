@@ -14,8 +14,8 @@ class AddCleanAndSettleToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('settle')->nullable()->after('set_time')->default(0)->commit('支付规则');
-            $table->integer('clean')->nullable()->after('set_time')->default(0)->commit('打扫规则');
+            $table->integer('settle')->nullable()->after('set_time')->default(0)->comment('支付规则');
+            $table->integer('clean')->nullable()->after('set_time')->default(0)->comment('打扫规则');
         });
     }
 

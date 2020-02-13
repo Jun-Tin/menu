@@ -14,7 +14,7 @@ class AddLinkToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('link')->nullable()->after('entry_time')->commit('登录链接');
+            $table->string('link')->nullable()->after('entry_time')->comment('登录链接');
         });
     }
 

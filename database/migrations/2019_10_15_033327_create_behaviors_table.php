@@ -15,10 +15,10 @@ class CreateBehaviorsTable extends Migration
     {
         Schema::create('behaviors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->nullable()->commit('用户id');
-            $table->integer('target_id')->nullable()->commit('目标id');
-            $table->enum('category', ['book','order','serving','clean','settle','retreat','cooking','backout'])->commit('工作分类');
-            $table->integer('status')->nullable()->default(0)->commit('完成情况;0：未完成,1:完成');
+            $table->integer('user_id')->nullable()->comment('用户id');
+            $table->integer('target_id')->nullable()->comment('目标id');
+            $table->enum('category', ['book','order','serving','clean','settle','retreat','cooking','backout'])->comment('工作分类');
+            $table->integer('status')->nullable()->default(0)->comment('完成情况;0：未完成,1:完成');
             $table->timestamps();
         });
     }

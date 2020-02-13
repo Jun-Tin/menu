@@ -14,7 +14,7 @@ class AddCategoryToShopcartsTable extends Migration
     public function up()
     {
         Schema::table('shopcarts', function (Blueprint $table) {
-            $table->string('category')->nullable()->after('menu_id')->commit('菜品分类');
+            $table->string('category')->nullable()->after('menu_id')->comment('菜品分类');
         });
     }
 

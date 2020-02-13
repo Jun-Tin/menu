@@ -14,7 +14,7 @@ class AddFinishToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('finish')->default(0)->after('status')->commit('是否打扫');
+            $table->integer('finish')->default(0)->after('status')->comment('是否打扫');
         });
     }
 

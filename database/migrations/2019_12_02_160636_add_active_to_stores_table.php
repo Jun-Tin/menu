@@ -14,7 +14,7 @@ class AddActiveToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('active')->nullable()->default(0)->after('settle')->commit('激活状态；0：未激活、1：已激活');
+            $table->integer('active')->nullable()->default(0)->after('settle')->comment('激活状态；0：未激活、1：已激活');
         });
     }
 

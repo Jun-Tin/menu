@@ -14,7 +14,7 @@ class AddSitterToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('sitter')->nullable()->after('final_number')->default(0)->commit('就坐人数');
+            $table->integer('sitter')->nullable()->after('final_number')->default(0)->comment('就坐人数');
         });
     }
 

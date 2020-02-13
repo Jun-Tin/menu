@@ -14,7 +14,7 @@ class AddCategoryToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('category')->nullable()->default(0)->after('actived_at')->commit('门店分类');
+            $table->integer('category')->nullable()->default(0)->after('actived_at')->comment('门店分类');
         });
     }
 

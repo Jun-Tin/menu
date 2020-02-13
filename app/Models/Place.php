@@ -32,6 +32,12 @@ class Place extends Model
         return $this->hasOne(Order::class);
     } 
 
+    /** 【 反向一对一门店关联关系 】 */
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    } 
+
     /** 【 更新二维码信息 】 */
     public function updateQrcode($data, $id)
     {
@@ -42,16 +48,16 @@ class Place extends Model
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
                 $qrcode = true;
                 $link = true;
-                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted;
+                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted.'/'.$data['language'];
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
-                $link = env('APP_STAFF').$id.'/'.$encrypted;
+                $link = env('APP_STAFF').$id.'/'.$encrypted.'/'.$data['language'];
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'chef':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
-                $link = env('APP_CHEF').$id.'/'.$encrypted;
+                $link = env('APP_CHEF').$id.'/'.$encrypted.'/'.$data['language'];
                 $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/user/'. $filename;
                 break;
             case 'store':
@@ -59,17 +65,17 @@ class Place extends Model
                 switch ($data['category']) {
                     case 'screen':
                         $filename = 'screen.png';
-                        $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted;
+                        $link = env('APP_SCREEN'). $data['store_id']. '/screen/'. $encrypted. '/'. $data['language'];
                         $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
                     case 'line':
                         $filename = 'line.png';
-                        $link = env('APP_LINE'). $data['store_id']. '/line/'. $encrypted;
+                        $link = env('APP_LINE'). $data['store_id']. '/line/'. $encrypted. '/'. $data['language'];
                         $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
                     case 'book':
                         $filename = 'book.png';
-                        $link = env('APP_BOOK'). $data['store_id']. '/book/'. $encrypted;
+                        $link = env('APP_BOOK'). $data['store_id']. '/book/'. $encrypted. '/'. $data['language'];
                         $qrcode = env('APP_URL').'/images/qrcodes/'. $data['store_id']. '/screen/'. $filename;
                         break;
                 }

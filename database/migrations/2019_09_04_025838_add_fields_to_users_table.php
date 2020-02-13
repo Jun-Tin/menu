@@ -14,7 +14,7 @@ class AddFieldsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('store_id')->nullable()->after('email')->commit('门店id');
+            $table->integer('store_id')->nullable()->after('email')->comment('门店id');
             $table->integer('gender')->nullable()->after('coins')->comment('性别');
             $table->string('birthday')->nullable()->after('gender')->comment('生日');
             $table->string('post')->nullable()->after('birthday')->comment('岗位');

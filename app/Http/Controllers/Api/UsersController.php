@@ -171,6 +171,7 @@ class UsersController extends Controller
             'store_id' => $request->store_id,
             'name' => $user->account,
             'id' => $user->id,
+            'language' => Store::find($request->store_id)->language->name_en,
         ];
         $result = $place->updateQrcode($data,$user->id);
         // 更新数据
@@ -197,6 +198,7 @@ class UsersController extends Controller
 
         $data['name'] = $user->account;
         $data['type'] = $request->post;
+        $data['language'] = Store::find($user->store_id)->language->name_en;
         $result = $place->updateQrcode($data,$user->id);
         $user->qrcode = $result['qrcode'];
         $user->link = $result['link'];
@@ -220,6 +222,7 @@ class UsersController extends Controller
             'store_id' => $user->store_id,
             'name' => $user->account,
             'id' => $user->id,
+            'language' => Store::find($user->store_id)->language->name_en,
         ];
         $result = $place->updateQrcode($data,$user->id);
         // 更新数据

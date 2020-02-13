@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'category', 'condition', 'interval',
+        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'category', 'condition', 'interval', 'language_id'
     ];
     
     /**【 一对一图片关联关系 】*/ 
@@ -74,7 +74,12 @@ class Store extends Model
     {
         return $this->hasMany(StoreOff::class);
     } 
-    
+
+    /** 【 一对一语言关联关系 】 */ 
+    public function language()
+    {
+        return $this->belongsTo(Language::class);
+    }    
 
     /** 【 周数统计 】 */
     public function get_week($year) {

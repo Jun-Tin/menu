@@ -14,7 +14,7 @@ class AddQrcodeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('qrcode')->nullable()->after('entry_time')->commit('登录二维码');
+            $table->string('qrcode')->nullable()->after('entry_time')->comment('登录二维码');
         });
     }
 

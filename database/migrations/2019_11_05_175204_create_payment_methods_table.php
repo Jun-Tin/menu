@@ -15,10 +15,10 @@ class CreatePaymentMethodsTable extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name_cn')->nullable()->commit('类型中文名称');
-            $table->string('name_en')->nullable()->commit('类型英文名称');
-            $table->integer('show')->nullable()->commit('是否显示');
-            $table->integer('order_number')->nullable()->commit('排序');
+            $table->string('name_cn')->nullable()->comment('类型中文名称');
+            $table->string('name_en')->nullable()->comment('类型英文名称');
+            $table->integer('show')->nullable()->comment('是否显示');
+            $table->integer('order_number')->nullable()->comment('排序');
             $table->timestamps();
         });
     }

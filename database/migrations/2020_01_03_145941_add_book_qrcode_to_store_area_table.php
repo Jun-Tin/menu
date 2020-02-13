@@ -14,7 +14,7 @@ class AddBookQrcodeToStoreAreaTable extends Migration
     public function up()
     {
         Schema::table('store_area', function (Blueprint $table) {
-            $table->string('book_qrcode')->nullable()->after('line_qrcode')->commit('预约二维码');
+            $table->string('book_qrcode')->nullable()->after('line_qrcode')->comment('预约二维码');
         });
     }
 

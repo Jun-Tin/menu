@@ -45,7 +45,6 @@ class StoresController extends Controller
         $store->save();
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => __('messages.store')]);
-        // return (new StoreResource($store))->additional(['status' => 200, 'message' => trans('store.message')]);
     }
 
     /**
@@ -108,6 +107,7 @@ class StoresController extends Controller
                     'name' => $store->name.'_screen',
                     'store_id' => $store->id,
                     'category' => 'screen',
+                    'language' => $store->language->name_en,
                 ];
                 $result = $place->updateQrcode($data,$store->id);
                 $update = [
@@ -121,6 +121,7 @@ class StoresController extends Controller
                     'name' => $store->name.'_line',
                     'store_id' => $store->id,
                     'category' => 'line',
+                    'language' => $store->language->name_en,
                 ];
                 $result = $place->updateQrcode($data,$store->id);
                 $update = ['link_qrcode' => $result['qrcode']];
@@ -131,6 +132,7 @@ class StoresController extends Controller
                     'name' => $store->name.'_book',
                     'store_id' => $store->id,
                     'category' => 'book',
+                    'language' => $store->language->name_en,
                 ];
                 $result = $place->updateQrcode($data,$store->id);
                 $update = ['book_qrcode' => $result['qrcode']];

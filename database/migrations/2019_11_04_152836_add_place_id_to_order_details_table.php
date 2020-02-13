@@ -14,8 +14,8 @@ class AddPlaceIdToOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->integer('place_id')->nullable()->after('menu_id')->default(0)->commit('座位id');
-            $table->integer('pid')->nullable()->after('place_id')->default(0)->commit('父级id');
+            $table->integer('place_id')->nullable()->after('menu_id')->default(0)->comment('座位id');
+            $table->integer('pid')->nullable()->after('place_id')->default(0)->comment('父级id');
         });
     }
 

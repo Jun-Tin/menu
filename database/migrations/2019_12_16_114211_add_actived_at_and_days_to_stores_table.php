@@ -14,8 +14,8 @@ class AddActivedAtAndDaysToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->timestamp('actived_at')->nullable()->after('active')->commit('上线日期');
-            $table->integer('days')->nullable()->after('active')->default(0)->commit('上线天数');
+            $table->timestamp('actived_at')->nullable()->after('active')->comment('上线日期');
+            $table->integer('days')->nullable()->after('active')->default(0)->comment('上线天数');
         });
     }
 

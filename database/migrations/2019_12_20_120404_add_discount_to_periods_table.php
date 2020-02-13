@@ -14,7 +14,7 @@ class AddDiscountToPeriodsTable extends Migration
     public function up()
     {
         Schema::table('periods', function (Blueprint $table) {
-            $table->string('discount')->nullable()->after('days')->commit('折扣');
+            $table->string('discount')->nullable()->after('days')->comment('折扣');
         });
     }
 

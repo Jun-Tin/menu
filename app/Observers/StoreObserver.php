@@ -13,7 +13,7 @@ class StoreObserver
 		// 	case 0:
 				// 创建默认厨师账号
 				$user = User::create([
-					'name' => '后厨管理员',
+					'name' => 'admin',
 					'store_id' => $store->id,
 					'account' => str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT),
 					'gender' => 1,
@@ -28,7 +28,7 @@ class StoreObserver
 		        if (!is_dir($dir)) {
 		            File::makeDirectory($dir, 0777, true);
 		        }
-		        $link = env('APP_CHEF').$user->id.'/'.$encrypted;
+		        $link = env('APP_CHEF').$user->id.'/'.$encrypted.'/'.$store->language->name_en;
 		        $qrcode = env('APP_URL').'/images/qrcodes/'. $store->id. '/user/'. $filename;
 		        // 判断图片是否存在
 		        if (file_exists($dir. '/' .$filename)) {
@@ -45,8 +45,35 @@ class StoreObserver
 			// }
 			// public function saved(Store $store)
 			// {
-				//  分类
-				$class = array('推荐', '前菜', '主食', '酒水/饮料');
+				switch ($store->language) {
+					case 1:
+						//  分类
+						$class = array('Recommend', 'Appetizers', 'Staple food', 'Drinks');
+						// 偏好
+						$perfer = array(
+							'Taste collection' => array('Light', 'Sweetness', 'Spicy', 'Black pepper'),
+							'Specification collection' => array('Large', 'Medium', 'Little'),
+						);
+						break;
+					case 2:
+						//  分类
+						$class = array('推薦', '前菜', '主食', '酒水/飲料');
+						// 偏好
+						$perfer = array(
+							'口味集合' => array('清淡', '甜味', '辣味', '黑椒'),
+							'規格集合' => array('大', '中', '小'),
+						);
+						break;
+					default:
+						//  分类
+						$class = array('推荐', '前菜', '主食', '酒水/饮料');
+						// 偏好
+						$perfer = array(
+							'口味集合' => array('清淡', '甜味', '辣味', '黑椒'),
+							'规格集合' => array('大', '中', '小'),
+						);
+						break;
+				}
 				
 				// 插入默认值
 				foreach ($class as $key => $value) {
@@ -58,11 +85,6 @@ class StoreObserver
 					]);
 				}
 				
-				// 偏好
-				$perfer = array(
-					'口味集合' => array('清淡', '甜味', '辣味', '黑椒'),
-					'规格集合' => array('大', '中', '小'),
-				);
 				// 插入默认值
 				foreach ($perfer as $key => $value) {
 					$tag[$key] = Tag::updateOrCreate([
@@ -163,14 +185,14 @@ class StoreObserver
 			            unlink($screen_dir. '/'. $value['filename']);
 			        }
 			        // 保存二维码
-			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/'. $value['type'].'/'. $code[$key], $screen_dir. '/'. $value['filename']);
+			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/'. $value['type'].'/'. $code[$key]. '/'.$store->language->name_en, $screen_dir. '/'. $value['filename']);
 			        // 设置redis缓存
 			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code[$key]);
 		        }
 
 		        StoreArea::updateOrCreate([
 		        	'store_id' => $store->id,
-		        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0],
+		        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0]. '/'.$store->language->name_en,
 		        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[0]['filename'],
 		        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[1]['filename'],
 		        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],

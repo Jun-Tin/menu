@@ -14,7 +14,7 @@ class AddStatusToPlacesTable extends Migration
     public function up()
     {
         Schema::table('places', function (Blueprint $table) {
-            $table->integer('status')->nullable()->after('image_id')->default(0)->commit('使用情况;0：未使用,1：已使用,2：未打扫');
+            $table->integer('status')->nullable()->after('image_id')->default(0)->comment('使用情况;0：未使用,1：已使用,2：未打扫');
         });
     }
 

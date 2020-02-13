@@ -14,7 +14,7 @@ class AddCreatedByUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('created_by')->nullable()->default(0)->after('link')->commit('创建方式');
+            $table->string('created_by')->nullable()->default(0)->after('link')->comment('创建方式');
         });
     }
 

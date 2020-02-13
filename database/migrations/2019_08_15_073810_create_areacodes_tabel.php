@@ -15,12 +15,12 @@ class CreateAreacodesTabel extends Migration
     {
         Schema::create('areacodes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('acname_en')->nullable()->commit('英文名称');
-            $table->string('acname_cn')->nullable()->commit('中文名称');
-            $table->string('codename')->nullable()->commit('缩写');
-            $table->integer('acnumber')->nullable()->commit('区号');
-            $table->integer('order_number')->nullable()->commit('序列号');
-            $table->integer('show')->nullable()->default(1)->commit('是否显示：0、不显示；1、显示');            
+            $table->string('acname_en')->nullable()->comment('英文名称');
+            $table->string('acname_cn')->nullable()->comment('中文名称');
+            $table->string('codename')->nullable()->comment('缩写');
+            $table->integer('acnumber')->nullable()->comment('区号');
+            $table->integer('order_number')->nullable()->comment('序列号');
+            $table->integer('show')->nullable()->default(1)->comment('是否显示：0、不显示；1、显示');            
             $table->timestamps();
         });
     }

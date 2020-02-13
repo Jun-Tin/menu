@@ -14,7 +14,7 @@ class AddPaymentMethodToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('payment_method')->nullable()->after('finish')->default(0)->commit('支付类型');
+            $table->integer('payment_method')->nullable()->after('finish')->default(0)->comment('支付类型');
         });
     }
 

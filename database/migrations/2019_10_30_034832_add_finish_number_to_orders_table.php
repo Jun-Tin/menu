@@ -14,7 +14,7 @@ class AddFinishNumberToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('finish_number')->nullable()->after('final_number')->default(0)->commit('完成数量');
+            $table->integer('finish_number')->nullable()->after('final_number')->default(0)->comment('完成数量');
         });
     }
 

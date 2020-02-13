@@ -320,6 +320,16 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     // 修改状态值
     Route::patch('line/{line}/update', 'Api\LinesController@update');
 
+    /** 【 语言选择 】 */
+    // 列表
+    Route::get('language/index', 'Api\LanguagesController@index');
+    // 创建
+    Route::post('language/store', 'Api\LanguagesController@store');
+    // 修改
+    Route::patch('language/{language}/update', 'Api\LanguagesController@update');
+    // 删除 
+    Route::delete('language/{language}/destroy', 'Api\LanguagesController@destroy');
+
 
     /** 
      * 【 功能类接口 】

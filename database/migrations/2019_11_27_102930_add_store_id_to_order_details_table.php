@@ -14,7 +14,7 @@ class AddStoreIdToOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->integer('store_id')->nullable()->after('order_order')->commit('门店id');
+            $table->integer('store_id')->nullable()->after('order_order')->comment('门店id');
         });
     }
 

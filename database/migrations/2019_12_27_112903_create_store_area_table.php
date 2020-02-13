@@ -15,10 +15,10 @@ class CreateStoreAreaTable extends Migration
     {
         Schema::create('store_area', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('store_id')->nullable()->commit('门店id');
-            $table->string('screen_link')->nullable()->commit('大屏幕连接');
-            $table->string('screen_qrcode')->nullable()->commit('大屏幕二维码');
-            $table->string('line_qrcode')->nullable()->commit('排队二维码');
+            $table->integer('store_id')->nullable()->comment('门店id');
+            $table->string('screen_link')->nullable()->comment('大屏幕连接');
+            $table->string('screen_qrcode')->nullable()->comment('大屏幕二维码');
+            $table->string('line_qrcode')->nullable()->comment('排队二维码');
             $table->timestamps();
         });
     }

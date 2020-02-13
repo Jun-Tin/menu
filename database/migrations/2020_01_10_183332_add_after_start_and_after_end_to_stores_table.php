@@ -14,8 +14,8 @@ class AddAfterStartAndAfterEndToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->string('after_end')->nullable()->after('start_time')->commit('午休结束时间');
-            $table->string('after_start')->nullable()->after('start_time')->commit('午休开始时间');
+            $table->string('after_end')->nullable()->after('start_time')->comment('午休结束时间');
+            $table->string('after_start')->nullable()->after('start_time')->comment('午休开始时间');
         });
     }
 

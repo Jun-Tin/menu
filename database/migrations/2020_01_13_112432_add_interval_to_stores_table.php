@@ -14,8 +14,8 @@ class AddIntervalToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('condition')->nullable()->default(1)->after('category')->commit('是否为空才能预约：0：否，1：是');
-            $table->integer('interval')->nullable()->after('category')->commit('时间间隔');
+            $table->integer('condition')->nullable()->default(1)->after('category')->comment('是否为空才能预约：0：否，1：是');
+            $table->integer('interval')->nullable()->after('category')->comment('时间间隔');
         });
     }
 

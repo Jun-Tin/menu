@@ -15,13 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->commit('用户名');
-            $table->string('email')->nullable()->unique()->commit('邮箱');
-            $table->integer('area_code')->nullable()->commit('区号');
-            $table->string('phone')->nullable()->commit('手机号码');
-            $table->integer('image_id')->nullable()->commit('图片id');
-            $table->string('password')->commit('加密密码');
-            $table->string('pro_password')->nullable()->commit('明文密码');
+            $table->string('name')->comment('用户名');
+            $table->string('email')->nullable()->unique()->comment('邮箱');
+            $table->integer('area_code')->nullable()->comment('区号');
+            $table->string('phone')->nullable()->comment('手机号码');
+            $table->integer('image_id')->nullable()->comment('图片id');
+            $table->string('password')->comment('加密密码');
+            $table->string('pro_password')->nullable()->comment('明文密码');
             $table->rememberToken();
             $table->timestamps();
         });

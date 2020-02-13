@@ -14,7 +14,7 @@ class AddSitterToShopcartsTable extends Migration
     public function up()
     {
         Schema::table('shopcarts', function (Blueprint $table) {
-            $table->integer('sitter')->nullable()->after('remark')->default(0)->commit('就坐人数');
+            $table->integer('sitter')->nullable()->after('remark')->default(0)->comment('就坐人数');
         });
     }
 

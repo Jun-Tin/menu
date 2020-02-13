@@ -14,7 +14,7 @@ class AddCategoryToOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->string('category')->nullable()->after('menu_id')->commit('菜品分类');
+            $table->string('category')->nullable()->after('menu_id')->comment('菜品分类');
         });
     }
 

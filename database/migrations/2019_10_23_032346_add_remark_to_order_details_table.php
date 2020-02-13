@@ -14,7 +14,7 @@ class AddRemarkToOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->string('remark')->nullable()->after('price')->commit('备注');
+            $table->string('remark')->nullable()->after('price')->comment('备注');
         });
     }
 

@@ -14,7 +14,7 @@ class AddIntroductionToMenusTable extends Migration
     public function up()
     {
         Schema::table('menus', function (Blueprint $table) {
-            $table->string('introduction')->nullable()->after('name')->commit('菜品介绍');
+            $table->string('introduction')->nullable()->after('name')->comment('菜品介绍');
         });
     }
 

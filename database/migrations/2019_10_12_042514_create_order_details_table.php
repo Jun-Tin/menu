@@ -15,14 +15,14 @@ class CreateOrderDetailsTable extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('order_order')->nullable()->commit('订单编号');
-            $table->integer('menu_id')->nullable()->commit('菜品id');
-            $table->string('menus_id')->nullable()->commit('菜品组id');
-            $table->string('tags_id')->nullable()->commit('标签组id');
-            $table->string('fill_price')->nullable()->commit('补差组');
-            $table->integer('number')->nullable()->commit('数量');
-            $table->integer('price')->nullable()->commit('价格');
-            $table->integer('status')->nullable()->default(0)->commit('菜品状态');
+            $table->string('order_order')->nullable()->comment('订单编号');
+            $table->integer('menu_id')->nullable()->comment('菜品id');
+            $table->string('menus_id')->nullable()->comment('菜品组id');
+            $table->string('tags_id')->nullable()->comment('标签组id');
+            $table->string('fill_price')->nullable()->comment('补差组');
+            $table->integer('number')->nullable()->comment('数量');
+            $table->integer('price')->nullable()->comment('价格');
+            $table->integer('status')->nullable()->default(0)->comment('菜品状态');
             $table->timestamps();
         });
     }

@@ -15,9 +15,9 @@ class CreateImagesTables extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->nullable()->commit('用户id');
-            $table->string('type')->nullable()->commit('图片类型');
-            $table->string('path')->nullable()->commit('链接地址');
+            $table->integer('user_id')->nullable()->comment('用户id');
+            $table->string('type')->nullable()->comment('图片类型');
+            $table->string('path')->nullable()->comment('链接地址');
             $table->timestamps();
         });
     }

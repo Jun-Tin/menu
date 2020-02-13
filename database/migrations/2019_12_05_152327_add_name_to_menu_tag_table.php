@@ -14,7 +14,7 @@ class AddNameToMenuTagTable extends Migration
     public function up()
     {
         Schema::table('menu_tag', function (Blueprint $table) {
-            $table->string('name')->nullable()->after('target_id')->commit('标签名称');
+            $table->string('name')->nullable()->after('target_id')->comment('标签名称');
         });
     }
 

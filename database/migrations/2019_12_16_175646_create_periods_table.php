@@ -15,11 +15,11 @@ class CreatePeriodsTable extends Migration
     {
         Schema::create('periods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->nullable()->commit('周期标题');
-            $table->integer('number')->nullable()->default(0)->commit('金币数目');
-            $table->integer('days')->nullable()->default(0)->commit('周期数目');
-            $table->integer('show')->nullable()->default(0)->commit('是否显示');
-            $table->integer('order_number')->nullable()->default(0)->commit('排序号');
+            $table->string('title')->nullable()->comment('周期标题');
+            $table->integer('number')->nullable()->default(0)->comment('金币数目');
+            $table->integer('days')->nullable()->default(0)->comment('周期数目');
+            $table->integer('show')->nullable()->default(0)->comment('是否显示');
+            $table->integer('order_number')->nullable()->default(0)->comment('排序号');
             $table->timestamps();
         });
     }

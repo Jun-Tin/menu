@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddRemarkToShopcartsTable extends Migration
+class AddLanguageIdToStoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddRemarkToShopcartsTable extends Migration
      */
     public function up()
     {
-        Schema::table('shopcarts', function (Blueprint $table) {
-            $table->string('remark')->nullable()->after('price')->comment('备注');
+        Schema::table('stores', function (Blueprint $table) {
+            $table->integer('language_id')->nullable()->default(1)->after('condition')->comment('语言id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddRemarkToShopcartsTable extends Migration
      */
     public function down()
     {
-        Schema::table('shopcarts', function (Blueprint $table) {
-            $table->dropColumn('remark');
+        Schema::table('stores', function (Blueprint $table) {
+            $table->dropColumn('language_id');
         });
     }
 }

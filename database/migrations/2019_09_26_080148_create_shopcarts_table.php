@@ -15,13 +15,13 @@ class CreateShopcartsTable extends Migration
     {
         Schema::create('shopcarts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('place_id')->nullable()->commit('座位id');
-            $table->integer('menu_id')->nullable()->commit('菜品id');
-            $table->string('menus_id')->nullable()->commit('内容id');
-            $table->string('tags_id')->nullable()->commit('标签组id');
-            $table->string('fill_price')->nullable()->commit('差价集合');
-            $table->integer('number')->nullable()->default(1)->commit('数量');
-            $table->integer('price')->nullable()->commit('总价格');
+            $table->integer('place_id')->nullable()->comment('座位id');
+            $table->integer('menu_id')->nullable()->comment('菜品id');
+            $table->string('menus_id')->nullable()->comment('内容id');
+            $table->string('tags_id')->nullable()->comment('标签组id');
+            $table->string('fill_price')->nullable()->comment('差价集合');
+            $table->integer('number')->nullable()->default(1)->comment('数量');
+            $table->integer('price')->nullable()->comment('总价格');
             $table->timestamps();
         });
     }

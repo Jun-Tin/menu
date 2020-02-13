@@ -14,7 +14,7 @@ class AddTargetToBillsTable extends Migration
     public function up()
     {
         Schema::table('bills', function (Blueprint $table) {
-            $table->string('target')->nullable()->after('accept')->commit('目标方');
+            $table->string('target')->nullable()->after('accept')->comment('目标方');
         });
     }
 

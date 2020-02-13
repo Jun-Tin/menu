@@ -14,7 +14,7 @@ class AddOriginalPriceToShopcartsTable extends Migration
     public function up()
     {
         Schema::table('shopcarts', function (Blueprint $table) {
-            $table->string('original_price')->nullable()->after('price')->commit('套餐单品价格');
+            $table->string('original_price')->nullable()->after('price')->comment('套餐单品价格');
         });
     }
 

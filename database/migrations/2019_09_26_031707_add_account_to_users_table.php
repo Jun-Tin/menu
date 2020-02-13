@@ -14,7 +14,7 @@ class AddAccountToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('account')->nullable()->after('store_id')->unique()->commit('账号');
+            $table->string('account')->nullable()->after('store_id')->unique()->comment('账号');
         });
     }
 

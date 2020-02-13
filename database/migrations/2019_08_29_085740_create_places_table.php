@@ -15,11 +15,11 @@ class CreatePlacesTable extends Migration
     {
         Schema::create('places', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('store_id')->nullable()->index()->commit('门店id');
-            $table->string('name')->nullable()->commit('座位名称');
-            $table->integer('number')->nullable()->commit('座位人数');
-            $table->integer('floor')->nullable()->commit('楼层');
-            $table->integer('image_id')->nullable()->commit('图片id');
+            $table->integer('store_id')->nullable()->index()->comment('门店id');
+            $table->string('name')->nullable()->comment('座位名称');
+            $table->integer('number')->nullable()->comment('座位人数');
+            $table->integer('floor')->nullable()->comment('楼层');
+            $table->integer('image_id')->nullable()->comment('图片id');
             $table->timestamps();
         });
     }
