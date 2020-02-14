@@ -50,8 +50,9 @@ class LinesController extends Controller
         $line->area_id = $collection['id'];
         $code = Line::where('store_id',$request->store_id)->where('area_id', $line->area_id)->orderBy('id', 'DESC')->value('code');
         if ($code) {
-            $num = substr($code, 1);
-            $number = (int)$num + 1;
+            $num += substr($code, 1);
+            dd($num);
+            // $number = (int)$num + 1;
             $line->code = $collection['sign']. sprintf("%03d", $number);
         } else {
             $line->code = $collection['sign'].'001';
