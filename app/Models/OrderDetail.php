@@ -31,8 +31,14 @@ class OrderDetail extends Model
     }
 
     /** 【 一对一菜品关联关系 】 */
-    public function menu()
+    public function packageMenu()
     {
         return $this->belongsTo(Menu::class, 'menus_id', 'id');
+    } 
+
+    /** 【 一对一菜品关联关系 】 */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
     } 
 }
