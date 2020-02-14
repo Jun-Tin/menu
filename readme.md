@@ -102,3 +102,5 @@ php artisan queue:restart 重启
 'type' => 'saleStatus', 'message' => '菜品销售状态改变！'
 更新排队列表
 'type' => 'lining', 'message' => '更新排队列表！'
+新菜品通知
+'type' => 'new dishes notice', 'message' => '新菜品通知！',

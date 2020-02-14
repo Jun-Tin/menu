@@ -23,4 +23,16 @@ class OrderDetail extends Model
     {
     	return $this->hasOne(Order::class, 'order', 'order_order');
     }
+
+    /** 【 一对一座位关联关系 】 */
+    public function place()
+    {
+        return $this->belongsTo(Place::class);
+    }
+
+    /** 【 一对一菜品关联关系 】 */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'menus_id', 'id');
+    } 
 }

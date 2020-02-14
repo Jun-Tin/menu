@@ -50,4 +50,5 @@ return [
     'pass' => '验证通过！',
     'people' => '没有销售人员！',
     'offline' => '门店未上线！',
+    'new_dishes' => '新菜品通知！'
 ];

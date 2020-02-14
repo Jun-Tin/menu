@@ -28,7 +28,7 @@ class StoreObserver
 		        if (!is_dir($dir)) {
 		            File::makeDirectory($dir, 0777, true);
 		        }
-		        $link = env('APP_CHEF').$user->id.'/'.$encrypted.'/'.$store->language->name_en;
+		        $link = env('APP_CHEF').$user->id.'/'.$encrypted;
 		        $qrcode = env('APP_URL').'/images/qrcodes/'. $store->id. '/user/'. $filename;
 		        // 判断图片是否存在
 		        if (file_exists($dir. '/' .$filename)) {
@@ -48,11 +48,11 @@ class StoreObserver
 				switch ($store->language_id) {
 					case 1:
 						//  分类
-						$class = array('Recommend', 'Appetizers', 'Staple food', 'Drinks');
+						$class = array('Recommended', 'Appetizer', 'Main Course', 'Beverage');
 						// 偏好
 						$perfer = array(
-							'Taste collection' => array('Light', 'Sweetness', 'Spicy', 'Black pepper'),
-							'Specification collection' => array('Large', 'Medium', 'Little'),
+							'Taste collection' => array('Light', 'Sweet', 'Spicy', 'Black Pepper'),
+							'Regular' => array('Large', 'Medium', 'Small'),
 						);
 						break;
 					case 2:
@@ -185,14 +185,14 @@ class StoreObserver
 			            unlink($screen_dir. '/'. $value['filename']);
 			        }
 			        // 保存二维码
-			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/'. $value['type'].'/'. $code[$key]. '/'.$store->language->name_en, $screen_dir. '/'. $value['filename']);
+			        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate($value['link']. $store->id. '/'. $value['type'].'/'. $code[$key], $screen_dir. '/'. $value['filename']);
 			        // 设置redis缓存
 			    	Redis::set($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id, $code[$key]);
 		        }
 
 		        StoreArea::updateOrCreate([
 		        	'store_id' => $store->id,
-		        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0]. '/'.$store->language->name_en,
+		        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0],
 		        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[0]['filename'],
 		        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[1]['filename'],
 		        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
