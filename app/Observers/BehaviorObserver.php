@@ -44,7 +44,7 @@ class BehaviorObserver
 
 				$store_id = (User::find($behavior->user_id))->store_id;
 				$count = OrderDetail::where('store_id', $store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'update serving', 'message' => __('messages.update_serving'), 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
 			// 做菜
 			case 'cooking':
@@ -87,7 +87,7 @@ class BehaviorObserver
 
 				$store_id = (User::find($behavior->user_id))->store_id;
 				$count = OrderDetail::where('store_id', $store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'serving', 'message' => __('messages.serving'), 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'serving', 'message' => '上菜了！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
 			// 退菜
 			case 'retreat':
@@ -110,7 +110,7 @@ class BehaviorObserver
 
 				$store_id = (User::find($behavior->user_id))->store_id;
 				$count = OrderDetail::where('store_id', $store_id)->where('category', 'm')->where('status', 0)->selectRaw('count(*) as value')->get()->toArray();
-				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'update serving', 'message' => __('messages.update_serving'), 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
+				Gateway::sendToGroup('waiter_'.$store_id, json_encode(array('type' => 'update serving', 'message' => '更新上菜消息！', 'count' => $count[0]['value']), JSON_UNESCAPED_UNICODE));
 				break;
 		}	
 	}

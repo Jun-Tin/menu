@@ -121,10 +121,10 @@ class MenusController extends Controller
 
         switch ($user->post) {
             case 'waiter':
-                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => __('messages.menu_sale'), JSON_UNESCAPED_UNICODE)));
+                Gateway::sendToGroup('chef_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
                 break;
             case 'chef':
-                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => __('messages.menu_sale'), JSON_UNESCAPED_UNICODE)));
+                Gateway::sendToGroup('waiter_'.$user->store_id, json_encode(array('type' => 'saleStatus', 'message' => '菜品销售状态改变！', JSON_UNESCAPED_UNICODE)));
                 break;
         }
         return response()->json(['message' => __('messages.update'), 'status' => 200]);

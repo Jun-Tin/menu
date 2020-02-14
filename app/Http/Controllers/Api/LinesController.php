@@ -58,7 +58,7 @@ class LinesController extends Controller
         }
         $line->save();
 
-        Gateway::sendToGroup('waiter_'.$store->id, json_encode(array('type' => 'lining', 'message' => __('messages.queue')), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('waiter_'.$store->id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
 
         return (new LineResource($line))->additional(['status' => 200, 'message' => __('messages.store')]);
     }
@@ -101,7 +101,7 @@ class LinesController extends Controller
                 break;
         }
 
-        Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => __('messages.queue')), JSON_UNESCAPED_UNICODE));
+        Gateway::sendToGroup('waiter_'.$line->store_id, json_encode(array('type' => 'lining', 'message' => '更新排队列表！'), JSON_UNESCAPED_UNICODE));
 
         return (new LineResource($line))->additional(['status' => 200, 'message' => $message]);
     }

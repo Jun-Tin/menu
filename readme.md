@@ -103,4 +103,6 @@ php artisan queue:restart 重启
 更新排队列表
 'type' => 'lining', 'message' => '更新排队列表！'
 新菜品通知
-'type' => 'new dishes notice', 'message' => '新菜品通知！',
+'type' => 'new_dishes', 'message' => '新菜品通知！',
+新排队通知
+'type' => 'new_lines', 'message' => '新排队通知！',
