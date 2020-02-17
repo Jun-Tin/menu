@@ -108,11 +108,11 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'screen',
                 ];
-                $result = $place->updateQrcode($data,$store->id);
-                $update = [
-                    'screen_qrcode' => $result['qrcode'],
-                    'screen_link' => $result['link']
-                ];
+                // $result = $place->updateQrcode($data,$store->id);
+                // $update = [
+                //     'screen_qrcode' => $result['qrcode'],
+                //     'screen_link' => $result['link']
+                // ];
                 break;
             case 'line':
                 $data = [
@@ -121,8 +121,8 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'line',
                 ];
-                $result = $place->updateQrcode($data,$store->id);
-                $update = ['link_qrcode' => $result['qrcode']];
+                // $result = $place->updateQrcode($data,$store->id);
+                // $update = ['link_qrcode' => $result['qrcode']];
                 break;
             case 'book':
                 $data = [
@@ -131,12 +131,15 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'book',
                 ];
-                $result = $place->updateQrcode($data,$store->id);
-                $update = ['book_qrcode' => $result['qrcode']];
+                // $result = $place->updateQrcode($data,$store->id);
+                // $update = ['book_qrcode' => $result['qrcode']];
                 break;
-
         }
-        $store->area->update($update);
+        $result = $place->updateQrcode($data,$store->id);
+        $store->area->update([
+            $request->category.'_qrcode' => $result['qrcode'],
+            $request->category.'_link' => $result['link']
+        ]);
 
         return response()->json(['message' => __('messages.refresh'), 'status' => 200]);
     }

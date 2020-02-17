@@ -10,12 +10,23 @@ class PlaceObserver
 	public function created(Place $place)
 	{
 		if ($place->floor != 0) {
-			$encrypted = substr(Crypt::encryptString('新座位'.$place->id.'_'.$place->id.'_code'), 0, 15);
+			switch ($place->store->language->id) {
+				case 1:
+					$set = 'New Seat';
+					break;
+				case 2:
+					$set = $set;
+					break;
+				default:
+					$set = $set;
+					break;
+			}
+			$encrypted = substr(Crypt::encryptString($set.$place->id.'_'.$place->id.'_code'), 0, 15);
 			$dir = public_path('images/qrcodes/'.$place->store_id. '/place/' .$place->floor);
 	        if (!is_dir($dir)) {
 	            File::makeDirectory($dir, 0777, true);
 	        }
-	        $filename = '新座位'.$place->id. '.png';
+	        $filename = $set.$place->id. '.png';
 	        // 判断图片是否存在
 	        if (file_exists($dir. '/' .$filename)) {
 	            unlink($dir. '/' .$filename);
@@ -32,7 +43,7 @@ class PlaceObserver
 	        ]);
 
 			$place->update([
-				'name' => '新座位'.$place->id,
+				'name' => $set.$place->id,
 				'number' => 1,
 				'image_id' => $image->id,
 			]);

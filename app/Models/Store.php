@@ -61,7 +61,8 @@ class Store extends Model
     /** 【 一对一门店区域链接关联关系 】 */
     public function area()
     {
-        return $this->hasOne(StoreArea::class, 'store_id', 'id');
+        // return $this->hasOne(StoreArea::class, 'store_id', 'id');
+        return $this->hasOne(StoreArea::class);
     }
 
     /** 【 一对多门店区域关联关系 】 */

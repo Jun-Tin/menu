@@ -194,7 +194,9 @@ class StoreObserver
 		        	'store_id' => $store->id,
 		        	'screen_link' => env('APP_SCREEN'). $store->id. '/screen/'. $code[0],
 		        	'screen_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[0]['filename'],
+		        	'line_link' => env('APP_LINE'). $store->id. '/screen/'. $code[1],
 		        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[1]['filename'],
+		        	'book_link' => env('APP_BOOK'). $store->id. '/screen/'. $code[2],
 		        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
 		        ]);
 				
