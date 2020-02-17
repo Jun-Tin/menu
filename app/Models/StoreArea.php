@@ -9,6 +9,6 @@ class StoreArea extends Model
     protected $table = 'store_area';
 
     protected $fillable = [
-        'store_id', 'screen_link', 'screen_qrcode', 'line_link', 'line_qrcode', 'book_line', 'book_qrcode'
+        'store_id', 'screen_link', 'screen_qrcode', 'line_link', 'line_qrcode', 'book_link', 'book_qrcode'
     ];
 }
