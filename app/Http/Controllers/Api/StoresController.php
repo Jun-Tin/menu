@@ -108,11 +108,6 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'screen',
                 ];
-                // $result = $place->updateQrcode($data,$store->id);
-                // $update = [
-                //     'screen_qrcode' => $result['qrcode'],
-                //     'screen_link' => $result['link']
-                // ];
                 break;
             case 'line':
                 $data = [
@@ -121,8 +116,6 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'line',
                 ];
-                // $result = $place->updateQrcode($data,$store->id);
-                // $update = ['link_qrcode' => $result['qrcode']];
                 break;
             case 'book':
                 $data = [
@@ -131,8 +124,6 @@ class StoresController extends Controller
                     'store_id' => $store->id,
                     'category' => 'book',
                 ];
-                // $result = $place->updateQrcode($data,$store->id);
-                // $update = ['book_qrcode' => $result['qrcode']];
                 break;
         }
         $result = $place->updateQrcode($data,$store->id);
@@ -244,6 +235,12 @@ class StoresController extends Controller
     {        
         return BookResource::collection($store->books)->additional(['status' => 200]);
     }
+
+    /** 【 手机号码 】 */
+    public function phone(Request $request, Store $store)
+    {
+        return BookResource::collection($store->books->unique('phone'))->additional(['status' => 200]);
+    } 
 
     /** 【 售罄菜品列表 】 */
     public function saleOut(Request $request, Store $store)

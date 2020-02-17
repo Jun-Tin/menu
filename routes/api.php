@@ -131,6 +131,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::post('store/{store}/index', 'Api\StoresController@index');
     // 预约列表 
     Route::get('store/{store}/book', 'Api\StoresController@book');
+    // 电话列表 
+    Route::get('store/{store}/phone', 'Api\StoresController@phone');
     /** 【 区域 】 */
     // 区域列表
     Route::get('store/{store}/area', 'Api\StoresController@area'); 
