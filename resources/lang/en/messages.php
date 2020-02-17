@@ -5,7 +5,7 @@ return [
     'update' => 'Updated！',
     'destroy' => 'Cancelled！',
     'refresh' => 'Refreshed！',
-    'upline' => 'Uploaded！',
+    'upline' => 'Published！',
     'do' => 'Processed！',
     'set_success' => 'Settings Success！',
     'set_fail' => 'Settings Failed！',
@@ -48,6 +48,6 @@ return [
     'password_reset' => 'Password Editing Success！',
     'logout' => 'Log-out Success！',
     'pass' => 'Approval Code Passed！',
-    'people' => 'No Saleperson！',
+    'people' => 'No Salesperson！',
     'offline' => 'Store Not Online！',
 ];

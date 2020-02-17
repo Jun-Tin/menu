@@ -5,7 +5,7 @@ return [
     'update' => '更新成功！',
     'destroy' => '删除成功！',
     'refresh' => '刷新成功！',
-    'upline' => '上线成功！',
+    'upline' => '发布成功！',
     'do' => '操作成功！',
     'set_success' => '设置成功！',
     'set_fail' => '设置失败！',

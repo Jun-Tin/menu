@@ -5,7 +5,7 @@ return [
     'update' => '更新成功！',
     'destroy' => '刪除成功！',
     'refresh' => '刷新成功！',
-    'upline' => '上線成功！',
+    'upline' => '發佈成功！',
     'do' => '操作成功！',
     'set_success' => '設置成功！',
     'set_fail' => '設置失敗！',

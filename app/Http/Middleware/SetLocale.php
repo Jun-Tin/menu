@@ -18,7 +18,7 @@ class SetLocale
      */
     public function handle($request, Closure $next)
     {
-        if (session()->has('locale') && in_array(session()->get('locale'), ['en', 'zh_hk', 'zh_cn'])) {
+        if (session()->has('locale') && in_array(session()->get('locale'), ['en', 'zh_cn', 'zh_hk'])) {
             App::setLocale($request->session()->get('locale'));
         } else {
             $request->session()->put('locale', Config::get('app.fallback_locale'));
