@@ -15,10 +15,10 @@ class PlaceObserver
 					$set = 'New Seat';
 					break;
 				case 2:
-					$set = $set;
+					$set = '新座位';
 					break;
 				default:
-					$set = $set;
+					$set = '新座位';
 					break;
 			}
 			$encrypted = substr(Crypt::encryptString($set.$place->id.'_'.$place->id.'_code'), 0, 15);
