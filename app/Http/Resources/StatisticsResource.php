@@ -456,18 +456,29 @@ class StatisticsResource extends Resource
                     foreach ($newdata as $key => $value) {
                         array_multisort($newdata[$key]['data'], SORT_DESC);
                         $count = count($value['data']);
-                        dd($count);
                         if ($count == 1) {
-                            $newdata[$key]['fast_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
-                            $newdata[$key]['slow_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
+                            $h = round(($value['data'][0])/3600) > 10? round(($value['data'][0])/3600). ':': '0'.round(($value['data'][0])/3600). ':';
+                            $m = round(((($value['data'][0])%3600)/60)) > 10? round(((($value['data'][0])%3600)/60)). ':': '0'.round(((($value['data'][0])%3600)/60)). ':';
+                            $s = (($value['data'][0])%60) > 10? (($value['data'][0])%60): '0'.(($value['data'][0])%60);
+                            $newdata[$key]['fast_time'] = $h.$m.$s;
+                            $newdata[$key]['slow_time'] = $h.$m.$s;
                         } else {
-                            $newdata[$key]['fast_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
-                            $newdata[$key]['slow_time'] = floor(($value['data'][$count-1])/3600).':'.floor(((($value['data'][$count-1])%3600)/60)).':'.(($value['data'][$count-1])%60);
+                            $fh = round(($value['data'][0])/3600) > 10? round(($value['data'][0])/3600). ':': '0'. round(($value['data'][0])/3600). ':';
+                            $fm = round(((($value['data'][0])%3600)/60)) > 10? round(((($value['data'][0])%3600)/60)). ':': '0'. round(((($value['data'][0])%3600)/60)). ':';
+                            $fs = (($value['data'][0])%60) > 10? (($value['data'][0])%60): '0'. (($value['data'][0])%60);
+                            $newdata[$key]['fast_time'] = $fh.$fm.$fs;
+                            $sh = round(($value['data'][$count-1])/3600) >10? round(($value['data'][$count-1])/3600). ':': '0'. round(($value['data'][$count-1])/3600). ':';
+                            $sm = round(((($value['data'][$count-1])%3600)/60)) > 10? round(((($value['data'][$count-1])%3600)/60)). ':': '0'. round(((($value['data'][$count-1])%3600)/60)). ':';
+                            $ss = (($value['data'][$count-1])%60) > 10? (($value['data'][$count-1])%60): '0'. (($value['data'][$count-1])%60);
+                            $newdata[$key]['slow_time'] = $sh.$sm.$ss;
                         }
                     }
                     foreach ($newdata as $key => $value) {
+                        $ah = round(($value['time']/$value['number'])/3600) > 10? round(($value['time']/$value['number'])/3600). ':': '0'. round(($value['time']/$value['number'])/3600). ':';
+                        $am = round(((($value['time']/$value['number'])%3600)/60)) > 10? round(((($value['time']/$value['number'])%3600)/60)). ':': '0'. round(((($value['time']/$value['number'])%3600)/60)). ':';
+                        $as = (($value['time']/$value['number'])%60) > 10? (($value['time']/$value['number'])%60): '0'. (($value['time']/$value['number'])%60);
                         // 平均数
-                        $value['averages'] = floor(($value['time']/$value['number'])/3600).':'.floor(((($value['time']/$value['number'])%3600)/60)).':'.(($value['time']/$value['number'])%60);
+                        $value['averages'] = $ah.$am.$as;
                         $data[] = $value;
                     }
 
