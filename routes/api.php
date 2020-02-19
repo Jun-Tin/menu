@@ -88,8 +88,6 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('user/update', 'Api\UsersController@update');
     // 我的账单
     Route::get('user/bill', 'Api\UsersController@bill');
-    // 我的上线
-    Route::get('user/upLine', 'Api\UsersController@upLine');
 
 
     /**【 门店 】*/

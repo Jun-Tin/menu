@@ -359,7 +359,7 @@ class UsersController extends Controller
         if ($user) {
             return (new UserResource($user))->additional(['status' => 200]);
         }
-        return response()->json(['data' => [], 'status' => 200]);
+        return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
     } 
 
     /** 【 修改客户金币数 】*/ 
@@ -406,16 +406,5 @@ class UsersController extends Controller
             ]);
         }
         return response()->json(['error' => ['message' => [__('messages.illegal')]], 'status' => 404]);
-    } 
-
-    /** 【 我的上线 】 */
-    public function upLine(Request $request, User $user)
-    {
-        $user = auth()->user()->user;
-        if (!$user) {
-            return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
-        }
-
-        return (new UserResource($user))->additional(['status' => 200]);
     } 
 }

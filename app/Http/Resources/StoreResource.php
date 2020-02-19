@@ -36,6 +36,8 @@ class StoreResource extends Resource
             'interval' => $this->interval,
             'condition' => $this->condition,
             'language' => $this->language,
+            'line' => $this->line,
+            'chef' => $this->chef,
             'actived_at' => $this->actived_at,
             'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
