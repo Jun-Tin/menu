@@ -260,17 +260,19 @@ class StatisticsResource extends Resource
                 });
 
                 $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->whereIn('status', [1, 2])->get()->map(function ($item){
-                    return $item->orders()->where('pid', 0)->selectRaw('id, menu_id, sum(price) as price, sum(number) as number')->whereIn('status', [1, 2, 3, 4])->get()->toArray()[0];
+                    return $item->orders()->where('pid', 0)->selectRaw('id, menu_id, sum(price) as price, sum(number) as number')->whereIn('status', [1, 2, 3, 4])->groupBy('menu_id')->get()->toArray();
                 })->filter()->values();
-
+                
                 if ($collection->isNotEmpty()) {
                     $newdata = [];
                     foreach($collection as $key => $value){
-                        if(!isset($newdata[$value['menu_id']])){
-                            $newdata[$value['menu_id']] = $value;
-                        }else{
-                            $newdata[$value['menu_id']]['price'] += $value['price'];
-                            $newdata[$value['menu_id']]['number'] += $value['number'];
+                        foreach ($value as $k => $v) {
+                            if(!isset($newdata[$v['menu_id']])){
+                                $newdata[$v['menu_id']] = $v;
+                            }else{
+                                $newdata[$v['menu_id']]['price'] += $v['price'];
+                                $newdata[$v['menu_id']]['number'] += $v['number'];
+                            }
                         }
                     }
 
@@ -371,12 +373,10 @@ class StatisticsResource extends Resource
                 })->filter()->values();
 
                 if ($collection->isNotEmpty()) {
-                    $users->map(function ($item, $key) use ($collection){
-                        foreach ($collection[0] as $k => $value) {
+                    $users->map(function ($item) use ($collection){
+                        foreach ($collection[0] as $key => $value) {
                             if ($item->id == $value['user_id']) {
-                                if ($value['category'] == $key) {
-                                    $item[$value['category']] += $value['count'];
-                                }
+                                $item[$value['category']] += $value['count'];
                             }
                         }
                     });
@@ -411,9 +411,9 @@ class StatisticsResource extends Resource
                 $menus = $this->menus()->where('status', 1)->select('id', 'name')->get()->map(function ($item){
                     $item->number = 0;
                     $item->time = 0;
-                    $item->fast_time = '0:0:0';
-                    $item->slow_time = '0:0:0';
-                    $item->averages = '0:0:0';
+                    $item->fast_time = '0:0';
+                    $item->slow_time = '0:0';
+                    $item->averages = '0:0';
                     return $item;
                 });
 
