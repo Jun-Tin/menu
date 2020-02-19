@@ -356,7 +356,10 @@ class UsersController extends Controller
     public function online(Request $request, User $user)
     {
         $user = auth()->user()->user;
-        return (new UserResource($user))->additional(['status' => 200]);
+        if ($user) {
+            return (new UserResource($user))->additional(['status' => 200]);
+        }
+        return response()->json(['data' => [], 'status' => 200]);
     } 
 
     /** 【 修改客户金币数 】*/ 
