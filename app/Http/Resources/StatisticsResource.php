@@ -411,9 +411,9 @@ class StatisticsResource extends Resource
                 $menus = $this->menus()->where('status', 1)->select('id', 'name')->get()->map(function ($item){
                     $item->number = 0;
                     $item->time = 0;
-                    $item->fast_time = '00:00:00';
-                    $item->slow_time = '00:00:00';
-                    $item->averages = '00:00:00';
+                    $item->fast_time = '0:0';
+                    $item->slow_time = '0:0';
+                    $item->averages = '0:0';
                     return $item;
                 });
 
@@ -456,7 +456,6 @@ class StatisticsResource extends Resource
                     foreach ($newdata as $key => $value) {
                         array_multisort($newdata[$key]['data'], SORT_DESC);
                         $count = count($value['data']);
-                        dd($count);
                         if ($count == 1) {
                             $newdata[$key]['fast_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
                             $newdata[$key]['slow_time'] = floor(($value['data'][0])/3600).':'.floor(((($value['data'][0])%3600)/60)).':'.(($value['data'][0])%60);
