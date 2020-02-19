@@ -72,7 +72,7 @@ class User extends Authenticatable
         return $this->hasMany(Behavior::class);
     }
 
-    /** 【 一对多客户关联关系 】 */
+    /** 【 一对多下线（客户）关联关系 】 */
     public function users()
     {
         return $this->hasMany(self::class, 'created_by', 'id');

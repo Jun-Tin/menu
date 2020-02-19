@@ -350,6 +350,13 @@ class UsersController extends Controller
     {
         $users = auth()->user()->users;
         return (UserResource::collection($users))->additional(['status' => 200]);
+    }
+
+    /** 【 我的上线 】 */
+    public function online(Request $request, User $user)
+    {
+        $user = auth()->user()->user;
+        return (new UserResource($user))->additional(['status' => 200]);
     } 
 
     /** 【 修改客户金币数 】*/ 

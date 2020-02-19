@@ -153,10 +153,22 @@ class StoresController extends Controller
             $store->increment('days', $days);
         }
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
-
+        
+        // 根据门店语言
+        switch ($store->language->id) {
+            case 1:
+                $title = 'Published';
+                break;
+            case 2:
+                $title = '發佈';
+                break;
+            default:
+                $title = '发布';
+                break;
+        }
         // 写入记录
         Bill::create([
-            'title' => '激活门店',
+            'title' => $title,
             'order' => 'Act'.date('YmdHis').$user->random(),
             'operate' => $user->id,
             'accept' => '系统',

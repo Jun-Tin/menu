@@ -12,13 +12,13 @@ class PlaceObserver
 		if ($place->floor != 0) {
 			switch ($place->store->language->id) {
 				case 1:
-					$set = 'New Seat';
+					$set = 'Seat';
 					break;
 				case 2:
-					$set = '新座位';
+					$set = '座位';
 					break;
 				default:
-					$set = '新座位';
+					$set = '座位';
 					break;
 			}
 			$encrypted = substr(Crypt::encryptString($set.$place->id.'_'.$place->id.'_code'), 0, 15);

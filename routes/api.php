@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::get('user/member', 'Api\UsersController@member');
     /**【 退出登录 】*/
     Route::get('user/logout', 'Api\UsersController@logout');
+    /**【 我的上线 】 */
+    Route::get('user/online', 'Api\UsersController@online'); 
     
 
     /**【 员工 】*/ 
