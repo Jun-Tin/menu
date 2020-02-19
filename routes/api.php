@@ -337,6 +337,17 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::delete('language/{language}/destroy', 'Api\LanguagesController@destroy');
 
 
+    /** 【 门店类型 】 */
+    // 列表
+    Route::get('type/index', 'Api\TypesController@index');
+    // 创建
+    Route::post('type/store', 'Api\TypesController@store');
+    // 修改
+    Route::patch('type/{type}/update', 'Api\TypesController@update');
+    // 删除 
+    Route::delete('type/{type}/destroy', 'Api\TypesController@destroy');
+
+
     /** 
      * 【 功能类接口 】
      */ 

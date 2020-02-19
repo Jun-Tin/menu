@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'category', 'condition', 'interval', 'language_id'
+        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'type_id', 'condition', 'interval', 'language_id'
     ];
     
     /**【 一对一图片关联关系 】*/ 

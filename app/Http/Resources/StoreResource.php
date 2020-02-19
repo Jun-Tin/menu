@@ -32,7 +32,7 @@ class StoreResource extends Resource
             'settle' => $this->settle,
             'active' => $this->active,
             'days' => $this->days,
-            'category' => $this->category,
+            'type_id' => $this->type_id,
             'interval' => $this->interval,
             'condition' => $this->condition,
             'language' => $this->language,

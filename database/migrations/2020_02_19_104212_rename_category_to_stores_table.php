@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCategoryToStoresTable extends Migration
+class RenameCategoryToStoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddCategoryToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('category')->nullable()->default(1)->after('actived_at')->comment('门店分类');
+            $table->renameColumn('category', 'type_id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddCategoryToStoresTable extends Migration
     public function down()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn('category');
+            $table->renameColumn('type_id','category');
         });
     }
 }
