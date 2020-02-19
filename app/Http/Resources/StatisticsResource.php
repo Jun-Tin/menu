@@ -417,8 +417,6 @@ class StatisticsResource extends Resource
                     return $item;
                 });
 
-                // q23123
-
                 $collection = $this->orders()->whereBetween('created_at', [$request->startday. ' 00:00:00', $request->endday. ' 23:59:59'])->whereIn('status', [1, 2])->get()->map(function ($item){
                     return $item->orders()->where('category', 'm')->whereIn('status', [1, 2, 3, 4])->selectRaw('id, menu_id, menus_id, number')->get()->map(function ($item){ 
                         $behavior = $item->behavior()->where('category', 'cooking')->where('status', 1)->first();
