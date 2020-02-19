@@ -411,9 +411,9 @@ class StatisticsResource extends Resource
                 $menus = $this->menus()->where('status', 1)->select('id', 'name')->get()->map(function ($item){
                     $item->number = 0;
                     $item->time = 0;
-                    $item->fast_time = '0:0';
-                    $item->slow_time = '0:0';
-                    $item->averages = '0:0';
+                    $item->fast_time = '00:00:00';
+                    $item->slow_time = '00:00:00';
+                    $item->averages = '00:00:00';
                     return $item;
                 });
 
