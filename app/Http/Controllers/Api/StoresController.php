@@ -156,7 +156,7 @@ class StoresController extends Controller
         
         // 写入记录
         Bill::create([
-            'title' => $title,
+            'title' => '激活门店',
             'order' => 'Act'.date('YmdHis').$user->random(),
             'operate' => $user->id,
             'accept' => '系统',
