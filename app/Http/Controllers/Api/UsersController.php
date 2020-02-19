@@ -379,6 +379,7 @@ class UsersController extends Controller
             'type' => 1,
             'number' => $request->number,
             'method' => $request->method,
+            'category' => 2,
         ]);
         return response()->json(['status' => 200, 'message' => __('messages.update')]);
     }

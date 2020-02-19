@@ -154,18 +154,6 @@ class StoresController extends Controller
         }
         $store->update(['active' => 1, 'actived_at' => Carbon::now()->toDateTimeString()]);
         
-        // 根据门店语言
-        switch ($store->language->id) {
-            case 1:
-                $title = 'Published';
-                break;
-            case 2:
-                $title = '發佈';
-                break;
-            default:
-                $title = '发布';
-                break;
-        }
         // 写入记录
         Bill::create([
             'title' => $title,
@@ -177,6 +165,7 @@ class StoresController extends Controller
             'type' => 0,
             'number' => $days,
             'method' => 7,
+            'category' => 1,
         ]);
 
         return (new StoreResource($store))->additional(['status' => 200, 'message' => __('messages.upline')]);

@@ -27,6 +27,7 @@ class BillResource extends Resource
             'type' => $this->type? new UserResource(User::where('id', $this->accept)->first()):'系统',
             'number' => $this->number,
             'method' => $this->method,
+            'category' => $this->category,
             'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):''
         ];
