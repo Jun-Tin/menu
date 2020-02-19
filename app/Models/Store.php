@@ -79,7 +79,13 @@ class Store extends Model
     public function language()
     {
         return $this->belongsTo(Language::class);
-    }    
+    }  
+
+    /** 【 一对一门店类型关联关系 】 */
+    public function type() 
+    {
+        return $this->belongsTo(Type::class);
+    }
 
     /** 【 周数统计 】 */
     public function get_week($year) {
