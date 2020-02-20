@@ -356,10 +356,10 @@ class UsersController extends Controller
     public function online(Request $request, User $user)
     {
         $user = auth()->user()->user;
-        if ($user) {
-            return (new UserResource($user))->additional(['status' => 200]);
+        if (!$user) {
+            return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
         }
-        return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
+        return (new UserResource($user))->additional(['status' => 200]);
     } 
 
     /** 【 修改客户金币数 】*/ 

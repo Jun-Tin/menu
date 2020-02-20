@@ -46,6 +46,12 @@ class Store extends Model
         return $this->hasMany(Book::class);
     }
 
+    /** 【 一对多排队关联关系 】 */
+    public function lines()
+    {
+        return $this->hasMany(Line::class);
+    } 
+
     /** 【 一对多订单关联关系 】 */
     public function orders()
     {
