@@ -21,7 +21,7 @@ class CreateOrderDetailsTable extends Migration
             $table->string('tags_id')->nullable()->comment('标签组id');
             $table->string('fill_price')->nullable()->comment('补差组');
             $table->integer('number')->nullable()->comment('数量');
-            $table->integer('price')->nullable()->comment('价格');
+            $table->double('price', 8, 2)->nullable()->comment('价格');
             $table->integer('status')->nullable()->default(0)->comment('菜品状态');
             $table->timestamps();
         });

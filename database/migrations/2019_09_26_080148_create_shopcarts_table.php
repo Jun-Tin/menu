@@ -21,7 +21,7 @@ class CreateShopcartsTable extends Migration
             $table->string('tags_id')->nullable()->comment('标签组id');
             $table->string('fill_price')->nullable()->comment('差价集合');
             $table->integer('number')->nullable()->default(1)->comment('数量');
-            $table->integer('price')->nullable()->comment('总价格');
+            $table->double('price', 8, 2)->nullable()->comment('总价格');
             $table->timestamps();
         });
     }

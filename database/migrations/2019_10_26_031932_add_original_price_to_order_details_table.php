@@ -14,7 +14,7 @@ class AddOriginalPriceToOrderDetailsTable extends Migration
     public function up()
     {
         Schema::table('order_details', function (Blueprint $table) {
-            $table->string('original_price')->nullable()->after('price')->comment('套餐单品价格');
+            $table->double('original_price', 8, 2)->nullable()->after('price')->comment('套餐单品价格');
         });
     }
 

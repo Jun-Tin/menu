@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->string('order')->unique()->nullable()->comment('订单编号');
             $table->integer('place_id')->nullable()->comment('座位id');
-            $table->string('price')->nullable()->comment('订单价格');
+            $table->double('price', 8, 2)->nullable()->comment('订单价格');
             $table->integer('number')->nullable()->comment('订单总商品');
             $table->integer('status')->nullable()->default(0)->comment('订单状态');
             $table->timestamps();

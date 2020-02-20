@@ -357,14 +357,14 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
 
 
 /** 【 门店详情 】 */
-Route::get('store/{store}/customerShow', 'Api\StoresController@customerShow'); 
+Route::get('store/{store}/customerShow', 'Api\StoresController@customerShow')->middleware('setLocale'); 
 /** 【 座位状态 】 */
-Route::get('place/{place}/customerStatus', 'Api\PlacesController@customerStatus'); 
+Route::get('place/{place}/customerStatus', 'Api\PlacesController@customerStatus')->middleware('setLocale'); 
 /** 【 客户预约 】 */
 // 创建
-Route::post('book/customerStore', 'Api\BooksController@customerStore');
+Route::post('book/customerStore', 'Api\BooksController@customerStore')->middleware('setLocale');
 // 详情
-Route::get('book/{book}/customerIndex', 'Api\BooksController@customerIndex');
+Route::get('book/{book}/customerIndex', 'Api\BooksController@customerIndex')->middleware('setLocale');
 
 /** 【 自定义验证类接口 】 */ 
 Route::group(['middleware' => ['Code', 'setLocale']], function(){
