@@ -18,15 +18,15 @@ use Illuminate\Http\Request;
 // });
 
 /**【 获取验证码 】*/ 
-Route::post('send', 'Api\MessageCodesController@store');
+Route::post('send', 'Api\MessageCodesController@store')->middleware('setLocale');
 /**【 注册 】*/ 
-Route::post('user/register', 'Api\UsersController@register');
+Route::post('user/register', 'Api\UsersController@register')->middleware('setLocale');
 /**【 登录 】*/ 
-Route::post('user/login', 'Api\UsersController@login');
+Route::post('user/login', 'Api\UsersController@login')->middleware('setLocale');
 /**【 忘记密码 】*/ 
-Route::post('user/forgot', 'Api\UsersController@forgotPassWord');
+Route::post('user/forgot', 'Api\UsersController@forgotPassWord')->middleware('setLocale');
 /**【 获取区号 】*/ 
-Route::get('areacode', 'Api\AreacodesController@index');
+Route::get('areacode', 'Api\AreacodesController@index')->middleware('setLocale');
 /**【 切换语言 】*/
 Route::get('changeLocale/{locale}','Api\AreacodesController@changeLocale')->middleware('setLocale');
 /**【 获取门店设置语言 】*/

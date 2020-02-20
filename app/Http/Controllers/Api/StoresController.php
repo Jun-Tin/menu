@@ -240,7 +240,8 @@ class StoresController extends Controller
     /** 【 手机号码 】 */
     public function phone(Request $request, Store $store)
     {
-        return BookResource::collection($store->books->unique('phone'))->additional(['status' => 200]);
+        $collection = collect([$store->lines, $store->books])->collapse();
+        return BookResource::collection($collection->unique('phone')->values())->additional(['status' => 200]);
     } 
 
     /** 【 售罄菜品列表 】 */
