@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Type extends Model
 {
     protected $fillable = [
-        'name', 'name_en', 'name_hk', 'show'
+        'name_cn', 'name_hk', 'name_en', 'show'
     ];
 
 }

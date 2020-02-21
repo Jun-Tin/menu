@@ -15,7 +15,7 @@ class CreateTypesTable extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->comment('名称');
+            $table->string('name_cn')->nullable()->comment('名称');
             $table->integer('show')->nullable()->default(1)->comment('是否显示：0：不显示，1：显示');
             $table->timestamps();
         });
