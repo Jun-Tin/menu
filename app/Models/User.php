@@ -100,9 +100,9 @@ class User extends Authenticatable
                     'password' => 'required',
                     'phone' => 'unique:users'
                 ], [
-                    'name.required' => '姓名不能为空',
-                    'password.required' => '密码不能为空',
-                    'phone.unique' => '手机号码已存在'
+                    'name.required' => __('messages.name_required'),
+                    'password.required' => __('messages.password_required'),
+                    'phone.unique' => __('messages.phone_unique')
                 ]);
                 break;
             case 'password':
@@ -110,24 +110,24 @@ class User extends Authenticatable
                     'password' => 'required',
                     'comfirmPassword' => 'required|same:password',
                 ], [
-                    'password.required' => '密码不能为空',
-                    'comfirmPassword.required' => '确认密码不能为空',
-                    'comfirmPassword.same' => '密码与确认密码不匹配',
+                    'password.required' => __('messages.password_required'),
+                    'comfirmPassword.required' => __('messages.comfirmPassword_required'),
+                    'comfirmPassword.same' => __('messages.comfirmPassword_same'),
                 ]);
                 break;
             case 'update':
                 return Validator::make($data, [
                     'phone' => 'required|unique:users,phone,' .$data['id'],
                 ], [
-                    'phone.required' => '手机号码不能为空',
-                    'phone.unique' => '手机号码已存在',
+                    'phone.required' => __('messages.phone_required'),
+                    'phone.unique' => __('messages.phone_unique'),
                 ]);
                 break;
             case 'updated':
                 return Validator::make($data, [
                     'phone' => 'required',
                 ], [
-                    'phone.required' => '手机号码不能为空',
+                    'phone.required' => __('messages.phone_required'),
                 ]);
                 break;
         }

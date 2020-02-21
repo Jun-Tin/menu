@@ -50,4 +50,14 @@ return [
     'pass' => 'Approval Code Passed！',
     'people' => 'No Salesperson！',
     'offline' => 'Store Not Online！',
+
+    // 验证规则
+    'name_required' => 'Please Fill In Name',
+    'password_required' => 'Please Fill In Password',
+    'phone_unique' => 'Phone Number Existed',
+    'comfirmPassword_required' => 'Please Re-enter Password',
+    'comfirmPassword_same' => 'Inconsistent Passwords',
+    'phone_required' => 'Please Fill In Phone Number',
+    'placeName_required' => 'Please Fill In Table Name',
+    'placeName_unique' => 'Table Name Existed',
 ];

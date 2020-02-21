@@ -50,4 +50,14 @@ return [
     'pass' => '驗證通過！',
     'people' => '沒有銷售人員！',
     'offline' => '門店未上線！',
+
+    // 验证规则
+    'name_required' => '姓名不能為空',
+    'password_required' => '密碼不能為空',
+    'phone_unique' => '手機號碼已存在',
+    'comfirmPassword_required' => '確認密碼不能為空',
+    'comfirmPassword_same' => '密碼與確認密碼不一致',
+    'phone_required' => '手機號碼不能為空',
+    'placeName_required' => '桌子名稱不能為空',
+    'placeName_unique' => '桌子名稱已存在',
 ];

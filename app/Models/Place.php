@@ -109,8 +109,8 @@ class Place extends Model
                 })
             ],
         ], [
-            'name.required' => '座位名称不能为空',
-            'name.unique' => '座位名称已存在',
+            'name.required' => __('messages.placeName_required'),
+            'name.unique' =>  __('messages.placeName_unique'),
         ]);
     } 
 }

@@ -50,5 +50,15 @@ return [
     'pass' => '验证通过！',
     'people' => '没有销售人员！',
     'offline' => '门店未上线！',
-    'new_dishes' => '新菜品通知！'
+    'new_dishes' => '新菜品通知！',
+
+    // 验证规则
+    'name_required' => '姓名不能为空',
+    'password_required' => '密码不能为空',
+    'phone_unique' => '手机号码已存在',
+    'comfirmPassword_required' => '确认密码不能为空',
+    'comfirmPassword_same' => '密码与确认密码不一致',
+    'phone_required' => '手机号码不能为空',
+    'placeName_required' => '桌子名称不能为空',
+    'placeName_unique' => '桌子名称已存在',
 ];
