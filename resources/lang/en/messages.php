@@ -42,7 +42,7 @@ return [
     'login' => 'Log-in Success！',
     'permission' => 'No Right For Log-in！',
     'password' => 'Password Incorrect！',
-    'code_expired' => 'Approval Code Inactive！',
+    'code_expired' => 'SMS Code Expired！',
     'code_fail' => 'SMS Code Incorrect！',
     'register' => 'Register Success！',
     'password_reset' => 'Password Editing Success！',
