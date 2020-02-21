@@ -89,6 +89,13 @@ class MenusController extends Controller
         return response()->json(['message' => __('messages.destroy'), 'status' => 200]);
     }
 
+    /** 【 修改菜品 —— 不修改标签关系 】 */
+    public function edit(Request $request, Menu $menu)
+    {
+        $menu->update($request->all());
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.update')]);
+    } 
+
     /** 【 菜品售罄、恢复 -- 多选 】 */
     public function saleStatus(Request $request, Menu $menu)
     {

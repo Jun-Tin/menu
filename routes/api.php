@@ -192,6 +192,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/saleStatus', 'Api\MenusController@saleStatus');
     // 菜品在售、售罄修改（单个菜品）
     Route::patch('menu/{menu}/soldStatus', 'Api\MenusController@soldStatus');
+    // 修改菜品 —— 不修改标签关系
+    Route::patch('menu/{menu}/edit', 'Api\MenusController@edit');
 
 
     /** 【 新套餐 】 */
