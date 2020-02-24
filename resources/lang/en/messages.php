@@ -49,6 +49,7 @@ return [
     'logout' => 'Log-out Success！',
     'pass' => 'Approval Code Passed！',
     'people' => 'No Salesperson！',
+    'online' => 'No Introducer！',
     'offline' => 'Store Not Online！',
 
     // 验证规则

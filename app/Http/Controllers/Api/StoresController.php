@@ -163,7 +163,7 @@ class StoresController extends Controller
             'target' => $store->id,
             'execute' => 0,
             'type' => 0,
-            'number' => $days,
+            'number' => $period->number,
             'method' => 7,
             'category' => 1,
         ]);

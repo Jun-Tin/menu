@@ -349,6 +349,9 @@ class UsersController extends Controller
     public function client(Request $request, User $user)
     {
         $users = auth()->user()->users;
+        // if (!$users) {
+        //     return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
+        // }
         return (UserResource::collection($users))->additional(['status' => 200]);
     }
 
@@ -357,7 +360,7 @@ class UsersController extends Controller
     {
         $user = auth()->user()->user;
         if (!$user) {
-            return response()->json(['error' => ['message' => [__('messages.people')]], 'status' => 404]);
+            return response()->json(['error' => ['message' => [__('messages.online')]], 'status' => 404]);
         }
         return (new UserResource($user))->additional(['status' => 200]);
     } 
