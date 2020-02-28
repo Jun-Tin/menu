@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'type_id', 'condition', 'interval', 'language_id', 'line', 'chef'
+        'user_id', 'name', 'address', 'image_id', 'phone', 'start_time', 'end_time', 'intro', 'set_time', 'clean', 'settle', 'active', 'days', 'actived_at', 'after_start', 'after_end', 'type_id', 'condition', 'interval', 'language_id', 'currency_id', 'line', 'chef'
     ];
     
     /**【 一对一图片关联关系 】*/ 
@@ -92,6 +92,12 @@ class Store extends Model
     {
         return $this->belongsTo(Type::class);
     }
+
+    /** 【 一对一货币关联关系 】 */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    } 
 
     /** 【 周数统计 】 */
     public function get_week($year) {

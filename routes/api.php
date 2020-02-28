@@ -347,6 +347,16 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     // 删除 
     Route::delete('type/{type}/destroy', 'Api\TypesController@destroy');
 
+    /** 【 货币选择 】 */
+    // 列表
+    Route::get('currency/index', 'Api\CurrenciesController@index');
+    // 创建
+    Route::post('currency/store', 'Api\CurrenciesController@store');
+    // 修改
+    Route::patch('currency/{currency}/update', 'Api\CurrenciesController@update');
+    // 删除 
+    Route::delete('currency/{currency}/destroy', 'Api\CurrenciesController@destroy');
+
 
     /** 
      * 【 功能类接口 】
