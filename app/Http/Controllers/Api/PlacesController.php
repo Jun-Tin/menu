@@ -151,10 +151,9 @@ class PlacesController extends Controller
     {
         $shopcarts = $place->shopcarts;
         // 总价格
-        // $total = $shopcarts->reduce(function ($sum, $value){
-        //     return $sum + $value->price;
-        // });
-        $total = $shopcarts->sum('price');
+        $total = round($shopcarts->reduce(function ($sum, $value){
+            return $sum + $value->price;
+        }), 2);
         // 总条数
         $number = $shopcarts->reduce(function ($sum, $value){
             return $sum + $value->number;
