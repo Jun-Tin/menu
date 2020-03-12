@@ -45,8 +45,6 @@ class OrderCollection extends ResourceCollection
                                 $item->tags_name = $name;
                             }
                             $item->remark = $item->remark;
-                            $item->created_at = $item->created_at? $item->created_at->format('Y/m/d H:i:s'): '';
-                            $item->updated_at = $item->updated_at? $item->updated_at->format('Y/m/d H:i:s'): '';
                             return $item;
                         })->values(),
                         'finished' => $this->collection['finished']->flatten()->filter(function ($item){
