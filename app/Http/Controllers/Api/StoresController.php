@@ -383,7 +383,7 @@ class StoresController extends Controller
     {
         Store::where('active', 1)->get()->map(function ($item){
             if (($item->days -1) <= 0) {
-                $item->update(['active' => 0]);
+                $item->update(['active' => 0, 'days' => 0, 'actived_at' => NULL]);
             } else {
                 $item->decrement('days', 1);
             }
