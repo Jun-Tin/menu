@@ -32,7 +32,7 @@ class PlaceObserver
 	            unlink($dir. '/' .$filename);
 	        }
 	        // 保存二维码
-	        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$place->store_id.'/'.$place->id.'/'.$encrypted.'/'.$place->store->language->name_en, $dir. '/'. $filename);
+	        QrCode::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate(env('APP_CLIENT').$place->store_id.'/'.$place->id.'/'.$encrypted, $dir. '/'. $filename);
 	        // 返回url链接
 	        $url = env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' .$place->floor. '/' .$filename;
 	        // 保存在数据库
