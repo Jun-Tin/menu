@@ -253,7 +253,7 @@ class StoresController extends Controller
     /** 【 菜品列表--全部 】 */ 
     public function totalMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->orderBy('id', 'desc')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
     }
 
     /** 【 在售、售罄菜品数量 】 */
@@ -293,7 +293,7 @@ class StoresController extends Controller
     /** 【 客户端--菜品列表--全部 】 */ 
     public function customerMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->orderBy('id', 'desc')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */

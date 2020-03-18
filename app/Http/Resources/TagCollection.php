@@ -23,7 +23,7 @@ class TagCollection extends ResourceCollection
         return [
             'data' => $this->collection->map(function ($item) use ($where) {
                 // $item->menus = Tag::find($item->id)->menus()->where('category', 'm')->where('status', 1)->get()->map(function ($item) {
-                $item->menus = Tag::find($item->id)->menus()->where($where)->get()->map(function ($item) {
+                $item->menus = Tag::find($item->id)->menus()->where($where)->orderBy('id', 'desc')->get()->map(function ($item) {
                     $item->image = Image::find($item->image_id);
                     return $item;
                 });
