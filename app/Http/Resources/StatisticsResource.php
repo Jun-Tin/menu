@@ -353,7 +353,7 @@ class StatisticsResource extends Resource
 
             case 'staffService':
                 // 门店下所有员工
-                $users = $this->users()->select('id', 'name')->get()->map(function ($item){
+                $users = $this->users()->where('post', 'waiter')->select('id', 'name')->get()->map(function ($item){
                     $item->book = 0;
                     $item->order = 0;
                     $item->serving = 0;
