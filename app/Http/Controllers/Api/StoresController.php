@@ -174,7 +174,7 @@ class StoresController extends Controller
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category', 'm')->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category', 'm')->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
@@ -184,7 +184,7 @@ class StoresController extends Controller
         if ($request->type == 'in') {
             $where[] = ['status', 1];
         }
-        return (new MenuCollection($store->menus()->where($where)->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where($where)->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 （按人数筛选） 】 */
@@ -253,7 +253,7 @@ class StoresController extends Controller
     /** 【 菜品列表--全部 】 */ 
     public function totalMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 在售、售罄菜品数量 】 */
@@ -293,7 +293,7 @@ class StoresController extends Controller
     /** 【 客户端--菜品列表--全部 】 */ 
     public function customerMenus(Request $request, Store $store)
     {
-        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('pid', 0)->where('category', 'class')->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
@@ -303,7 +303,7 @@ class StoresController extends Controller
         if ($request->type == 'in') {
             $where[] = ['status', 1];
         }
-        return (new MenuCollection($store->menus()->where($where)->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where($where)->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
     }
 
     /** 【 收入报表 】 */ 
