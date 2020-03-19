@@ -6,7 +6,7 @@ use App\Models\{Store, User, MenuTag, Bill, Period, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource, LanguageResource, CurrecyResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource, LanguageResource, CurrencyResource};
 use Carbon\Carbon;
 
 class StoresController extends Controller
@@ -379,7 +379,7 @@ class StoresController extends Controller
     /** 【 获取门店设置币种 】 */
     public function currency(Request $request, Store $store)
     {
-        return (new CurrecyResource($store->currency))->additional(['status' => 200]);
+        return (new CurrencyResource($store->currency))->additional(['status' => 200]);
     }
 
 
