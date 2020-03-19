@@ -140,6 +140,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('store/{store}/refresh', 'Api\StoresController@refresh');
     // 门店预约二维码
     Route::get('store/{store}/bookQrcode', 'Api\StoresController@bookQrcode');
+    // 获取门店设置币种 
+    Route::get('store/{store}/currency', 'Api\StoresController@currency');
 
 
     /** 【 报表 】 */

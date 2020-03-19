@@ -376,6 +376,12 @@ class StoresController extends Controller
         return (new LanguageResource($store->language))->additional(['status' => 200]);
     }
 
+    /** 【 获取门店设置币种 】 */
+    public function currency(Request $request, Store $store)
+    {
+        return (new CurrenyResource($store->currency))->additional(['status' => 200]);
+    }
+
 
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
