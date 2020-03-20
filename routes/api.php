@@ -199,7 +199,6 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/{menu}/edit', 'Api\MenusController@edit');
     // 修改菜品 —— 排序号
     Route::patch('menu/upDown', 'Api\MenusController@upDown');
-    Route::get('menu/bian', 'Api\MenusController@bian');
 
 
     /** 【 新套餐 】 */
