@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Menu, MenuTag};
+use App\Models\{Menu, MenuTag, Tag};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{MenuResource, MenuCollection, StoreCollection};
+use App\Http\Resources\{MenuResource, MenuCollection, StoreCollection, TagResource};
 use GatewayWorker\Lib\Gateway;
 
 class MenusController extends Controller
@@ -212,4 +212,12 @@ class MenusController extends Controller
 
         return (new StoreCollection($menus))->additional(['status' => 200]);
     }
+
+    /** 【 修改菜品排序 】 */
+    public function upDown(Request $request)
+    {   
+        MenuTag::where('id', $request->pivot_id)->update(['order_number' => $request->order_number]);
+        $tag = Tag::find($request->taget_id);
+        return (TagResource::collection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
+    } 
 }
