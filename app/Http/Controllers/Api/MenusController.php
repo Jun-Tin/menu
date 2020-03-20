@@ -220,4 +220,12 @@ class MenusController extends Controller
         $tag = Tag::find($request->taget_id);
         return (TagResource::collection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
     } 
+
+    public function bian()
+    {
+        dd(MenuTag::get()->map(function($item) {
+            MenuTag::where('id', $item->id)->update(['order_number' => $item->id]);
+        }));
+
+    }
 }

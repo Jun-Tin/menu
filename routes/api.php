@@ -31,6 +31,8 @@ Route::get('areacode', 'Api\AreacodesController@index')->middleware('setLocale')
 Route::get('changeLocale/{locale}','Api\AreacodesController@changeLocale')->middleware('setLocale');
 /**【 获取门店设置语言 】*/
 Route::get('store/{store}/language', 'Api\StoresController@language');
+// 获取门店设置货币 
+Route::get('store/{store}/currency', 'Api\StoresController@currency');
 
 // paypal支付
 Route::get('paypal/pay', 'Api\PaypalsController@pay');
@@ -140,8 +142,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('store/{store}/refresh', 'Api\StoresController@refresh');
     // 门店预约二维码
     Route::get('store/{store}/bookQrcode', 'Api\StoresController@bookQrcode');
-    // 获取门店设置币种 
-    Route::get('store/{store}/currency', 'Api\StoresController@currency');
+    
 
 
     /** 【 报表 】 */
@@ -198,6 +199,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/{menu}/edit', 'Api\MenusController@edit');
     // 修改菜品 —— 排序号
     Route::patch('menu/upDown', 'Api\MenusController@upDown');
+    Route::get('menu/bian', 'Api\MenusController@bian');
 
 
     /** 【 新套餐 】 */
