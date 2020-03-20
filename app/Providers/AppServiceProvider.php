@@ -21,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Place::observe(\App\Observers\PlaceObserver::class);
         \App\Models\OrderDetail::observe(\App\Observers\OrderDetailObserver::class);
         \App\Models\Line::observe(\App\Observers\LineObserver::class);
-        \App\Models\MenuTag::observe(\App\Observers\MenuTagObserver::class);
     }
 
     /**

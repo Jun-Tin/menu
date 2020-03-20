@@ -39,8 +39,10 @@ class MenusController extends Controller
         $menu->save();
         
         if ($ids) {
-            foreach ($ids as $key => $value) {
-                $menu->tags()->sync($value, false);
+            // 获取菜品跟标签关系
+            $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+            for ($i = 0; $i < count($ids); $i++) { 
+                $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
             }
         }
         
@@ -60,8 +62,10 @@ class MenusController extends Controller
             $ids = json_decode($request->ids);
             $menu->tags()->detach();
             if ($ids) {
-                foreach ($ids as $key => $value) {
-                    $menu->tags()->sync($value, false);
+                // 获取菜品跟标签关系
+                $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+                for ($i = 0; $i < count($ids); $i++) { 
+                    $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
                 }
             }
         }
@@ -140,7 +144,9 @@ class MenusController extends Controller
     /** 【 新套餐 -- 添加标签 】 */
     public function addTags(Request $request, Menu $menu)
     {
-        $menu->tags()->wherePivot('pid', 0)->attach(0, ['pid' => 0, 'order_number' => 0]);
+        // 获取菜品跟标签关系
+        $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+        $menu->tags()->wherePivot('pid', 0)->attach(0, ['pid' => 0, 'order_number' => $order_number+1]);
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.add')]);
     } 
