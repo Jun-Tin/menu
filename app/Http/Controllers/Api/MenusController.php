@@ -229,6 +229,6 @@ class MenusController extends Controller
         MenuTag::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
         MenuTag::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
         $tag = Tag::find($request->taget_id);
-        return (TagResource::collection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
+        return (new MenuCollection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
     }
 }
