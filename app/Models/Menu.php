@@ -25,7 +25,7 @@ class Menu extends Model
     /** 【 多对多标签嵌入菜品关联关系 】 */
     public function menus($value)
     {
-        return $this->belongsToMany(self::class, 'menu_tag', 'menu_id', 'target_id')->withPivot('id', 'fill_price', 'order_number')->wherePivot('pid', $value)->withTimestamps()->orderBy('order_number');
+        return $this->belongsToMany(self::class, 'menu_tag', 'menu_id', 'target_id')->withPivot('id', 'fill_price', 'order_number')->wherePivot('pid', $value)->withTimestamps()->orderBy('order_number', 'desc')->orderBy('id', 'desc');
     }
 
     /** 【 一对多标签关联关系 】 */
