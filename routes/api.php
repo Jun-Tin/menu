@@ -43,6 +43,8 @@ Route::get('paypal/notify', 'Api\PaypalsController@notify');
 // 定时计算上线天数
 Route::get('store/computeDays', 'Api\StoresController@computeDays');
 
+Route::get('place/redis', 'Api\PlacesController@redis');
+
 
 
 /** 【 socket通讯 】 */

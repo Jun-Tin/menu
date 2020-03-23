@@ -429,4 +429,9 @@ class PlacesController extends Controller
         $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/' . $place->floor. '/' .$place->name. '.png']);
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.bind')]);
     }
+
+    public function redis()
+    {
+        dd(Redis::keys('*'));
+    }
 }
