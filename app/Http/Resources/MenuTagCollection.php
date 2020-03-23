@@ -18,7 +18,7 @@ class MenuTagCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function ($item) {
-                $item->menus = MenuTag::where('pid', $item->id)->get()->map(function ($item){
+                $item->menus = MenuTag::where('pid', $item->id)->orderBy('order_number')->orderBy('id', 'desc')->get()->map(function ($item){
                     $menu = Menu::find($item->target_id);
                     $item->name = $menu->name;
                     $item->image = Image::find($menu->image_id);

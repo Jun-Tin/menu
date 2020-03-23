@@ -219,7 +219,7 @@ class MenusController extends Controller
         return (new StoreCollection($menus))->additional(['status' => 200]);
     }
 
-    /** 【 修改菜品排序 】 */
+    /** 【 修改菜品排序 —— 单品 】 */
     public function upDown(Request $request)
     {   
         // 操作的序列号
@@ -228,7 +228,20 @@ class MenusController extends Controller
         $order_number2 = MenuTag::where('id', $request->pivot_ids)->value('order_number');
         MenuTag::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
         MenuTag::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
-        $tag = Tag::find($request->taget_id);
+        $tag = Tag::find($request->target_id);
         return (new MenuCollection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
+    }
+
+    /** 【 修改菜品排序 —— 套餐 】 */
+    public function PackageUpDown(Request $request)
+    {   
+        // 操作的序列号
+        $order_number1 = MenuTag::where('id', $request->pivot_id)->value('order_number');
+        // 交换的序列号
+        $order_number2 = MenuTag::where('id', $request->pivot_ids)->value('order_number');
+        MenuTag::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
+        MenuTag::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
+        $menu = Menu::find($request->target_id);
+        return (new MenuResource($menu))->additional(['status' => 200]);
     }
 }

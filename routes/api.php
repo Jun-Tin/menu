@@ -199,8 +199,10 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/{menu}/soldStatus', 'Api\MenusController@soldStatus');
     // 修改菜品 —— 不修改标签关系
     Route::patch('menu/{menu}/edit', 'Api\MenusController@edit');
-    // 修改菜品 —— 排序号
+    // 修改菜品排序 —— 菜品
     Route::patch('menu/upDown', 'Api\MenusController@upDown');
+    // 修改菜品排序 —— 套餐
+    Route::patch('menu/PackageUpDown', 'Api\MenusController@PackageUpDown');
 
 
     /** 【 新套餐 】 */
@@ -333,6 +335,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     // 修改状态值
     Route::patch('line/{line}/update', 'Api\LinesController@update');
 
+
     /** 【 语言选择 】 */
     // 列表
     Route::get('language/index', 'Api\LanguagesController@index');
@@ -353,6 +356,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('type/{type}/update', 'Api\TypesController@update');
     // 删除 
     Route::delete('type/{type}/destroy', 'Api\TypesController@destroy');
+
 
     /** 【 货币选择 】 */
     // 列表

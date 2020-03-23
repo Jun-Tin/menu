@@ -19,7 +19,7 @@ class Menu extends Model
     /** 【 多对多标签关联关系 】*/
     public function tags()
     {
-    	return $this->belongsToMany(Tag::class, 'menu_tag', 'menu_id', 'target_id')->withPivot('id', 'order_number')->withTimestamps()->orderBy('order_number');
+    	return $this->belongsToMany(Tag::class, 'menu_tag', 'menu_id', 'target_id')->withPivot('id', 'order_number')->withTimestamps()->orderBy('order_number')->orderBy('id', 'desc');
     }
 
     /** 【 多对多标签嵌入菜品关联关系 】 */
