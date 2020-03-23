@@ -197,7 +197,7 @@ class StoreObserver
 		        	'line_link' => env('APP_LINE'). $store->id. '/screen/'. $code[1],
 		        	'line_qrcode' => env('APP_URL').'/images/qrcodes/'. $store->id. '/screen/'. $data[1]['filename'],
 		        	'book_link' => env('APP_BOOK'). $store->id. '/screen/'. $code[2],
-		        	'book_qrcode' => env('APP_BOOK').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
+		        	'book_qrcode' => env('APP_URL').'images/qrcodes/'. $store->id. '/screen/'. $data[2]['filename'],
 		        ]);
 				
 				// break;
