@@ -61,6 +61,7 @@ class Code
         }
         // 检查门店是否上线状态
         $active = Store::where('id', $store_id)->value('active');
+        dd($active);
         if (!$active) {
             return response()->json(['error' => ['message' => [__('messages.offline')]], 'status' => 404]);
         }
