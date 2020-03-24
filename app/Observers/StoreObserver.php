@@ -179,7 +179,7 @@ class StoreObserver
 		        ];
 
 		        foreach ($data as $key => $value) {
-		        	$code[$key] = substr(Crypt::encryptString($store->name. '_'.$value['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
+		        	$code[$key] = substr(Crypt::encryptString('store_'.$value['type'].'_'. $store->id. '_'. $store->id. '_code'), 0, 15);
 		        	// 判断图片是否存在
 			        if (file_exists($screen_dir. '/'. $value['filename'])) {
 			            unlink($screen_dir. '/'. $value['filename']);

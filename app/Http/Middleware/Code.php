@@ -37,17 +37,18 @@ class Code
             if ($request->header('storeid') && $request->header('category')) {
                 // 获取门店
                 $store = Store::find($request->header('storeid'));
-                switch ($request->header('category')) {
-                    case 'screen':
-                        $name = $store->name.'_screen';
-                        break;
-                    case 'line':
-                        $name = $store->name.'_line';
-                        break;
-                    case 'book':
-                        $name = $store->name.'_book';
-                        break;
-                }
+                $name = 'store_'.$request->category;
+                // switch ($request->header('category')) {
+                //     case 'screen':
+                //         $name = $store->name.'_screen';
+                //         break;
+                //     case 'line':
+                //         $name = $store->name.'_line';
+                //         break;
+                //     case 'book':
+                //         $name = $store->name.'_book';
+                //         break;
+                // }
                 $id = $store->id;
                 $store_id = $store->id;
             }

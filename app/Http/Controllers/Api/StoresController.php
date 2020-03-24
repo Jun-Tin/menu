@@ -104,7 +104,7 @@ class StoresController extends Controller
             case 'screen':
                 $data = [
                     'type' => 'store',
-                    'name' => $store->name.'_screen',
+                    'name' => 'store_screen',
                     'store_id' => $store->id,
                     'category' => 'screen',
                 ];
@@ -112,7 +112,7 @@ class StoresController extends Controller
             case 'line':
                 $data = [
                     'type' => 'store',
-                    'name' => $store->name.'_line',
+                    'name' => 'store_line',
                     'store_id' => $store->id,
                     'category' => 'line',
                 ];
@@ -120,7 +120,7 @@ class StoresController extends Controller
             case 'book':
                 $data = [
                     'type' => 'store',
-                    'name' => $store->name.'_book',
+                    'name' => 'store_book',
                     'store_id' => $store->id,
                     'category' => 'book',
                 ];
