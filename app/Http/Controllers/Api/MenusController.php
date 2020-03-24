@@ -60,10 +60,10 @@ class MenusController extends Controller
     {
         if ($request->category == 'm') {
             $ids = json_decode($request->ids);
+            // 获取菜品跟标签关系
+            $order_number = MenuTag::orderBy('id', 'desc')->value('id');
             $menu->tags()->detach();
             if ($ids) {
-                // 获取菜品跟标签关系
-                $order_number = MenuTag::orderBy('id', 'desc')->value('id');
                 for ($i = 0; $i < count($ids); $i++) { 
                     $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
                 }
