@@ -37,7 +37,7 @@ class Code
             if ($request->header('storeid') && $request->header('category')) {
                 // 获取门店
                 $store = Store::find($request->header('storeid'));
-                $name = 'store_'.$request->category;
+                $name = 'store_'.$request->header('category');
                 // switch ($request->header('category')) {
                 //     case 'screen':
                 //         $name = $store->name.'_screen';
@@ -61,7 +61,6 @@ class Code
         }
         // 检查门店是否上线状态
         $active = Store::where('id', $store_id)->value('active');
-        dd($active);
         if (!$active) {
             return response()->json(['error' => ['message' => [__('messages.offline')]], 'status' => 404]);
         }
