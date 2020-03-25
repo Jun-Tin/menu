@@ -13,7 +13,7 @@ class Tag extends Model
     /** 【 多对多标签关联关系 】 */
     public function menus()
     {
-    	return $this->belongsToMany(Menu::class, 'menu_tag', 'target_id', 'menu_id')->withPivot('id', 'order_number')->withTimestamps()->orderBy('order_number', 'desc')->orderBy('id', 'desc');
+    	return $this->belongsToMany(Menu::class, 'menu_tag', 'target_id', 'menu_id')->withPivot('id', 'order_number')->withTimestamps()->orderBy('order_number')->orderBy('id');
     }
 
     /** 【 一对多菜品关联关系 】 */ 
