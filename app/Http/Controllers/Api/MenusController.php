@@ -252,12 +252,12 @@ class MenusController extends Controller
     public function PackageUpDown(Request $request)
     { 
         // 操作的序列号
-        $order_number1 = Menu::where('id', $request->pivot_id)->value('order_number');
+        $sort1 = Menu::where('id', $request->pivot_id)->value('sort');
         // 交换的序列号
-        $order_number2 = Menu::where('id', $request->pivot_ids)->value('order_number');
-        Menu::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
-        Menu::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
+        $sort2 = Menu::where('id', $request->pivot_ids)->value('sort');
+        Menu::where('id', $request->pivot_id)->update(['sort' => $sort]);
+        Menu::where('id', $request->pivot_ids)->update(['sort' => $sort]);
         $store = Store::find($request->store_id);
-        return (new MenuCollection($store->menus()->where([['category', 'p'], ['status', 1]])->orderByDesc('id')->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where([['category', 'p'], ['status', 1]])->orderByDesc('sort')->get()))->additional(['status' => 200]);
     }
 }

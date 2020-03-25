@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddOrderNumberToMenusTable extends Migration
+class AddSortToMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddOrderNumberToMenusTable extends Migration
     public function up()
     {
         Schema::table('menus', function (Blueprint $table) {
-            $table->integer('order_number')->nullable()->after('status')->comment('排序号');
+            $table->integer('sort')->nullable()->after('status')->comment('排序号');
         });
     }
 
@@ -26,7 +26,7 @@ class AddOrderNumberToMenusTable extends Migration
     public function down()
     {
         Schema::table('menus', function (Blueprint $table) {
-            $table->dropColumn('order_number');
+            $table->dropColumn('sort');
         });
     }
 }
