@@ -255,8 +255,8 @@ class MenusController extends Controller
         $sort1 = Menu::where('id', $request->pivot_id)->value('sort');
         // 交换的序列号
         $sort2 = Menu::where('id', $request->pivot_ids)->value('sort');
-        Menu::where('id', $request->pivot_id)->update(['sort' => $sort]);
-        Menu::where('id', $request->pivot_ids)->update(['sort' => $sort]);
+        Menu::where('id', $request->pivot_id)->update(['sort' => $sort2]);
+        Menu::where('id', $request->pivot_ids)->update(['sort' => $sort1]);
         $store = Store::find($request->store_id);
         return (new MenuCollection($store->menus()->where([['category', 'p'], ['status', 1]])->orderByDesc('sort')->get()))->additional(['status' => 200]);
     }
