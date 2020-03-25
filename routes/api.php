@@ -201,6 +201,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/{menu}/edit', 'Api\MenusController@edit');
     // 修改菜品排序 —— 菜品
     Route::patch('menu/upDown', 'Api\MenusController@upDown');
+    // 修改菜品排序 —— 套餐内单品
+    Route::patch('menu/MenusUpDown', 'Api\MenusController@MenusUpDown');
     // 修改菜品排序 —— 套餐
     Route::patch('menu/PackageUpDown', 'Api\MenusController@PackageUpDown');
 

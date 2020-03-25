@@ -16,7 +16,7 @@ class AreacodesController extends Controller
      */
     public function index(Areacode $areacode)
     {
-        return (new AreacodeResource($areacode::where('show', 1)->orderBy('order_number', 'desc')->get()))->additional(['status' => 200]);
+        return (new AreacodeResource($areacode::where('show', 1)->orderByDesc('order_number')->get()))->additional(['status' => 200]);
     }
 
     /** 【 切换语言 】 */

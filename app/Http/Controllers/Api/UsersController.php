@@ -250,7 +250,7 @@ class UsersController extends Controller
     {
         $user = auth()->user();
 
-        return (BehaviorResource::collection($user->behaviors()->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
+        return (BehaviorResource::collection($user->behaviors()->orderByDesc('created_at')->get()))->additional(['status' => 200]);
     }
 
     /** 【 退出登录 】 */
@@ -391,7 +391,7 @@ class UsersController extends Controller
     public function bill(Request $request, User $user)
     {
         $user = auth()->user();
-        return (BillResource::collection($user->bills()->orderBy('created_at', 'desc')->get()))->additional(['status' => 200]);
+        return (BillResource::collection($user->bills()->orderByDesc('created_at')->get()))->additional(['status' => 200]);
     } 
 
     /** 【 免登录验证 】 */

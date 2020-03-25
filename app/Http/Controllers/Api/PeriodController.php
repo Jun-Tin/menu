@@ -16,7 +16,7 @@ class PeriodController extends Controller
      */
     public function index(Period $period)
     {
-        return (PeriodResource::collection($period::where('show',1)->orderBy('order_number','desc')->get()))->additional(['status' => 200]);
+        return (PeriodResource::collection($period::where('show', 1)->orderByDesc('order_number')->get()))->additional(['status' => 200]);
     }
 
     /**

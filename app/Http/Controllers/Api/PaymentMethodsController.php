@@ -16,7 +16,7 @@ class PaymentMethodsController extends Controller
      */
     public function index(PaymentMethod $paymentmethod)
     {
-        return (PaymentMethodResource::collection($paymentmethod::where('show',1)->orderBy('order_number','desc')->get()))->additional(['status' => 200]);
+        return (PaymentMethodResource::collection($paymentmethod::where('show', 1)->orderByDesc('order_number')->get()))->additional(['status' => 200]);
     }
 
     /**

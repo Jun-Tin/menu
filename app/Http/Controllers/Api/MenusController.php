@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\{Menu, MenuTag, Tag};
+use App\Models\{Menu, MenuTag, Tag, Store};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\{MenuResource, MenuCollection, StoreCollection, TagResource};
@@ -36,11 +36,15 @@ class MenusController extends Controller
     {
         $ids = json_decode($request->ids);
         $menu->fill($request->all());
+        if ($request->category == 'p') {
+            $sort = Menu::orderByDesc('id')->value('sort');
+            $menu->sort = $sort +1;
+        }
         $menu->save();
         
         if ($ids) {
             // 获取菜品跟标签关系
-            $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+            $order_number = MenuTag::orderByDesc('id')->value('id');
             for ($i = 0; $i < count($ids); $i++) { 
                 $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
             }
@@ -61,7 +65,7 @@ class MenusController extends Controller
         if ($request->category == 'm') {
             $ids = json_decode($request->ids);
             // 获取菜品跟标签关系
-            $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+            $order_number = MenuTag::orderByDesc('id')->value('id');
             $menu->tags()->detach();
             if ($ids) {
                 for ($i = 0; $i < count($ids); $i++) { 
@@ -145,7 +149,7 @@ class MenusController extends Controller
     public function addTags(Request $request, Menu $menu)
     {
         // 获取菜品跟标签关系
-        $order_number = MenuTag::orderBy('id', 'desc')->value('id');
+        $order_number = MenuTag::orderByDesc('id')->value('id');
         $menu->tags()->wherePivot('pid', 0)->attach(0, ['pid' => 0, 'order_number' => $order_number+1]);
 
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.add')]);
@@ -232,8 +236,8 @@ class MenusController extends Controller
         return (new MenuCollection($tag->menus()->where('category', 'm')->where('status', 1)->get()))->additional(['status' => 200]);
     }
 
-    /** 【 修改菜品排序 —— 套餐 】 */
-    public function PackageUpDown(Request $request)
+    /** 【 修改菜品排序 —— 套餐内单品 】 */
+    public function MenusUpDown(Request $request)
     {   
         // 操作的序列号
         $order_number1 = MenuTag::where('id', $request->pivot_id)->value('order_number');
@@ -243,5 +247,17 @@ class MenusController extends Controller
         MenuTag::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
         $menu = Menu::find($request->target_id);
         return (new MenuResource($menu))->additional(['status' => 200]);
+    }
+
+    public function PackageUpDown(Request $request)
+    { 
+        // 操作的序列号
+        $order_number1 = Menu::where('id', $request->pivot_id)->value('order_number');
+        // 交换的序列号
+        $order_number2 = Menu::where('id', $request->pivot_ids)->value('order_number');
+        Menu::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
+        Menu::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
+        $store = Store::find($request->store_id);
+        return (new MenuCollection($store->menus()->where([['category', 'p'], ['status', 1]])->orderByDesc('id')->get()))->additional(['status' => 200]);
     }
 }

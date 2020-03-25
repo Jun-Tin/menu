@@ -37,12 +37,12 @@ class PlaceCollection extends ResourceCollection
                         case 'places':
                             $item->order = '';
                             if ($item->status == 1) {
-                                $item->order = $item->order()->orderBy('created_at', 'desc')->first();
+                                $item->order = $item->order()->orderByDesc('created_at')->first();
                             }
                             break;
                         
                         case 'retreat':
-                            $item->order = Order::where('place_id', $item->id)->where('status', 0)->orderBy('created_at', 'desc')->first();
+                            $item->order = Order::where('place_id', $item->id)->where('status', 0)->orderByDesc('created_at')->first();
                             break;
                         /*case 'PUT':
                             $item->place = PlaceResource::collection($item->place);
