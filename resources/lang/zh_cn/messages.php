@@ -49,7 +49,7 @@ return [
     'logout' => '退出成功！',
     'pass' => '验证通过！',
     'people' => '没有销售人员！',
-    'online' => '没有推荐人！',
+    'online' => '没有介绍人！',
     'offline' => '门店未上线！',
     'new_dishes' => '新菜品通知！',
 
