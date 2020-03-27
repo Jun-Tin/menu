@@ -267,23 +267,23 @@ class MenusController extends Controller
     public function selectMenuTag(Request $request, Menu $menu)
     {
         // 查询menutag的关系
-        $m = MenuTag::find($request->id);
-        $new =  MenuTag::create([
+        $menuTag = MenuTag::find($request->id);
+        $create =  MenuTag::create([
             'menu_id' => $request->menu->id,
-            'target_id' => $m->target_id,
-            'name' => $m->name,
-            'pid' => $m->pid,
-            'fill_price' => $m->fill_price,
+            'target_id' => $menuTag->target_id,
+            'name' => $menuTag->name,
+            'pid' => $menuTag->pid,
+            'fill_price' => $menuTag->fill_price,
         ]);
-        $n = $m->menuTags;
-        for ($i=0; $i<count($n); $i++){
+        $menuTags = $menuTag->menuTags;
+        for ($i=0; $i<count($menuTags); $i++){
             MenuTag::create([
                 'menu_id' => $request->menu->id,
-                'target_id' => $m->target_id,
-                'name' => $m->name,
-                'pid' => $new->id,
-                'fill_price' => $m->fill_price,
-                'order_number' => $new->id+ $i+ 1,
+                'target_id' => $menuTag->target_id,
+                'name' => $menuTag->name,
+                'pid' => $create->id,
+                'fill_price' => $menuTag->fill_price,
+                'order_number' => $create->id+ $i+ 1,
             ]);
         }
         // 获取菜品跟标签关系
