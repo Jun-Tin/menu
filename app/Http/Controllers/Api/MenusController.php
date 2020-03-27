@@ -269,7 +269,7 @@ class MenusController extends Controller
         // 查询menutag的关系
         $menuTag = MenuTag::find($request->id);
         $create =  MenuTag::create([
-            'menu_id' => $request->menu->id,
+            'menu_id' => $menu->id,
             'target_id' => $menuTag->target_id,
             'name' => $menuTag->name,
             'pid' => $menuTag->pid,
@@ -278,7 +278,7 @@ class MenusController extends Controller
         $menuTags = $menuTag->menuTags;
         for ($i=0; $i<count($menuTags); $i++){
             MenuTag::create([
-                'menu_id' => $request->menu->id,
+                'menu_id' => $menu->id,
                 'target_id' => $menuTag->target_id,
                 'name' => $menuTag->name,
                 'pid' => $create->id,
