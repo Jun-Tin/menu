@@ -194,11 +194,12 @@ class MenusController extends Controller
         $menuTag = MenuTag::find($request->id);
         $menu = $menu::find($menuTag->menu_id);
 
+        $order_number = MenuTag::orderByDesc('id')->value('id');
         // 先解除原有数据
         $menu->menus($request->id)->detach();
         foreach ($data as $key => $value) {
             if ($value['id']) {
-                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price']]);
+                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price', 'order_number' => $order_number+ $i+1]]);
             }
         }
 
@@ -249,6 +250,7 @@ class MenusController extends Controller
         return (new MenuResource($menu))->additional(['status' => 200]);
     }
 
+    /** 【 修改菜品排序 —— 套餐 】 */
     public function PackageUpDown(Request $request)
     { 
         // 操作的序列号
@@ -260,4 +262,31 @@ class MenusController extends Controller
         $store = Store::find($request->store_id);
         return (new MenuCollection($store->menus()->where([['category', 'p'], ['status', 1]])->orderByDesc('sort')->get()))->additional(['status' => 200]);
     }
+
+    /** 【 选中套餐种类 】 */
+    public function selectMenuTag(Request $request, Menu $menu)
+    {
+        // 查询menutag的关系
+        $m = MenuTag::find($request->id);
+        $new =  MenuTag::create([
+            'menu_id' => $request->menu->id,
+            'target_id' => $m->target_id,
+            'name' => $m->name,
+            'pid' => $m->pid,
+            'fill_price' => $m->fill_price,
+        ]);
+        $n = $m->menuTags;
+        for ($i=0; $i<count($n); $i++){
+            MenuTag::create([
+                'menu_id' => $request->menu->id,
+                'target_id' => $m->target_id,
+                'name' => $m->name,
+                'pid' => $new->id,
+                'fill_price' => $m->fill_price,
+                'order_number' => $new->id+ $i+ 1,
+            ]);
+        }
+        // 获取菜品跟标签关系
+        return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.add')]);
+    } 
 }

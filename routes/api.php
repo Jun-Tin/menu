@@ -168,6 +168,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('store/{store}/staffService', 'Api\StoresController@staffService');
     // 后厨报表 -- 出菜时间
     Route::patch('store/{store}/menuServed', 'Api\StoresController@menuServed');
+    // 所有套餐种类
+    Route::get('store/{store}/menuTags', 'Api\StoresController@menuTags');
 
 
 
@@ -205,6 +207,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/MenusUpDown', 'Api\MenusController@MenusUpDown');
     // 修改菜品排序 —— 套餐
     Route::patch('menu/PackageUpDown', 'Api\MenusController@PackageUpDown');
+    // 选中套餐种类
+    Route::post('menu/{menu}/selectMenuTag', 'Api\MenusController@selectMenuTag');
 
 
     /** 【 新套餐 】 */

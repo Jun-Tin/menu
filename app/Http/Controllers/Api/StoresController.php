@@ -382,6 +382,19 @@ class StoresController extends Controller
         return (new CurrencyResource($store->currency))->additional(['status' => 200]);
     }
 
+    /** 【 所有套餐种类 】 */ 
+    public function MenuTags(Request $request, Store $store)
+    {
+        $collection = $store->menus()->where('category', 'p')->get()->map(function ($item){
+            return $item->menuTag()->where('pid', 0)->get()->filter(function ($item){
+                if ($item->menuTags->isNotEmpty()) {
+                    return $item;
+                }
+            });
+        })->flatten();
+        return response()->json(['data' => $collection, 'status' => 200]);
+    }
+
 
 
     /** 【 定时计算上线天数 -- 每天递减1 】 */ 
