@@ -199,7 +199,7 @@ class MenusController extends Controller
         $menu->menus($request->id)->detach();
         foreach ($data as $key => $value) {
             if ($value['id']) {
-                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price'], 'order_number' => $order_number+$i+1]);
+                $menu->menus($request->id)->attach($value['id'], ['pid' => $request->id, 'fill_price' => $value['fill_price'], 'order_number' => $order_number+$key+1]);
             }
         }
 
