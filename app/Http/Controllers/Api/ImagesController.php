@@ -41,7 +41,6 @@ class ImagesController extends Controller
             // 使用我们新建的upload_img本地存储空间（目录）
             //这里的upload_img是配置文件的名称
             $bool = Storage::disk('upload_img')->put($filename, file_get_contents($realPath));
-            dd($bool);
             if($bool){
                 $url = env('APP_URL').'/images/uploads/'.date('Ym',time()).'/'.$filename;
                 // 保存在数据库
