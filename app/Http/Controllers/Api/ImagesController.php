@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\{Auth, Storage, File};
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Intervention\Image\Facades\Image AS Iimage;
 
 class ImagesController extends Controller
 {
@@ -40,7 +41,7 @@ class ImagesController extends Controller
             // 使用我们新建的upload_img本地存储空间（目录）
             //这里的upload_img是配置文件的名称
             $bool = Storage::disk('upload_img')->put($filename, file_get_contents($realPath));
-
+            dd($bool);
             if($bool){
                 $url = env('APP_URL').'/images/uploads/'.date('Ym',time()).'/'.$filename;
                 // 保存在数据库
@@ -141,5 +142,52 @@ class ImagesController extends Controller
         ]);
 
         return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
+    }
+
+
+    public function thumbImage(Request $request)
+    {
+        $file = $request->file('file');
+        header('Content-type: application/json');
+        
+        if (!$request->type) {
+            return response()->json(['error' => ['message' => __('messages.picture_type')], 'status' => 201]);
+        }
+
+        // 文件是否上传成功
+        if ($file->isValid()) {
+            $ext = $file->getClientOriginalExtension();     // 扩展名
+            $extArr = array('jpg','jpeg','png','gif');
+
+            if(!in_array($ext,$extArr)){
+                return response()->json(['error' => ['message' => __('messages.picture_format')], 'status' => 201]);
+            }
+            $dir = public_path('/images/uploads/'). date('Ym',time()). '/'. $request->type. '/';
+            if (!is_dir($dir)) {
+                File::makeDirectory($dir, 0777, true);
+            }
+            $image = Iimage::make($file);
+            // 拼接文件名称
+            $filename = date('YmdHis'). uniqid(). '.'. $ext;
+            $path = $dir. $filename;
+            $height = $image->height() / 200;
+            $width = $image->width() / $height;
+            $bool = $image->resize($width, 200)->save($path);
+
+            if($bool){
+                $url = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/'. $request->type. '/'. $filename;
+                // 保存在数据库
+                $create = Image::create([
+                    'user_id' => auth()->user()->id,
+                    'type' => $request->type,
+                    'path' => $url,
+                ]);
+                return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $create->id, 'url' => $url), 'status' => 200]);
+            }else{
+                return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
+            }
+        } else {
+            return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
+        }
     }
 }

@@ -381,6 +381,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::post('img', 'Api\ImagesController@uploadImg');
     Route::post('imgs', 'Api\ImagesController@uploadImgs');
     Route::post('qrcode', 'Api\ImagesController@createQrcode');
+    Route::post('image', 'Api\ImagesController@thumbImage');
+
 });
 
 
