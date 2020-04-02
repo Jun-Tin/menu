@@ -279,10 +279,10 @@ class MenusController extends Controller
         for ($i=0; $i<count($menuTags); $i++){
             MenuTag::create([
                 'menu_id' => $menu->id,
-                'target_id' => $menuTag->target_id,
-                'name' => $menuTag->name,
+                'target_id' => $menuTags[$i]->target_id,
+                'name' => $menuTags[$i]->name,
                 'pid' => $create->id,
-                'fill_price' => $menuTag->fill_price,
+                'fill_price' => $menuTags[$i]->fill_price,
                 'order_number' => $create->id+ $i+ 1,
             ]);
         }

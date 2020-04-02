@@ -187,6 +187,7 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Chumper\Zipper\ZipperServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
     ],
 
@@ -241,7 +242,8 @@ return [
         'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
         'EasySms' => App\Facades\EasySms::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'Zipper' => Chumper\Zipper\Zipper::class
+        'Zipper' => Chumper\Zipper\Zipper::class,
+        'Imagessss' => Intervention\Image\Facades\Image::class,
 
 
     ],

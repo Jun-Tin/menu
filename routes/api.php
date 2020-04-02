@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
 /**【 获取验证码 】*/ 
 Route::post('send', 'Api\MessageCodesController@store')->middleware('setLocale');
 /**【 注册 】*/ 
