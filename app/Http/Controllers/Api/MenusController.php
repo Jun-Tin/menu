@@ -73,8 +73,13 @@ class MenusController extends Controller
                 }
             }
         } else {
+            $filtered = $menu->menuTag()->where('target_id', '<>', 0)->get()->filter(function ($item){
+                return empty($item->pid);
+            });
+            $filtered->map(function ($item){
+                $item->delete();
+            });
             if ($ids) {
-                $menu->tags()->wherePivot('target_id', '<>', 0)->detach();
                 for ($i = 0; $i < count($ids); $i++) { 
                     $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
                 }
