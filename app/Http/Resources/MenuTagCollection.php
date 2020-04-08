@@ -21,7 +21,8 @@ class MenuTagCollection extends ResourceCollection
                 $item->menus = MenuTag::where('pid', $item->id)->orderBy('order_number')->orderByDesc('id')->get()->map(function ($item){
                     $menu = Menu::find($item->target_id);
                     $item->name = $menu->name;
-                    $item->image = Image::find($menu->image_id);
+                    $item->name_en = $menu->name_en;
+                    $item->image = $menu->image;
                     $item->perfer = $menu->tags()->where('category', 'perfer')->get()->map(function ($item, $key){
                         $item->category = new TagCollection(Tag::where('pid', $item->pivot->target_id)->get());
                         return $item;
