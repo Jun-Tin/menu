@@ -65,10 +65,19 @@ class MenusController extends Controller
         $ids = json_decode($request->ids);
         // 获取菜品跟标签关系
         $order_number = MenuTag::orderByDesc('id')->value('id');
-        if ($ids) {
-            $menu->tags()->detach();
-            for ($i = 0; $i < count($ids); $i++) { 
-                $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
+        if ($request->category == 'm') {
+            if ($ids) {
+                $menu->tags()->detach();
+                for ($i = 0; $i < count($ids); $i++) { 
+                    $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
+                }
+            }
+        } else {
+            if ($ids) {
+                $menu->tags()->wherePivot('target_id', '<>', 0)->detach();
+                for ($i = 0; $i < count($ids); $i++) { 
+                    $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
+                }
             }
         }
         $menu->update($request->all());
