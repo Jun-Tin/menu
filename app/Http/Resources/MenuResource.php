@@ -39,8 +39,8 @@ class MenuResource extends Resource
                         $item->category = new TagCollection(Tag::where('pid', $item->pivot->target_id)->get());
                         return $item;
                     })),
-                    'class_id' => $this->tags->where('category', 'class')->pluck('id'),
-                    'perfer_id' => $this->tags->where('category', 'perfer')->pluck('id'),
+                    'class_id' => $this->tags()->where('category', 'class')->get()->pluck('id'),
+                    'perfer_id' => $this->tags()->where('category', 'perfer')->get()->pluck('id'),
                 ];
                 break;
             
@@ -61,8 +61,8 @@ class MenuResource extends Resource
                     'sort' => $this->sort,
                     'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
-                    'class' => new MenuCollection($this->tags()->where('category', 'class')->get()),
-                    'class_id' => $this->tags->where('category', 'class')->pluck('id'),
+                    'class' => new MenuCollection($this->tags()->where('category', 'class')->where('menu_tag.pid', '')->get()),
+                    'class_id' => $this->tags()->where('category', 'class')->where('menu_tag.pid', '')->get()->pluck('id'),
                     'tags' => new MenuTagCollection($this->menuTag()->where('pid', 0)->get()),
                 ];
                 break;
