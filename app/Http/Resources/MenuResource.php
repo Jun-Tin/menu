@@ -61,8 +61,8 @@ class MenuResource extends Resource
                     'sort' => $this->sort,
                     'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
                     'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
-                    'class' => new MenuCollection($this->tags()->where('category', 'class')->whereNull('menu_tag.pid')->get()),
-                    'class_id' => $this->tags()->where('category', 'class')->whereNull('menu_tag.pid')->get()->pluck('id'),
+                    'class' => new MenuCollection($this->tags()->where('category', 'class')->wherePivot('target_id', '<>', 0)->get()),
+                    'class_id' => $this->tags()->where('category', 'class')->wherePivot('target_id', '<>', 0)->get()->pluck('id'),
                     'tags' => new MenuTagCollection($this->menuTag()->where('pid', 0)->get()),
                 ];
                 break;
