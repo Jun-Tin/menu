@@ -62,15 +62,13 @@ class MenusController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        if ($request->category == 'm') {
-            $ids = json_decode($request->ids);
-            // 获取菜品跟标签关系
-            $order_number = MenuTag::orderByDesc('id')->value('id');
+        $ids = json_decode($request->ids);
+        // 获取菜品跟标签关系
+        $order_number = MenuTag::orderByDesc('id')->value('id');
+        if ($ids) {
             $menu->tags()->detach();
-            if ($ids) {
-                for ($i = 0; $i < count($ids); $i++) { 
-                    $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
-                }
+            for ($i = 0; $i < count($ids); $i++) { 
+                $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
             }
         }
         $menu->update($request->all());

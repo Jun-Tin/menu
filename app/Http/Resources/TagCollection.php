@@ -15,15 +15,19 @@ class TagCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $where[] = ['category', 'm'];
+        $status = [0, 1];
+        // $where[] = ['category', 'm'];
+        // dd($where);
         if ($request->type == 'in') {
-            $where[] = ['status', 1];
+            // $where[] = ['status', 1];
+            $status = [1];
         }
+        // dd($status);
         // return parent::toArray($request);
         return [
-            'data' => $this->collection->map(function ($item) use ($where) {
+            'data' => $this->collection->map(function ($item) use ($status) {
                 // $item->menus = Tag::find($item->id)->menus()->where('category', 'm')->where('status', 1)->get()->map(function ($item) {
-                $item->menus = Tag::find($item->id)->menus()->where($where)->get()->map(function ($item) {
+                $item->menus = Tag::find($item->id)->menus()->whereIn('status', $status)->get()->map(function ($item) {
                     $item->image = Image::find($item->image_id);
                     return $item;
                 });
