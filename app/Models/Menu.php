@@ -33,4 +33,23 @@ class Menu extends Model
     {
         return $this->hasMany(MenuTag::class, 'menu_id', 'id');
     } 
+
+    /** 【 反向多对一关联关系 】 */
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    } 
+
+    /**
+     * 后台列表-select-option
+     */
+    public static function getSelectOptions()
+    {
+        $options = Store::select('id','name as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
+    }
 }

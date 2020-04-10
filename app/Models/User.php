@@ -26,9 +26,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'pro_password', 'remember_token',
-    ];
+    // protected $hidden = [
+    //     'password', 'pro_password', 'remember_token',
+    // ];
 
     /** 【 多字段验证 】 */ 
     public function findForPassport($username)
@@ -87,7 +87,7 @@ class User extends Authenticatable
     /** 【 一对一我的上线关联关系 】 */
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'created_by');
+        return $this->hasOne(self::class, 'id', 'created_by');
     } 
 
     /** 【 自定义验证规则 ] */ 
@@ -137,5 +137,18 @@ class User extends Authenticatable
     public function random()
     {
         return str_pad(random_int(1, 99999999), 8, 0, STR_PAD_LEFT);
+    }
+
+    /**
+     * 后台列表-select-option
+     */
+    public static function getSelectOptions()
+    {
+        $options = User::select('id','name as text')->get();
+        $selectOption = [];
+        foreach ($options as $option){
+            $selectOption[$option->id] = $option->text;
+        }
+        return $selectOption;
     }
 }

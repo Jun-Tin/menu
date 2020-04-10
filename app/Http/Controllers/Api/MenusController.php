@@ -66,12 +66,12 @@ class MenusController extends Controller
         // 获取菜品跟标签关系
         $order_number = MenuTag::orderByDesc('id')->value('id');
         if ($request->category == 'm') {
-            if ($ids) {
+            // if ($ids) {
                 $menu->tags()->detach();
                 for ($i = 0; $i < count($ids); $i++) { 
                     $menu->tags()->attach($ids[$i], ['order_number' => $order_number+ $i+1]);
                 }
-            }
+            // }
         } else {
             $filtered = $menu->menuTag()->where('target_id', '<>', 0)->get()->filter(function ($item){
                 return empty($item->pid);
