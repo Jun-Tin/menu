@@ -2,13 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Menu;
+use App\Models\{Menu, Image};
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Encore\Admin\Facades\Admin;
+use Intervention\Image\Facades\Image AS Iimage;
 
 class MenusController extends Controller
 {
@@ -174,7 +176,7 @@ class MenusController extends Controller
         $form->text('name', '主菜名');
         $form->text('name_en', '复菜名');
         $form->textarea('introduction', '菜品介绍');
-        $form->image('image_id', '菜品图片');
+        $form->image('image.path', '菜品图片');
         
         $form->decimal('original_price', '原价');
         $form->decimal('special_price', '特价');
@@ -192,12 +194,30 @@ class MenusController extends Controller
             0 => '下架',
             1 => '上架'
         ]);
-        dd($form);
         // 在表单提交前调用
-        $form->submitted(function (Form $form) {
-            if ($form->image_id) {
-                # code...
+        $form->saving(function (Form $form) {
+            $dir = public_path('/images/uploads/'). date('Ym',time()). '/shop/';
+            if (!is_dir($dir)) {
+                File::makeDirectory($dir, 0777, true);
             }
+            $image = Iimage::make(\request()->file('image.path'));
+            // 拼接文件名称
+            $filename = date('YmdHis'). uniqid(). '.'. \request()->file('image.path')->getClientOriginalExtension();
+            $path = $dir. $filename;
+            $height = $image->height() / 200;
+            $width = $image->width() / $height;
+            $bool = $image->resize($width, 200)->save($path);
+
+            if($bool){
+                $url = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename;
+                // 保存在数据库
+                $create = Image::create([
+                    'user_id' => Admin::user()->id,
+                    'type' => 'shop',
+                    'path' => $url,
+                ]);
+            }
+            $form->model()->image_id = $create->id;
         });
 
         return $form;

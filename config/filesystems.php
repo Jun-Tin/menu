@@ -72,7 +72,14 @@ return [
         'qrcodes' => [
             'driver' => 'local',
             'root' => public_path('images').'/qrcodes/',
-        ]
+        ],
+
+        'admin' => [
+            'driver' => 'local',
+            'root'   => public_path('images').'/uploads/'.date('Ym',time()),
+            'url'    => env('APP_URL').'/uploads',
+            'visibility' => 'public',
+        ],
     ],
 
 ];
