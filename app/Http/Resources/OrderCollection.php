@@ -128,6 +128,7 @@ class OrderCollection extends ResourceCollection
                         if ($behavior) {
                             if ($behavior->user_id == auth()->id()) {
                                 $item->place_name = Place::where('id', $item->place_id)->value('name');
+                                $item->floor_name = Place::where('id', Place::where('id', $item->place_id)->value('floor'))->value('name');
                                 if ($item->pid) {
                                     $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                                 } else{
