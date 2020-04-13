@@ -100,7 +100,7 @@ class OrderCollection extends ResourceCollection
                 return [
                     'finished' => $this->collection['finished']->flatten()->filter(function ($item) use ($request){
                         $item->place_name = Place::where('id', $item->place_id)->value('name');
-                        $item->floor = Place::where('id', $item->place_id)->value('floor');
+                        $item->floor_name = Place::where('id', Place::where('id', $item->place_id)->value('floor'))->value('name');
                         if ($item->pid) {
                             $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
                         } else{
