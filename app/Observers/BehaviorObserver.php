@@ -3,6 +3,7 @@ namespace App\Observers;
 
 use App\Models\{Behavior, OrderDetail, User};
 use GatewayWorker\Lib\Gateway;
+use Carbon\Carbon;
 
 class BehaviorObserver
 {
@@ -50,7 +51,7 @@ class BehaviorObserver
 			case 'cooking':
 				$order_detail = $behavior->order_detail;
 				// 修改菜品状态
-				$order_detail->update(['status' => 2]);
+				$order_detail->update(['status' => 2, 'finished_at' => Carbon::now()]);
 				// 判断是否属于套餐内的单品
 				if ($order_detail->pid) {
 					// 获取套餐内单品状态
@@ -63,7 +64,7 @@ class BehaviorObserver
 					});
 					if ($status) {
 						// 修改套餐状态
-						OrderDetail::where('id', $order_detail->pid)->update(['status' => 2]);
+						OrderDetail::where('id', $order_detail->pid)->update(['status' => 2, 'finished_at' => Carbon::now()]);
 					}
 				}
 				// 获取原订单信息
