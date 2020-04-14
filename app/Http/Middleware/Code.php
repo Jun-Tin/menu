@@ -21,7 +21,7 @@ class Code
             if ($request->header('placeid')) {
                 // 获取座位
                 $place = Place::find($request->header('placeid'));
-                $name = $place->name;
+                $name = 'place_'.$place->id;
                 $id = $place->id;
                 $store_id = $place->store_id;
             }
@@ -38,17 +38,6 @@ class Code
                 // 获取门店
                 $store = Store::find($request->header('storeid'));
                 $name = 'store_'.$request->header('category');
-                // switch ($request->header('category')) {
-                //     case 'screen':
-                //         $name = $store->name.'_screen';
-                //         break;
-                //     case 'line':
-                //         $name = $store->name.'_line';
-                //         break;
-                //     case 'book':
-                //         $name = $store->name.'_book';
-                //         break;
-                // }
                 $id = $store->id;
                 $store_id = $store->id;
             }

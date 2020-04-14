@@ -46,10 +46,11 @@ class PlacesController extends Controller
         if (file_exists($str)) {
             unlink($str);
         }
+        $place->update($request->all());
         // 默认类型值
         $data['type'] = 'place';
+        $data['name'] = 'place_'.$place->id;
         $result = $place->updateQrcode($data,$place->id);
-        $place->update($request->all());
         
         if ($result) {
             $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
@@ -96,7 +97,7 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->update();
         $data = array(
-            'name' => $place->name,
+            'name' => 'place_'.$place->id,
             'store_id' => $place->store_id,
             'floor' => $place->floor,
             'type' => 'place',

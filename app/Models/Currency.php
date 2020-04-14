@@ -9,6 +9,6 @@ class Currency extends Model
     protected $table = 'currencies';
 
     protected $fillable = [
-        'name_cn', 'name_hk', 'name_en', 'unit', 'code'
+        'name_cn', 'name_hk', 'name_en', 'unit', 'code', 'order_number'
     ];
 }

@@ -21,7 +21,7 @@ class PlaceObserver
 					$set = '座位';
 					break;
 			}
-			$encrypted = substr(Crypt::encryptString($set.$place->id.'_'.$place->id.'_code'), 0, 15);
+			$encrypted = substr(Crypt::encryptString('place_'.$place->id.'_'.$place->id.'_code'), 0, 15);
 			$dir = public_path('images/qrcodes/'.$place->store_id. '/place/' .$place->floor);
 	        if (!is_dir($dir)) {
 	            File::makeDirectory($dir, 0777, true);
@@ -48,7 +48,7 @@ class PlaceObserver
 				'image_id' => $image->id,
 			]);
 	        // 设置redis缓存
-        	Redis::set($place->name.'_'.$place->store_id.'_'.$place->id, $encrypted);
+        	Redis::set('place_'.$place->id.'_'.$place->store_id.'_'.$place->id, $encrypted);
 		}
 	}
 } 
