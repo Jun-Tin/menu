@@ -41,11 +41,11 @@ class PlacesController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors(), 'status' => 401]);
         }
-        $path = $place->image->path;
-        $str = substr($path, strripos($path, "images"));
-        if (file_exists($str)) {
-            unlink($str);
-        }
+        // $path = $place->image->path;
+        // $str = substr($path, strripos($path, "images"));
+        // if (file_exists($str)) {
+        //     unlink($str);
+        // }
         // 默认类型值
         // $data['type'] = 'place';
         // $result = $place->updateQrcode($data,$place->id);
