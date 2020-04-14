@@ -47,13 +47,13 @@ class PlacesController extends Controller
             unlink($str);
         }
         // 默认类型值
-        $data['type'] = 'place';
-        $result = $place->updateQrcode($data,$place->id);
+        // $data['type'] = 'place';
+        // $result = $place->updateQrcode($data,$place->id);
         $place->update($request->all());
         
-        if ($result) {
-            $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
-        }
+        // if ($result) {
+        //     $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
+        // }
 
         return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
