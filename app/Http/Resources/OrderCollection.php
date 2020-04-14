@@ -32,9 +32,11 @@ class OrderCollection extends ResourceCollection
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                $item->menu_name_en = Menu::where('id', $item->menus_id)->value('name_en');
                                 $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                $item->menu_name_en = Menu::where('id', $item->menu_id)->value('name_en');
                                 $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
@@ -51,9 +53,11 @@ class OrderCollection extends ResourceCollection
                             $item->place_name = Place::where('id', $item->place_id)->value('name');
                             if ($item->pid) {
                                 $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                $item->menu_name_en = Menu::where('id', $item->menus_id)->value('name_en');
                                 $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                             } else{
                                 $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                $item->menu_name_en = Menu::where('id', $item->menu_id)->value('name_en');
                                 $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                             }
 
@@ -73,9 +77,11 @@ class OrderCollection extends ResourceCollection
                                     $item->place_name = Place::where('id', $item->place_id)->value('name');
                                     if ($item->pid) {
                                         $item->menu_name = Menu::where('id', $item->menus_id)->value('name');
+                                        $item->menu_name_en = Menu::where('id', $item->menus_id)->value('name_en');
                                         $item->path = Image::where('id', Menu::where('id', $item->menus_id)->value('image_id'))->value('path');
                                     } else{
                                         $item->menu_name = Menu::where('id', $item->menu_id)->value('name');
+                                        $item->menu_name_en = Menu::where('id', $item->menu_id)->value('name_en');
                                         $item->path = Image::where('id', Menu::where('id', $item->menu_id)->value('image_id'))->value('path');
                                     }
 
