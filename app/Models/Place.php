@@ -42,7 +42,7 @@ class Place extends Model
     public function updateQrcode($data, $id)
     {
         $encrypted = substr(Crypt::encryptString($data['name'].'_'.$id.'_code'), 0, 15);
-        $filename = $data['name'] . '.png';
+        $filename = $data['name'] .'.png';
         switch ($data['type']) {
             case 'place':
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
