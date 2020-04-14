@@ -97,7 +97,7 @@ class PlacesController extends Controller
         $place->fill($request->all());
         $place->update();
         $data = array(
-            'name' => 'place_'.$place->id,
+            'name' => $place->name,
             'store_id' => $place->store_id,
             'floor' => $place->floor,
             'type' => 'place',

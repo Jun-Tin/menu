@@ -48,7 +48,8 @@ class Place extends Model
                 $dir = public_path('images/qrcodes/'.$data['store_id']. '/place/' .$data['floor']);
                 $qrcode = true;
                 $link = true;
-                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted ;
+                $link = env('APP_CLIENT').$data['store_id'].'/'.$id.'/'.$encrypted;
+                $data['name'] = 'place_'.$id;
                 break;
             case 'waiter':
                 $dir = public_path('images/qrcodes/'.$data['store_id'].'/user');
