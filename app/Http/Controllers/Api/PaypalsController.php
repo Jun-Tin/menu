@@ -49,6 +49,7 @@ class PaypalsController extends Controller
      */
     public function pay(Request $request)
     {
+        $code = $request->code;
         $order = Order::where('order', $request->order)->first();
         switch ($order->status) {
             case 2:
@@ -70,11 +71,11 @@ class PaypalsController extends Controller
             )
         );
         
-        $paypal->setConfig(
-            array(
-                'mode' => 'live'
-            )
-        );
+        // $paypal->setConfig(
+        //     array(
+        //         'mode' => 'live'
+        //     )
+        // );
         $product = '订单：'.$order->order;
         $price = 1;
         $shipping = 0;

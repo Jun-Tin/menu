@@ -53,7 +53,7 @@ return [
     'offline' => '門店未上線！',
     'order_paid' => '訂單已支付！！',
     'order_cancel' => '訂單已取消！',
-    'payment' => '沒有可用參數！'
+    'payment' => '沒有可用參數！',
 
     // 验证规则
     'name_required' => '姓名不能為空',

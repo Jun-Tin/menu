@@ -54,7 +54,7 @@ return [
     'new_dishes' => '新菜品通知！',
     'order_paid' => '订单已支付！',
     'order_cancel' => '订单已取消！',
-    'payment' => '没有可用参数！'
+    'payment' => '没有可用参数！',
 
     // 验证规则
     'name_required' => '姓名不能为空',
