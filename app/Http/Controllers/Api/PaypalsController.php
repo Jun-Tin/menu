@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\{Order, StorePayment};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class PaypalsController extends Controller
 {
@@ -60,7 +61,7 @@ class PaypalsController extends Controller
                 break;
         }
 
-        $payment = StorePayment::where('store_id', $order->store_id)->where('payment_id', 6)->first();
+        $payment = StorePayment::where('store_id', $order->store_id)->where('payment_id', 7)->first();
         if (!$payment) {
             return response()->json(['error' => ['message' => [__('messages.payment')]], 'status' => 401]);
         }
@@ -157,6 +158,12 @@ class PaypalsController extends Controller
             // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
             return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         }
+        // 修改订单状态
+        $order->update([
+            'status' => 2, 
+            'payment_method' => 7,
+            'paid_at' => Carbon::now()
+        ]);
         return redirect("http://47.56.146.107/menu_client/#/Success?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         // echo '支付成功，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
 
