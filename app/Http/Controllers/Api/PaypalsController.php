@@ -13,14 +13,16 @@ use App\Http\Controllers\Controller;
 
 class PaypalsController extends Controller
 {
+    // const clientId = 'Ac3Ai2BM9Wggmbz9rI-PZ5spaLJRuUtN0-POPRbhEPnhP8sT3eCLwmKolHeXqXAUJSqRiuM6YHQi0T2Z';//ID
+    // const clientSecret = 'EASXST6KC_JNk5CUVnaytLkzC4UloIY--g02tjb1iJ8ND9kS7ZAUUxK4HVBm0ImFXJs7UcTrM5OoPS5B';//秘钥
     const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
     const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
-    const accept_url = 'http://menu.test/api/paypal/callback';//返回地址
+    const accept_url = 'http://47.56.146.107/menub/api/paypal/callback';//返回地址
     const Currency = 'USD';//币种
     protected $PayPal;
 
-    // sb-1qjqf536347@business.example.com
-    // iP{_D-K7
+    // 沙盒测试账号：sb-1qjqf536347@business.example.com
+    // 沙盒测试密码：iP{_D-K7
 
     public function __construct()
     {
@@ -30,12 +32,12 @@ class PaypalsController extends Controller
                 self::clientSecret
             )
         );
-        //如果是沙盒测试环境不设置，请注释掉
-//        $this->PayPal->setConfig(
-//            array(
-//                'mode' => 'live',
-//            )
-//        );
+        // 如果是沙盒测试环境不设置，请注释掉
+        // $this->PayPal->setConfig(
+        //    array(
+        //        'mode' => 'live',
+        //    )
+        // );
     }
 
     /**
@@ -80,13 +82,14 @@ class PaypalsController extends Controller
         try {
             $payment->create($paypal);
         } catch (PayPalConnectionException $e) {
-            echo $e->getData();
-            die();
+            return response()->json(['data' => $e->getData(), 'status' => 401]);
+            // echo $e->getData();
+            // die();
         }
 
         $approvalUrl = $payment->getApprovalLink();
-        dd($approvalUrl);
-        header("Location: {$approvalUrl}");
+        // header("Location: {$approvalUrl}");
+        return response()->json(['data' => $approvalUrl, 'status' => 200]);
     }
 
     /**
@@ -97,18 +100,21 @@ class PaypalsController extends Controller
         $success = trim($_GET['success']);
 
         if ($success == 'false' && !isset($_GET['paymentId']) && !isset($_GET['PayerID'])) {
-            echo '取消付款';die;
+            // $message = '取消付款';
+            return redirect("http://47.56.146.107/menu_client/#/Fail");
         }
 
         $paymentId = trim($_GET['paymentId']);
         $PayerID = trim($_GET['PayerID']);
 
         if (!isset($success, $paymentId, $PayerID)) {
-            echo '支付失败';die;
+            // $message = '支付失败';
+            return redirect("http://47.56.146.107/menu_client/#/Fail");
         }
 
         if ((bool)$_GET['success'] === 'false') {
-            echo  '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';die;
+            // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
+            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}");
         }
 
         $payment = Payment::get($paymentId, $this->PayPal);
@@ -120,9 +126,13 @@ class PaypalsController extends Controller
         try {
             $payment->execute($execute, $this->PayPal);
         } catch (Exception $e) {
-            echo ',支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';die;
+            // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
+            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}");
         }
-        echo '支付成功，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';die;
+        return redirect("http://47.56.146.107/menu_client/#/Success?paymentId={$paymentId}&PayerID={$PayerID}");
+        // echo '支付成功，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
+
+        // return response()->json(['status' => 200, 'message' => $message]);
     }
 
 
@@ -172,7 +182,6 @@ class PaypalsController extends Controller
      */
     public function returnMoney()
     {
-
         try {
             $txn_id = "xxxxxxx";  //异步加调中拿到的id
             $amt = new Amount();

@@ -432,6 +432,6 @@ class PlacesController extends Controller
 
     public function redis()
     {
-        dd(Redis::keys('*'));
+        dd(Redis::keys('store_line_96_*'));
     }
 }
