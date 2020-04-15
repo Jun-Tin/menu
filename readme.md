@@ -71,9 +71,9 @@ php artisan passport:keys --force
 	order,		state,				0：正在做，1：已做完，2：已上完
 	order_detail, status,			0：未完成，1：正在做，2：已做完，3：准备上菜，4：已上菜，5：退菜，
 	book,		status, 			0：未完成，1：已完成，2：逾期
-	order, 		payment_method 		1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他
+	order, 		payment_method 		1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他，7：paypal
 	user,		created_by			0：系统，{id}：用户id
-	bill, 		method 				1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他，7：coins
+	bill, 		method 				1：现金，2：微信，3：支付宝，4：Apple Pay，5：信用卡，6：其他，7：coins，8：paypal
 	line,		status 				0：未叫号，1：正在叫号，2：切号
 
 

@@ -51,6 +51,9 @@ return [
     'people' => 'No Salesperson！',
     'online' => 'No Introducer！',
     'offline' => 'Store Not Online！',
+    'order_paid' => 'The order has been paid！',
+    'order_cancel' => 'The order has been cancelled！',
+    'payment' => 'No parameters available！'
 
     // 验证规则
     'name_required' => 'Please Fill In Name',

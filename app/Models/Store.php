@@ -99,6 +99,12 @@ class Store extends Model
         return $this->belongsTo(Currency::class);
     } 
 
+    /** 【 多对多支付方式关联关系 】 */
+    public function payments()
+    {
+        return $this->hasMany(StorePayment::class);
+    } 
+
     /** 【 周数统计 】 */
     public function get_week($year) {
         $year_start = $year . "-01-01";

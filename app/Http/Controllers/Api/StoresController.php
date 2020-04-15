@@ -6,7 +6,7 @@ use App\Models\{Store, User, MenuTag, Bill, Period, Place};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource, LanguageResource, CurrencyResource};
+use App\Http\Resources\{StoreResource, StoreCollection, PlaceCollection, UserResource, BookResource, MenuCollection, TagCollection, StatisticsResource, AreaResource, StoreAreaResource, LanguageResource, CurrencyResource, StorePaymentResource};
 use Carbon\Carbon;
 
 class StoresController extends Controller
@@ -305,6 +305,12 @@ class StoresController extends Controller
         }
         return (new MenuCollection($store->menus()->where($where)->orderByDesc('id')->get()))->additional(['status' => 200]);
     }
+
+    /** 【 支付参数列表 】 */
+    public function payments(Request $request, Store $store)
+    {
+        return (StorePaymentResource::collection($store->payments))->additional(['status' => 200]);
+    } 
 
     /** 【 收入报表 】 */ 
     // 总月

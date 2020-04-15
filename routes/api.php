@@ -34,7 +34,7 @@ Route::get('store/{store}/language', 'Api\StoresController@language');
 Route::get('store/{store}/currency', 'Api\StoresController@currency');
 
 // paypal支付
-Route::get('paypal/pay', 'Api\PaypalsController@pay');
+Route::post('paypal/pay', 'Api\PaypalsController@pay');
 Route::get('paypal/callback', 'Api\PaypalsController@callback');
 Route::get('paypal/notify', 'Api\PaypalsController@notify');
 
@@ -143,6 +143,9 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('store/{store}/refresh', 'Api\StoresController@refresh');
     // 门店预约二维码
     Route::get('store/{store}/bookQrcode', 'Api\StoresController@bookQrcode');
+    /** 【 支付参数 】 */
+    // 列表
+    Route::get('store/{store}/payments', 'Api\StoresController@payments'); 
     
 
 
@@ -372,6 +375,16 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('currency/{currency}/update', 'Api\CurrenciesController@update');
     // 删除 
     Route::delete('currency/{currency}/destroy', 'Api\CurrenciesController@destroy');
+
+    /** 【 支付参数 】 */
+    // 列表
+    Route::get('storepayment/index', 'Api\StorePaymentsController@index');
+    // 创建
+    Route::post('storepayment/store', 'Api\StorePaymentsController@store');
+    // 修改
+    Route::patch('storepayment/{storepayment}/update', 'Api\StorePaymentsController@update');
+    // 删除
+    Route::delete('storepayment/{storepayment}/destroy', 'Api\StorePaymentsController@destroy');
 
 
     /** 

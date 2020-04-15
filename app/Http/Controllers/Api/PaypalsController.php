@@ -7,7 +7,7 @@ use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Exception\PayPalConnectionException;
 use PayPal\Rest\ApiContext;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\{Order, StorePayment};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,8 +15,8 @@ class PaypalsController extends Controller
 {
     // const clientId = 'Ac3Ai2BM9Wggmbz9rI-PZ5spaLJRuUtN0-POPRbhEPnhP8sT3eCLwmKolHeXqXAUJSqRiuM6YHQi0T2Z';//ID
     // const clientSecret = 'EASXST6KC_JNk5CUVnaytLkzC4UloIY--g02tjb1iJ8ND9kS7ZAUUxK4HVBm0ImFXJs7UcTrM5OoPS5B';//秘钥
-    const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
-    const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
+    // const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
+    // const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
     const accept_url = 'http://47.56.146.107/menub/api/paypal/callback';//返回地址
     const Currency = 'USD';//币种
     protected $PayPal;
@@ -24,21 +24,21 @@ class PaypalsController extends Controller
     // 沙盒测试账号：sb-1qjqf536347@business.example.com
     // 沙盒测试密码：iP{_D-K7
 
-    public function __construct()
-    {
-        $this->PayPal = new ApiContext(
-            new OAuthTokenCredential(
-                self::clientId,
-                self::clientSecret
-            )
-        );
-        // 如果是沙盒测试环境不设置，请注释掉
-        // $this->PayPal->setConfig(
-        //    array(
-        //        'mode' => 'live',
-        //    )
-        // );
-    }
+    // public function __construct()
+    // {
+    //     $this->PayPal = new ApiContext(
+    //         new OAuthTokenCredential(
+    //             self::clientId,
+    //             self::clientSecret
+    //         )
+    //     );
+    //     // 如果是沙盒测试环境不设置，请注释掉
+    //     // $this->PayPal->setConfig(
+    //     //    array(
+    //     //        'mode' => 'live',
+    //     //    )
+    //     // );
+    // }
 
     /**
      * @param
@@ -47,13 +47,38 @@ class PaypalsController extends Controller
      * $shipping 运费
      * $description 描述内容
      */
-    public function pay()
+    public function pay(Request $request)
     {
-        $product = '1123';
+        $order = Order::where('order', $request->order)->first();
+        switch ($order->status) {
+            case 2:
+                return response()->json(['error' => ['message' => [__('messages.order_paid')]], 'status' => 401]);
+                break;
+            case 3:
+                return response()->json(['error' => ['message' => [__('messages.order_cancel')]], 'status' => 401]);
+                break;
+        }
+
+        $payment = StorePayment::where('store_id', $order->store_id)->where('payment_id', 6)->first();
+        if (!$payment) {
+            return response()->json(['error' => ['message' => [__('messages.payment')]], 'status' => 401]);
+        }
+        $paypal = new ApiContext(
+            new OAuthTokenCredential(
+                $payment->client_id,
+                $payment->client_secret
+            )
+        );
+        
+        $paypal->setConfig(
+            array(
+                'mode' => 'live'
+            )
+        );
+        $product = '订单：'.$order->order;
         $price = 1;
         $shipping = 0;
         $description = '1123123';
-        $paypal = $this->PayPal;
         $total = $price + $shipping;//总价
 
         $payer = new Payer();
@@ -75,7 +100,7 @@ class PaypalsController extends Controller
         $transaction->setAmount($amount)->setItemList($itemList)->setDescription($description)->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(self::accept_url . '?success=true')->setCancelUrl(self::accept_url . '/?success=false');
+        $redirectUrls->setReturnUrl(self::accept_url . '?success=true&placeid='. $order->place_id. '&code='.$code)->setCancelUrl(self::accept_url . '/?success=false&placeid='.  $order->place_id. '&code='.$code);
 
         $payment = new Payment();
         $payment->setIntent('sale')->setPayer($payer)->setRedirectUrls($redirectUrls)->setTransactions([$transaction]);
@@ -98,10 +123,12 @@ class PaypalsController extends Controller
     public function callback()
     {
         $success = trim($_GET['success']);
+        $placeid = trim($_GET['placeid']);
+        $code    = trim($_GET['code']);
 
         if ($success == 'false' && !isset($_GET['paymentId']) && !isset($_GET['PayerID'])) {
             // $message = '取消付款';
-            return redirect("http://47.56.146.107/menu_client/#/Fail");
+            return redirect("http://47.56.146.107/menu_client/#/Fail?placeid={$placeid}&code={$code}");
         }
 
         $paymentId = trim($_GET['paymentId']);
@@ -109,12 +136,12 @@ class PaypalsController extends Controller
 
         if (!isset($success, $paymentId, $PayerID)) {
             // $message = '支付失败';
-            return redirect("http://47.56.146.107/menu_client/#/Fail");
+            return redirect("http://47.56.146.107/menu_client/#/Fail?placeid={$placeid}&code={$code}");
         }
 
         if ((bool)$_GET['success'] === 'false') {
             // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
-            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}");
+            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         }
 
         $payment = Payment::get($paymentId, $this->PayPal);
@@ -127,9 +154,9 @@ class PaypalsController extends Controller
             $payment->execute($execute, $this->PayPal);
         } catch (Exception $e) {
             // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
-            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}");
+            return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         }
-        return redirect("http://47.56.146.107/menu_client/#/Success?paymentId={$paymentId}&PayerID={$PayerID}");
+        return redirect("http://47.56.146.107/menu_client/#/Success?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         // echo '支付成功，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
 
         // return response()->json(['status' => 200, 'message' => $message]);

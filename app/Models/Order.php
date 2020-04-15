@@ -29,7 +29,7 @@ class Order extends Model
     public function store()
     {
         return $this->hasOne(Store::class, 'id', 'store_id');
-    } 
+    }
 
     protected function getordersCountAttribute($value)
     {
