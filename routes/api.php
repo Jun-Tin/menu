@@ -378,7 +378,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
 
     /** 【 支付参数 】 */
     // 列表
-    Route::get('storepayment/index', 'Api\StorePaymentsController@index');
+    Route::get('storepayment/{storepayment}/show', 'Api\StorePaymentsController@show');
     // 创建
     Route::post('storepayment/store', 'Api\StorePaymentsController@store');
     // 修改
