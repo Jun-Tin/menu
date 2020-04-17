@@ -16,8 +16,8 @@ class PaypalsController extends Controller
 {
     // const clientId = 'Ac3Ai2BM9Wggmbz9rI-PZ5spaLJRuUtN0-POPRbhEPnhP8sT3eCLwmKolHeXqXAUJSqRiuM6YHQi0T2Z';//ID
     // const clientSecret = 'EASXST6KC_JNk5CUVnaytLkzC4UloIY--g02tjb1iJ8ND9kS7ZAUUxK4HVBm0ImFXJs7UcTrM5OoPS5B';//秘钥
-    // const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
-    // const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
+    const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
+    const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
     const accept_url = 'http://47.56.146.107/menub/api/paypal/callback';//返回地址
     const Currency = 'USD';//币种
     protected $PayPal;
@@ -25,21 +25,21 @@ class PaypalsController extends Controller
     // 沙盒测试账号：sb-1qjqf536347@business.example.com
     // 沙盒测试密码：iP{_D-K7
 
-    // public function __construct()
-    // {
-    //     $this->PayPal = new ApiContext(
-    //         new OAuthTokenCredential(
-    //             self::clientId,
-    //             self::clientSecret
-    //         )
-    //     );
-    //     // 如果是沙盒测试环境不设置，请注释掉
-    //     // $this->PayPal->setConfig(
-    //     //    array(
-    //     //        'mode' => 'live',
-    //     //    )
-    //     // );
-    // }
+    public function __construct()
+    {
+        // $this->PayPal = new ApiContext(
+        //     new OAuthTokenCredential(
+        //         self::clientId,
+        //         self::clientSecret
+        //     )
+        // );
+        // 如果是沙盒测试环境不设置，请注释掉
+        // $this->PayPal->setConfig(
+        //    array(
+        //        'mode' => 'live',
+        //    )
+        // );
+    }
 
     /**
      * @param
@@ -65,7 +65,7 @@ class PaypalsController extends Controller
         if (!$payment) {
             return response()->json(['error' => ['message' => [__('messages.payment')]], 'status' => 401]);
         }
-        $paypal = new ApiContext(
+        $this->PayPal = new ApiContext(
             new OAuthTokenCredential(
                 $payment->client_id,
                 $payment->client_secret
@@ -77,7 +77,7 @@ class PaypalsController extends Controller
         //         'mode' => 'live'
         //     )
         // );
-        $product = '订单：'.$order->order;
+        $product = '订单：'.$request->order;
         $price = 1;
         $shipping = 0;
         $description = '1123123';
@@ -102,7 +102,7 @@ class PaypalsController extends Controller
         $transaction->setAmount($amount)->setItemList($itemList)->setDescription($description)->setInvoiceNumber(uniqid());
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl(self::accept_url . '?success=true&placeid='. $order->place_id. '&code='.$code)->setCancelUrl(self::accept_url . '/?success=false&placeid='.  $order->place_id. '&code='.$code);
+        $redirectUrls->setReturnUrl(self::accept_url . '?success=true&placeid='. $order->place_id. '&code='.$code. '&order='. $request->order)->setCancelUrl(self::accept_url . '/?success=false&placeid='.  $order->place_id. '&code='.$code. '&order='. $request->order);
 
         $payment = new Payment();
         $payment->setIntent('sale')->setPayer($payer)->setRedirectUrls($redirectUrls)->setTransactions([$transaction]);
@@ -126,6 +126,7 @@ class PaypalsController extends Controller
     {
         $success = trim($_GET['success']);
         $placeid = trim($_GET['placeid']);
+        $order   = trim($_GET['order']);
         $code    = trim($_GET['code']);
 
         if ($success == 'false' && !isset($_GET['paymentId']) && !isset($_GET['PayerID'])) {
@@ -146,20 +147,28 @@ class PaypalsController extends Controller
             return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         }
 
-        $payment = Payment::get($paymentId, $this->PayPal);
+        $payment = StorePayment::where('store_id', Order::where('order', $order)->value('store_id'))->where('payment_id', 7)->first();
+        $ApiContext = new ApiContext(
+            new OAuthTokenCredential(
+                $payment->client_id,
+                $payment->client_secret
+            )
+        );
+
+        $payment = Payment::get($paymentId, $ApiContext);
 
         $execute = new PaymentExecution();
 
         $execute->setPayerId($PayerID);
 
         try {
-            $payment->execute($execute, $this->PayPal);
+            $payment->execute($execute, $ApiContext);
         } catch (Exception $e) {
             // $message = '支付失败，支付ID【' . $paymentId . '】,支付人ID【' . $PayerID . '】';
             return redirect("http://47.56.146.107/menu_client/#/Fail?paymentId={$paymentId}&PayerID={$PayerID}&placeid={$placeid}&code={$code}");
         }
         // 修改订单状态
-        $order->update([
+        Order::where('order', $order)->update([
             'status' => 2, 
             'payment_method' => 7,
             'paid_at' => Carbon::now()
