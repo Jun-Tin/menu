@@ -65,7 +65,7 @@ class PaypalsController extends Controller
         if (!$payment) {
             return response()->json(['error' => ['message' => [__('messages.payment')]], 'status' => 401]);
         }
-        $this->PayPal = new ApiContext(
+        $paypal = new ApiContext(
             new OAuthTokenCredential(
                 $payment->client_id,
                 $payment->client_secret
