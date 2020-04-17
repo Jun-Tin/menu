@@ -16,8 +16,8 @@ class PaypalsController extends Controller
 {
     // const clientId = 'Ac3Ai2BM9Wggmbz9rI-PZ5spaLJRuUtN0-POPRbhEPnhP8sT3eCLwmKolHeXqXAUJSqRiuM6YHQi0T2Z';//ID
     // const clientSecret = 'EASXST6KC_JNk5CUVnaytLkzC4UloIY--g02tjb1iJ8ND9kS7ZAUUxK4HVBm0ImFXJs7UcTrM5OoPS5B';//秘钥
-    const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
-    const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
+    // const clientId = 'AaI3OTYDtSmZ9-KkCVecwKWq5GKmp8s_SyTcEbRiWHBEFYjT3ID2nzHokcKaE5KBDeRX0WzRksgNQahE';//ID
+    // const clientSecret = 'EJe3inSl5Kig3pnlSl2mPh_WtiwsytD3hPUrjfyV0P-ZYpYi81UmhbsClZgcMfs9CHIzmDHOAd4oAw9V';//秘钥
     const accept_url = 'http://47.56.146.107/menub/api/paypal/callback';//返回地址
     const Currency = 'USD';//币种
     protected $PayPal;
