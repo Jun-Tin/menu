@@ -175,7 +175,7 @@ class ImagesController extends Controller
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 300;
+                        $fixed = 500;
                         break;
                 }
                 // 拼接文件名称
@@ -204,4 +204,11 @@ class ImagesController extends Controller
             return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
         }
     }
+
+    /** 【 补充数据 】 */
+    public function loopImage()
+    {
+        $collection = Image::get();
+        dd($collection);
+    } 
 }
