@@ -92,7 +92,7 @@ class PlacesController extends Controller
         $result = $place->updateQrcode($data,$place->id);
 
         if ($result) {
-            $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png']);
+            $place->image->update(['path' => env('APP_URL').'/images/qrcodes/'. $place->store_id. '/place/' . $place->floor. '/' .$place->name. '.png', 'link' => $result['link']]);
             return (new PlaceResource($place))->additional(['status' => 200, 'message' => __('messages.update')]);
         }
     }

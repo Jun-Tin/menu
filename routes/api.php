@@ -43,6 +43,7 @@ Route::get('paypal/notify', 'Api\PaypalsController@notify');
 Route::get('store/computeDays', 'Api\StoresController@computeDays');
 
 Route::get('place/redis', 'Api\PlacesController@redis');
+Route::get('loopImage', 'Api\ImagesController@loopImage');
 
 
 
