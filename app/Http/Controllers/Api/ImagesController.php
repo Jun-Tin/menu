@@ -205,138 +205,54 @@ class ImagesController extends Controller
         }
     }
 
-    /** 【 补充数据 】 */
-    public function loopImage()
-    {
-
-        $bigImg= $this->GrabImage('http://47.56.146.107/menub/images/uploads/201912/shop/201912231831475e0097932517a.jpg', public_path('/images/uploads/'). date('Ym',time()). '/shop/'); 
-        dd($bigImg);
-        var_dump($this->compressImg($bigImg,100,100,1));
-        dd(123);
-        $collection = Image::get()->map(function ($item){
-            header('Content-type: image/jpg');
-            // dd(imagecreatefromstring(file_get_contents($item->path)));
-        });
-        
-    } 
 
     /** 
      *根据url获取服务器上的图片 
-     *$url服务器上图片路径 $filename文件名 
-    */  
-    public function GrabImage($url,$filename="") { 
-        if($url=="") return false;  
-        if($filename=="") {  
-            $ext=strrchr($url,".");  
-            if($ext!=".gif" && $ext!=".jpg" && $ext!=".png")  
-                return false;  
-            $filename=date("YmdHis").$ext;  
-        }  
-        ob_start();   
-        readfile($url);   
-        $img = ob_get_contents();   
-        ob_end_clean();  
-        $size = strlen($img);   
-      
-        $fp2=@fopen($filename, "a");  
-        fwrite($fp2,$img);  
-        fclose($fp2);  
-        return $filename;  
-    } 
+    **/  
+    public function GrabImage() 
+    { 
+        Image::where('type', 'shop')->whereNull('mediumpath')->get()->map(function ($item){
+            $dir = public_path('/images/uploads/'). date('Ym',time()). '/shop/'; //保存路径       
+            if(!file_exists($dir))
+            {       
+               //检查是否有该文件夹，如果没有就创建，并给予最高权限       
+               mkdir($dir, 0700);
+            }
 
-    /** 
-    *
-    *函数：调整图片尺寸或生成缩略图 
-    *返回：True/False 
-    *参数：
-    *   $Image   需要调整的图片(含路径) 
-    *   $Dw=450  调整时最大宽度;缩略图时的绝对宽度 
-    *   $Dh=450  调整时最大高度;缩略图时的绝对高度 
-    *   $Type=1  1,调整尺寸; 2,生成缩略图 
-    */ 
+            ob_start();
+            readfile($item->path);
+            $img = ob_get_contents();
+            ob_end_clean(); 
+            $size = strlen($img);
+            $image = Iimage::make($img);
+            // 拼接文件名称
+            $ext = substr($item->path,strripos($item->path,".")+1);
+            for ($i=0; $i < 2; $i++) { 
+                switch ($i) {
+                    case 0:
+                        $fixed = 100;
+                        break;
+                    case 1:
+                        $fixed = 200;
+                        break;
+                    case 2:
+                        $fixed = 300;
+                        break;
+                }
+                // 拼接文件名称
+                $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
+                $path[$i] = $dir. $filename[$i];
+                $bool[$i] = $image->resize($fixed, null, function($constraint){
+                    $constraint->aspectRatio();
+                })->save($path[$i]);
+                $link[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename[$i];
+            }
+            
+            $item->update([
+                'mediumpath' => $link[1],
+                'tinypath' => $link[0]
+            ]);
+        });
 
-    public function compressImg($Image,$Dw,$Dh,$Type){  
-        IF(!file_exists($Image)){  
-            return false;  
-        }  
-        // 如果需要生成缩略图,则将原图拷贝一下重新给$Image赋值(生成缩略图操作)  
-        // 当Type==1的时候，将不拷贝原图像文件，而是在原来的图像文件上重新生成缩小后的图像(调整尺寸操作)  
-        IF($Type!=1){  
-            copy($Image,str_replace(".","_x.",$Image));  
-            $Image=str_replace(".","_x.",$Image);  
-        }  
-        // 取得文件的类型,根据不同的类型建立不同的对象  
-        $ImgInfo=getimagesize($Image);  
-        Switch($ImgInfo[2]){  
-            case 1:  
-                $Img =@imagecreatefromgif($Image);  
-                break;  
-            case 2:  
-                $Img =@imagecreatefromjpeg($Image);  
-                Break;  
-            case 3:  
-                $Img =@imagecreatefrompng($Image);  
-                break;  
-        }  
-        // 如果对象没有创建成功,则说明非图片文件  
-        IF(Empty($Img)){  
-            // 如果是生成缩略图的时候出错,则需要删掉已经复制的文件  
-            IF($Type!=1){  
-                unlink($Image);  
-            }  
-            return false;  
-        }  
-        // 如果是执行调整尺寸操作则  
-        IF($Type==1){  
-            $w=ImagesX($Img);  
-            $h=ImagesY($Img);  
-            $width = $w;  
-            $height = $h;  
-            IF($width>$Dw){  
-                $Par=$Dw/$width;  
-                $width=$Dw;  
-                $height=$height*$Par;  
-                IF($height>$Dh){  
-                    $Par=$Dh/$height;  
-                    $height=$Dh;  
-                    $width=$width*$Par;  
-                }  
-            } ElseIF($height>$Dh) {  
-                $Par=$Dh/$height;  
-                $height=$Dh;  
-                $width=$width*$Par;  
-                IF($width>$Dw){  
-                    $Par=$Dw/$width;  
-                    $width=$Dw;  
-                    $height=$height*$Par;  
-                }  
-            } Else {  
-                $width=$width;  
-                $height=$height;  
-            }  
-            $nImg =ImageCreateTrueColor($width,$height);// 新建一个真彩色画布  
-            ImageCopyReSampled($nImg,$Img,0,0,0,0,$width,$height,$w,$h);// 重采样拷贝部分图像并调整大小  
-            ImageJpeg($nImg,$Image);// 以JPEG格式将图像输出到浏览器或文件  
-            return true;  
-        } Else {// 如果是执行生成缩略图操作则  
-            $w=ImagesX($Img);  
-            $h=ImagesY($Img);  
-            $width = $w;  
-            $height = $h;  
-            $nImg =ImageCreateTrueColor($Dw,$Dh);  
-            IF($h/$w>$Dh/$Dw){// 高比较大  
-                $width=$Dw;  
-                $height=$h*$Dw/$w;  
-                $IntNH=$height-$Dh;  
-                ImageCopyReSampled($nImg, $Img, 0, -$IntNH/1.8, 0, 0, $Dw, $height, $w, $h);  
-            } Else {// 宽比较大  
-                $height=$Dh;  
-                $width=$w*$Dh/$h;  
-                $IntNW=$width-$Dw;  
-                ImageCopyReSampled($nImg, $Img,-$IntNW/1.8,0,0,0, $width, $Dh, $w, $h);  
-            }  
-            ImageJpeg($nImg,$Image);  
-            return true;  
-        }  
     }
 }
