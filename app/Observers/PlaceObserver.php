@@ -40,7 +40,7 @@ class PlaceObserver
 	            'user_id' => auth()->user()->id,
 	            'type' => 'qrcodes/'.$place->store_id.'/place',
 	            'path' => $url,
-	            'link' => env('APP_CLIENT').$place->store_id.'/'.$place->id.'/'.$encrypted;
+	            'link' => env('APP_CLIENT').$place->store_id.'/'.$place->id.'/'.$encrypted,
 	        ]);
 
 			$place->update([
