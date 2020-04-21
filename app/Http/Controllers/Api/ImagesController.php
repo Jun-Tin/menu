@@ -61,7 +61,7 @@ class ImagesController extends Controller
     }
 
 
-    // 上传图片多张
+    /** 【 上传图片多张 】 */ 
     public function uploadImgs(Request $request){
         $file = $request->file('file');
         header('Content-type: application/json');
@@ -115,7 +115,7 @@ class ImagesController extends Controller
         return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $data, 'url' => $url), 'status' => 200]);
     }
 
-    /** [生成二维码] */
+    /** 【 生成二维码 】 */
     public function createQrcode(Request $request)
     {
         $dir = public_path('images/qrcodes/'.$request->store_id. '/' .$request->floor);
@@ -143,7 +143,7 @@ class ImagesController extends Controller
         return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $image->id, 'url' => $url), 'status' => 200]);
     }
 
-
+    /** 【 裁剪图片 】 */ 
     public function thumbImage(Request $request)
     {
         $file = $request->file('file');
@@ -166,22 +166,37 @@ class ImagesController extends Controller
                 File::makeDirectory($dir, 0777, true);
             }
             $image = Iimage::make($file);
-            // 拼接文件名称
-            $filename = date('YmdHis'). uniqid(). '.'. $ext;
-            $path = $dir. $filename;
-            $height = $image->height() / 200;
-            $width = $image->width() / $height;
-            $bool = $image->resize($width, 200)->save($path);
+            for ($i=0; $i < 3; $i++) { 
+                switch ($i) {
+                    case 0:
+                        $fixed = 100;
+                        break;
+                    case 1:
+                        $fixed = 200;
+                        break;
+                    case 2:
+                        $fixed = 300;
+                        break;
+                }
+                // 拼接文件名称
+                $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
+                $path[$i] = $dir. $filename[$i];
+                $width = $image->width() / $fixed;
+                $height = $image->height() / $width;
+                $bool[$i] = $image->resize($fixed, $height)->save($path[$i]);
+                $url[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/'. $request->type. '/'. $filename[$i];
+            }
 
             if($bool){
-                $url = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/'. $request->type. '/'. $filename;
                 // 保存在数据库
                 $create = Image::create([
                     'user_id' => auth()->user()->id,
                     'type' => $request->type,
-                    'path' => $url,
+                    'path' => $url[2],
+                    'mediumpath' => $url[1],
+                    'tinypath' => $url[0],
                 ]);
-                return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $create->id, 'url' => $url), 'status' => 200]);
+                return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $create->id, 'url' => $url[2]), 'status' => 200]);
             }else{
                 return response()->json(['error' => ['message' => __('messages.upload_fail')], 'status' => 201]);
             }
