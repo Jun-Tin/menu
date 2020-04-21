@@ -174,7 +174,7 @@ class StoresController extends Controller
     /** 【 菜品列表 】 */
     public function menus(Store $store)
     {
-        return (new StoreCollection($store->menus()->where('category', 'm')->orderByDesc('id')->get()))->additional(['status' => 200]);
+        return (new StoreCollection($store->menus()->where('category', 'm')->orderBy('id')->get()))->additional(['status' => 200]);
     }
 
     /** 【 套餐列表 】 */
@@ -184,7 +184,7 @@ class StoresController extends Controller
         if ($request->type == 'in') {
             $where[] = ['status', 1];
         }
-        return (new MenuCollection($store->menus()->where($where)->orderByDesc('id')->get()))->additional(['status' => 200]);
+        return (new MenuCollection($store->menus()->where($where)->orderBy('id')->get()))->additional(['status' => 200]);
     }
 
     /** 【 座位列表 （按人数筛选） 】 */
