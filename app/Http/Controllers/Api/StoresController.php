@@ -312,6 +312,17 @@ class StoresController extends Controller
         return (StorePaymentResource::collection($store->payments))->additional(['status' => 200]);
     } 
 
+    /** 【 检测是否设置支付参数 】 */
+    public function setPayment(Request $request, Store $store)
+    {
+        $paypal = $store->payments()->where('payment_id', 7)->first();
+        if (!$paypal) {
+            return response()->json(['error' => ['message' => [__('messages.payment')]], 'status' => 401]);
+        } else {
+            return (new StorePaymentResource($paypal))->additional(['status' => 200]);
+        }
+    }
+
     /** 【 收入报表 】 */ 
     // 总月
     public function totalMonthIncome(Request $request, Store $store)

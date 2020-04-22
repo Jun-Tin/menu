@@ -409,6 +409,9 @@ Route::post('book/customerStore', 'Api\BooksController@customerStore')->middlewa
 // 详情
 Route::get('book/{book}/customerIndex', 'Api\BooksController@customerIndex')->middleware('setLocale');
 
+/** 【 检测是否设置支付参数 】 */
+Route::get('store/{store}/setPayment', 'Api\StoresController@setPayment')->middleware('setLocale'); 
+
 /** 【 自定义验证类接口 】 */ 
 Route::group(['middleware' => ['Code', 'setLocale']], function(){
     // Route::get('store/index/{store}/{place}/{code}', 'Api\StoresController@index');
