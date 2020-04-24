@@ -175,7 +175,7 @@ class ImagesController extends Controller
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 300;
+                        $fixed = 500;
                         break;
                 }
                 // 拼接文件名称
