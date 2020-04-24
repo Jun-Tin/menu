@@ -187,6 +187,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::delete('tags/destroy', 'Api\TagsController@destroy');
     // 门店菜品列表--标签
     Route::get('tags/{tag}/menus', 'Api\TagsController@menus');
+    // 排序标签
+    Route::patch('tags/order', 'Api\TagsController@order');
 
 
     /**【 菜品 、 套餐 】*/

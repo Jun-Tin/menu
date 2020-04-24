@@ -37,7 +37,7 @@ class Store extends Model
     /** 【 一对多标签关联关系 】 */
     public function tags()
     {
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(Tag::class)->orderBy('order_number');
     }
 
     /** 【 一对多预约关联关系】 */

@@ -19,7 +19,7 @@ class TagsController extends Controller
         $store = Store::find($request->store_id);
 
         // return (new TagCollection($user->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
-        return (new TagCollection($store->tags()->where('category',$request->category)->where('pid',$request->pid)->get()))->additional(['status' => 200]);
+        return (new TagCollection($store->tags()->where('category', $request->category)->where('pid', $request->pid)->get()))->additional(['status' => 200]);
     }
 
     /**
@@ -31,6 +31,9 @@ class TagsController extends Controller
     public function store(Request $request, Tag $tag)
     {
         $tag->fill($request->all());
+        if ($request->category == 'class') {
+           $tag->order_number = Tag::max('id')+ 1;
+        }
         $tag->save();
 
         return (new TagResource($tag))->additional(['status' => 200, 'message' => __('messages.store')]);
@@ -72,6 +75,18 @@ class TagsController extends Controller
     /** 【 菜品列表--标签 】 */ 
     public function menus(Request $request, Tag $tag)
     {
-        return (TagResource::collection($tag->menus()->where('category','m')->where('status',1)->get()))->additional(['status' => 200]);
+        return (TagResource::collection($tag->menus()->where('category','m')->where('status', 1)->get()))->additional(['status' => 200]);
     }
+
+    /** 【 排序标签 】 */
+    public function order(Request $request, Tag $tag)
+    {
+        // 操作的序列号
+        $order_number1 = Tag::where('id', $request->id)->value('order_number');
+        // 交换的序列号
+        $order_number2 = Tag::where('id', $request->ids)->value('order_number');
+        Tag::where('id', $request->id)->update(['order_number' => $order_number2]);
+        Tag::where('id', $request->ids)->update(['order_number' => $order_number1]);
+        return response()->json(['status' => 200, 'messages' => __('messages.update')]);
+    } 
 }

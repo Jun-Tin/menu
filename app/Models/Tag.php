@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     protected $fillable = [
-        'pid', 'store_id', 'name', 'category'
+        'pid', 'store_id', 'name', 'category', 'order_number'
     ];
 
     /** 【 多对多标签关联关系 】 */

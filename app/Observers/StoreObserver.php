@@ -82,6 +82,7 @@ class StoreObserver
 						'store_id' => $store->id,
 						'name' => $value,
 						'category' => 'class',
+						'order_number' => Tag::max('id')+ 1,
 					]);
 				}
 				

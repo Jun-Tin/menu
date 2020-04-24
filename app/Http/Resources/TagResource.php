@@ -22,6 +22,7 @@ class TagResource extends Resource
             'store_id' => $this->store_id,
             'name' => $this->name,
             'category' => $this->category,
+            'order_number' => $this->order_number,
             'created_at' => $this->created_at?$this->created_at->format('Y/m/d H:i:s'):'',
             'updated_at' => $this->updated_at?$this->updated_at->format('Y/m/d H:i:s'):'',
             'pivot' => $this->whenPivotLoaded('menu_tag', function(){
