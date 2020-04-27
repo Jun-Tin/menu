@@ -13,7 +13,7 @@ class Create extends Action
     protected $selector = '.create';
 
     public function handle(Request $request)
-    {   
+    {
         if (!$request->number) {
             return $this->response()->timeout(1000)->info('请输入创建个数');
         }

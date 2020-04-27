@@ -28,5 +28,4 @@ class BatchDeletion extends BatchAction
     {
         $this->confirm('确定删除？');
     }
-
 }

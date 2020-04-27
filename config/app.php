@@ -79,7 +79,6 @@ return [
     |
     */
 
-    // 'locale' => 'en',
     'locale' => 'zh-CN',
 
     /*

@@ -2,77 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\{Menu, Image};
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\HasResourceActions;
+use App\Models\Menu;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Encore\Admin\Facades\Admin;
-use Intervention\Image\Facades\Image AS Iimage;
 
-class MenusController extends Controller
+class MenusController extends AdminController
 {
-    use HasResourceActions;
-
     /**
-     * Index interface.
+     * Title for current resource.
      *
-     * @param Content $content
-     * @return Content
+     * @var string
      */
-    public function index(Content $content)
-    {
-        return $content
-            ->header('菜品列表')
-            ->description('description')
-            ->body($this->grid());
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->header('Detail')
-            ->description('description')
-            ->body($this->detail($id));
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->header('Edit')
-            ->description('description')
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->header('Create')
-            ->description('description')
-            ->body($this->form());
-    }
+    protected $title = '菜品';
 
     /**
      * Make a grid builder.
@@ -119,7 +62,7 @@ class MenusController extends Controller
     /**
      * Make a show builder.
      *
-     * @param mixed   $id
+     * @param mixed $id
      * @return Show
      */
     protected function detail($id)
@@ -159,7 +102,7 @@ class MenusController extends Controller
         ]);
         $show->created_at('Created at');
         $show->updated_at('Updated at');
-
+        
         return $show;
     }
 

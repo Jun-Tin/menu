@@ -3,73 +3,19 @@
 namespace App\Admin\Controllers;
 
 use App\Models\User;
-use App\Http\Controllers\Controller;
-use Encore\Admin\Controllers\HasResourceActions;
+use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class UsersController extends Controller
+class UsersController extends AdminController
 {
-    use HasResourceActions;
-
     /**
-     * Index interface.
+     * Title for current resource.
      *
-     * @param Content $content
-     * @return Content
+     * @var string
      */
-    public function index(Content $content)
-    {
-        return $content
-            ->header('用户列表')
-            ->body($this->grid());
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->header('Detail')
-            ->description('description')
-            ->body($this->detail($id));
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param mixed   $id
-     * @param Content $content
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->header('Edit')
-            ->description('description')
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->header('Create')
-            ->description('description')
-            ->body($this->form());
-    }
+    protected $title = '用户';
 
     /**
      * Make a grid builder.
@@ -91,13 +37,14 @@ class UsersController extends Controller
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
         $grid->disableCreateButton();
+
         return $grid;
     }
 
     /**
      * Make a show builder.
      *
-     * @param mixed   $id
+     * @param mixed $id
      * @return Show
      */
     protected function detail($id)
@@ -130,9 +77,8 @@ class UsersController extends Controller
      */
     protected function form()
     {
-        // $id = isset(request()->route()->parameters['user']) ? request()->route()->parameters['user'] : '';
         $form = new Form(new User);
-        // dd($form);
+        
         $form->display('id', 'ID');
         $form->text('name', '用户名')->rules('required', [
             'required' => '不能为空'
@@ -160,6 +106,7 @@ class UsersController extends Controller
                 $form->password = bcrypt($form->password);
             }
         });
+
         return $form;
     }
 }
