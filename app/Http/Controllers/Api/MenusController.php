@@ -286,6 +286,7 @@ class MenusController extends Controller
             'name' => $menuTag->name,
             'pid' => $menuTag->pid,
             'fill_price' => $menuTag->fill_price,
+            'order_number' => MenuTag::max('id')+ 1
         ]);
         $menuTags = $menuTag->menuTags;
         for ($i=0; $i<count($menuTags); $i++){
@@ -300,5 +301,17 @@ class MenusController extends Controller
         }
         // 获取菜品跟标签关系
         return (new MenuResource($menu))->additional(['status' => 200, 'message' => __('messages.add')]);
+    } 
+
+    /** 【 套餐标签排序 】 */
+    public function tagsUpDown(Request $request, Menu $menu)
+    {
+        // 操作的序列号
+        $order_number1 = MenuTag::where('id', $request->id)->value('order_number');
+        // 交换的序列号
+        $order_number2 = MenuTag::where('id', $request->ids)->value('order_number');
+        MenuTag::where('id', $request->id)->update(['order_number' => $order_number2]);
+        MenuTag::where('id', $request->ids)->update(['order_number' => $order_number1]);
+        return (new MenuResource($menu))->additional(['status' => 200]);
     } 
 }

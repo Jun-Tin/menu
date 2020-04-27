@@ -214,6 +214,8 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
     Route::patch('menu/PackageUpDown', 'Api\MenusController@PackageUpDown');
     // 选中套餐种类
     Route::post('menu/{menu}/selectMenuTag', 'Api\MenusController@selectMenuTag');
+    // 修改菜品排序 —— 套餐内标签
+    Route::patch('menu/{menu}/tagsUpDown', 'Api\MenusController@tagsUpDown');
 
 
     /** 【 新套餐 】 */

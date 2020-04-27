@@ -14,5 +14,6 @@ Route::group([
 
     $router->resource('users', UsersController::class);
     $router->resource('menus', MenusController::class);
+    $router->resource('qrcodes', QrcodesController::class);
 
 });
