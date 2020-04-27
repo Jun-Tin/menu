@@ -9,10 +9,9 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-use Illuminate\Support\Facades\File;
-use SimpleSoftwareIO\QrCode\Facades\QrCode as Qrcodes;
+use App\Admin\Actions\Qrcode\Create;
 use App\Admin\Actions\Qrcode\BatchReplicate;
-use Encore\Admin\Grid\Displayers\DropdownActions;
+use App\Admin\Actions\Qrcode\BatchDeletion;
 
 class QrcodesController extends Controller
 {
@@ -86,15 +85,32 @@ class QrcodesController extends Controller
         $grid = new Grid(new Qrcode);
 
         $grid->id('Id');
-        $grid->image('Image');
-        $grid->link('Link');
+        $grid->column('image', '二维码')->image('image', 100, 100);
+        $grid->column('link', '链接地址');
         $grid->created_at('Created at');
-        // $grid->updated_at('Updated at');
-         // 开启新的行内编辑
-        // $grid->setActionClass(DropdownActions::class);
+        $grid->updated_at('Updated at');
+        // 禁用创建按钮
+        $grid->disableCreateButton();
+        // 禁用行操作列
+        $grid->disableActions();
+        // 禁用原有批量删除
+        $grid->tools(function ($tools) {
+            $tools->batch(function ($batch) {
+                $batch->disableDelete();
+            });
+        });
+        // 批量复制
         $grid->batchActions(function ($batch) {
             $batch->add(new BatchReplicate());
+            $batch->add(new BatchDeletion());
+            
         });
+
+        // 批量创建
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->append(new Create());
+        });
+
 
         return $grid;
     }
@@ -126,39 +142,25 @@ class QrcodesController extends Controller
     protected function form()
     {
         $form = new Form(new Qrcode);
-        $form->number('number', '个数');
-        // dd($number);
-        // $form->image('image', 'Image');
-        // $form->url('link', 'Link');
-        // $form->filename = date('YmdHis'). uniqid(). '.png';
-        dd($form);
-        for ($i=0; $i < \request('number'); $i++) { 
-            // 在表单提交前调用
-            $form->saving(function (Form $form) use($i) {
-                if (!\request('number')) {
-                    // 抛出异常
-                    throw new \Exception('请输入个数');
-                }
-                    $form->model()->image = env('APP_URL').'/images/systems/'. date('Ym',time()). '/'. date('YmdHis'). uniqid(). '.png';
-                    $this->str[$i] = env('APP_URL').'/images/systems/'. date('Ym',time()). '/'. date('YmdHis'). uniqid(). '.png';
-            });
-                
-            // 在表单提交后调用
-            $form->saved(function (Form $form) use($i) {
-                $dir = public_path('/images/systems/'). date('Ym',time()). '/';
-                if (!is_dir($dir)) {
-                    File::makeDirectory($dir, 0777, true);
-                }
-                    $filename[$i] = substr($this->str[$i], strripos($this->str[$i], "/")+1);
-                    // 判断图片是否存在
-                    if (file_exists($dir. '/' .$filename[$i])) {
-                        unlink($dir. '/' .$filename[$i]);
-                    }
-                    // 保存二维码
-                    Qrcodes::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate('http://47.56.146.107/menu/#/BindCode/'. $form->model()->id, $dir. '/'. $filename[$i]);
-            });
-        }
-        $form->ignore(['number']);
+        // 在表单提交前调用
+        $form->saving(function (Form $form) {
+            $form->model()->image = env('APP_URL').'/images/systems/'. date('Ymd',time()). '/'. date('YmdHis'). uniqid(). '.png';
+        });
+            
+        // 在表单提交后调用
+        $form->saved(function (Form $form) {
+            $dir = public_path('/images/systems/'). date('Ymd',time()). '/';
+            if (!is_dir($dir)) {
+                File::makeDirectory($dir, 0777, true);
+            }
+            $filename = substr($this->str, strripos($this->str, "/")+1);
+            // 判断图片是否存在
+            if (file_exists($dir. '/' .$filename[$i])) {
+                unlink($dir. '/' .$filename[$i]);
+            }
+            // 保存二维码
+            Qrcodes::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate('http://47.56.146.107/menu/#/BindCode/'. $form->model()->id, $dir. '/'. $filename[$i]);
+        });
 
         return $form;
 

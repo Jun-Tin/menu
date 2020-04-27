@@ -12,4 +12,5 @@ yarn-error.log
 .env
 /public/images/qrcodes
 /public/images/uploads
+/public/images/systems
 /public/zips

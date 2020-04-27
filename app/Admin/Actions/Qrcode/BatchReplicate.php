@@ -18,4 +18,8 @@ class BatchReplicate extends BatchAction
         return $this->response()->success('Success message...')->refresh();
     }
 
+    public function dialog()
+    {
+        $this->confirm('确定复制？');
+    }
 }
