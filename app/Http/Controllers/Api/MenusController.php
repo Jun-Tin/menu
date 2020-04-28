@@ -307,11 +307,11 @@ class MenusController extends Controller
     public function tagsUpDown(Request $request, Menu $menu)
     {
         // 操作的序列号
-        $order_number1 = MenuTag::where('id', $request->id)->value('order_number');
+        $order_number1 = MenuTag::where('id', $request->pivot_id)->value('order_number');
         // 交换的序列号
-        $order_number2 = MenuTag::where('id', $request->ids)->value('order_number');
-        MenuTag::where('id', $request->id)->update(['order_number' => $order_number2]);
-        MenuTag::where('id', $request->ids)->update(['order_number' => $order_number1]);
+        $order_number2 = MenuTag::where('id', $request->pivot_ids)->value('order_number');
+        MenuTag::where('id', $request->pivot_id)->update(['order_number' => $order_number2]);
+        MenuTag::where('id', $request->pivot_ids)->update(['order_number' => $order_number1]);
         return (new MenuResource($menu))->additional(['status' => 200]);
     } 
 }
