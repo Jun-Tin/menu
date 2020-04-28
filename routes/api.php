@@ -38,6 +38,12 @@ Route::post('paypal/pay', 'Api\PaypalsController@pay');
 Route::get('paypal/callback', 'Api\PaypalsController@callback');
 Route::get('paypal/notify', 'Api\PaypalsController@notify');
 
+/** 【 系统创建二维码 】 */
+// 查询
+Route::get('qrcode/{qrcode}/index', 'Api\QrcodesController@index');
+// 绑定
+Route::patch('qrcode/{qrcode}/update', 'Api\QrcodesController@update');
+
 /** 【 定时调用 】 */
 // 定时计算上线天数
 Route::get('store/computeDays', 'Api\StoresController@computeDays');
