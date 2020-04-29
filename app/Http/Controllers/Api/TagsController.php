@@ -75,7 +75,7 @@ class TagsController extends Controller
     /** 【 菜品列表--标签 】 */ 
     public function menus(Request $request, Tag $tag)
     {
-        return (TagResource::collection($tag->menus()->where('category','m')->where('status', 1)->get()))->additional(['status' => 200]);
+        return (TagResource::collection($tag->menus()->where('status', 1)->get()))->additional(['status' => 200]);
     }
 
     /** 【 排序标签 】 */
