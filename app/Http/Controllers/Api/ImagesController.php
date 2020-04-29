@@ -207,7 +207,7 @@ class ImagesController extends Controller
 
 
     /** 
-     *根据url获取服务器上的图片 
+     * 根据url获取服务器上的图片 
     **/  
     public function GrabImage() 
     { 
@@ -225,9 +225,9 @@ class ImagesController extends Controller
             ob_end_clean(); 
             $size = strlen($img);
             // 拼接文件名称
+            $image = Iimage::make($img);
             $ext = substr($item->path,strripos($item->path,".")+1);
             for ($i=0; $i < 3; $i++) { 
-                $image[$i] = Iimage::make($img);
                 switch ($i) {
                     case 0:
                         $fixed = 800;
@@ -242,7 +242,7 @@ class ImagesController extends Controller
                 // 拼接文件名称
                 $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
                 $path[$i] = $dir. $filename[$i];
-                $bool[$i] = $image[$i]->resize($fixed, null, function($constraint){
+                $bool[$i] = $image->resize($fixed, null, function($constraint){
                     $constraint->aspectRatio();
                 })->save($path[$i]);
                 $link[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename[$i];
@@ -253,6 +253,25 @@ class ImagesController extends Controller
                 'tinypath' => $link[2]
             ]);
         });
+    }
 
+    /**
+    * 根据url获取服务器上的图片 
+    **/ 
+    public function deleteImage()
+    {
+        $dir = public_path('/images/uploads/202004/shop/'); //保存路径       
+        Image::where('type', 'shop')->whereNotNull('mediumpath')->get()->map(function ($item) use($dir){
+            $mediumpath = substr($item->mediumpath, strripos($item->mediumpath, "/") +1);
+            $tinypath = substr($item->tinypath, strripos($item->tinypath, "/") +1);
+            // 判断图片是否存在
+            if (file_exists($dir. '/' .$mediumpath)) {
+                unlink($dir. '/' .$mediumpath);
+            }
+            // 判断图片是否存在
+            if (file_exists($dir. '/' .$tinypath)) {
+                unlink($dir. '/' .$tinypath);
+            }
+        });
     }
 }

@@ -48,8 +48,12 @@ Route::patch('qrcode/{qrcode}/update', 'Api\QrcodesController@update');
 // 定时计算上线天数
 Route::get('store/computeDays', 'Api\StoresController@computeDays');
 
+// 测试redis
 Route::get('place/redis', 'Api\PlacesController@redis');
+// 根据url获取服务器上的图片 
 Route::get('GrabImage', 'Api\ImagesController@GrabImage');
+// 根据url删除就有图片
+Route::get('deleteImage', 'Api\ImagesController@deleteImage');
 
 
 
