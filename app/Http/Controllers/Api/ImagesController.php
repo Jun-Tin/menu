@@ -165,23 +165,23 @@ class ImagesController extends Controller
             if (!is_dir($dir)) {
                 File::makeDirectory($dir, 0777, true);
             }
+            $image = Iimage::make($file);
             for ($i=0; $i < 3; $i++) { 
-                $image[$i] = Iimage::make($file);
                 switch ($i) {
                     case 0:
-                        $fixed = 100;
+                        $fixed = 800;
                         break;
                     case 1:
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 800;
+                        $fixed = 100;
                         break;
                 }
                 // 拼接文件名称
                 $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
                 $path[$i] = $dir. $filename[$i];
-                $bool[$i] = $image[$i]->resize($fixed, null, function($constraint){
+                $bool[$i] = $image->resize($fixed, null, function($constraint){
                     $constraint->aspectRatio();
                 })->save($path[$i]);
                 $url[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/'. $request->type. '/'. $filename[$i];
@@ -226,17 +226,17 @@ class ImagesController extends Controller
             $size = strlen($img);
             // 拼接文件名称
             $ext = substr($item->path,strripos($item->path,".")+1);
-            for ($i=0; $i < 2; $i++) { 
+            for ($i=0; $i < 3; $i++) { 
                 $image[$i] = Iimage::make($img);
                 switch ($i) {
                     case 0:
-                        $fixed = 100;
+                        $fixed = 800;
                         break;
                     case 1:
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 800;
+                        $fixed = 100;
                         break;
                 }
                 // 拼接文件名称
@@ -250,7 +250,7 @@ class ImagesController extends Controller
             
             $item->update([
                 'mediumpath' => $link[1],
-                'tinypath' => $link[0]
+                'tinypath' => $link[2]
             ]);
         });
 
