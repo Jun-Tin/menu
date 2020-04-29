@@ -192,9 +192,9 @@ class ImagesController extends Controller
                 $create = Image::create([
                     'user_id' => auth()->user()->id,
                     'type' => $request->type,
-                    'path' => $url[2],
+                    'path' => $url[0],
                     'mediumpath' => $url[1],
-                    'tinypath' => $url[0],
+                    'tinypath' => $url[2],
                 ]);
                 return response()->json(['message' => __('messages.upload_success'), 'success' => array('image_id' => $create->id, 'url' => $url[2]), 'status' => 200]);
             }else{
