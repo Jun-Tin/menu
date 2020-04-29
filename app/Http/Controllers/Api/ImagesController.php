@@ -165,8 +165,8 @@ class ImagesController extends Controller
             if (!is_dir($dir)) {
                 File::makeDirectory($dir, 0777, true);
             }
-            $image = Iimage::make($file);
             for ($i=0; $i < 3; $i++) { 
+                $image[$i] = Iimage::make($file);
                 switch ($i) {
                     case 0:
                         $fixed = 100;
@@ -181,7 +181,7 @@ class ImagesController extends Controller
                 // 拼接文件名称
                 $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
                 $path[$i] = $dir. $filename[$i];
-                $bool[$i] = $image->resize($fixed, null, function($constraint){
+                $bool[$i] = $image[$i]->resize($fixed, null, function($constraint){
                     $constraint->aspectRatio();
                 })->save($path[$i]);
                 $url[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/'. $request->type. '/'. $filename[$i];
@@ -224,10 +224,10 @@ class ImagesController extends Controller
             $img = ob_get_contents();
             ob_end_clean(); 
             $size = strlen($img);
-            $image = Iimage::make($img);
             // 拼接文件名称
             $ext = substr($item->path,strripos($item->path,".")+1);
             for ($i=0; $i < 2; $i++) { 
+                $image[$i] = Iimage::make($img);
                 switch ($i) {
                     case 0:
                         $fixed = 100;
@@ -242,7 +242,7 @@ class ImagesController extends Controller
                 // 拼接文件名称
                 $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
                 $path[$i] = $dir. $filename[$i];
-                $bool[$i] = $image->resize($fixed, null, function($constraint){
+                $bool[$i] = $image[$i]->resize($fixed, null, function($constraint){
                     $constraint->aspectRatio();
                 })->save($path[$i]);
                 $link[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename[$i];
