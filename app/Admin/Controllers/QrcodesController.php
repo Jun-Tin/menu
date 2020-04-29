@@ -10,7 +10,6 @@ use Encore\Admin\Show;
 use App\Admin\Actions\Qrcode\BatchDeletion;
 use App\Admin\Actions\Qrcode\BatchReplicate;
 use App\Admin\Actions\Qrcode\Create;
-use App\Admin\Extensions\PostsExporter;
 
 class QrcodesController extends AdminController
 {
@@ -44,7 +43,6 @@ class QrcodesController extends AdminController
             $tools->batch(function ($batch) {
                 $batch->disableDelete();
             });
-            // $tools->append(new Creation());
         });
         // 批量复制
         $grid->batchActions(function ($batch) {
@@ -58,7 +56,6 @@ class QrcodesController extends AdminController
             $tools->append(new Create());
         });
 
-        $grid->exporter(new PostsExporter());
 
         return $grid;
     }

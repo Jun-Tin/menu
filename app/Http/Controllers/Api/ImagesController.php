@@ -218,40 +218,42 @@ class ImagesController extends Controller
                //检查是否有该文件夹，如果没有就创建，并给予最高权限       
                mkdir($dir, 0700);
             }
-
-            ob_start();
-            readfile($item->path);
-            $img = ob_get_contents();
-            ob_end_clean(); 
-            $size = strlen($img);
-            // 拼接文件名称
-            $image = Iimage::make($img);
-            $ext = substr($item->path,strripos($item->path,".")+1);
-            for ($i=0; $i < 3; $i++) { 
-                switch ($i) {
-                    case 0:
-                        $fixed = 800;
-                        break;
-                    case 1:
-                        $fixed = 200;
-                        break;
-                    case 2:
-                        $fixed = 100;
-                        break;
-                }
+            $file = substr($item->path, strripos($item->path, "/") +1);
+            if (file_exists($dir. '/'. $file)) {
+                ob_start();
+                readfile($item->path);
+                $img = ob_get_contents();
+                ob_end_clean(); 
+                $size = strlen($img);
                 // 拼接文件名称
-                $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
-                $path[$i] = $dir. $filename[$i];
-                $bool[$i] = $image->resize($fixed, null, function($constraint){
-                    $constraint->aspectRatio();
-                })->save($path[$i]);
-                $link[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename[$i];
+                $image = Iimage::make($img);
+                $ext = substr($item->path, strripos($item->path, ".") +1);
+                for ($i=0; $i < 3; $i++) { 
+                    switch ($i) {
+                        case 0:
+                            $fixed = 800;
+                            break;
+                        case 1:
+                            $fixed = 200;
+                            break;
+                        case 2:
+                            $fixed = 100;
+                            break;
+                    }
+                    // 拼接文件名称
+                    $filename[$i] = date('YmdHis'). uniqid(). '.'. $ext;
+                    $path[$i] = $dir. $filename[$i];
+                    $bool[$i] = $image->resize($fixed, null, function($constraint){
+                        $constraint->aspectRatio();
+                    })->save($path[$i]);
+                    $link[$i] = env('APP_URL'). '/images/uploads/'. date('Ym',time()). '/shop/'. $filename[$i];
+                }
+                
+                $item->update([
+                    'mediumpath' => $link[1],
+                    'tinypath' => $link[2]
+                ]);
             }
-            
-            $item->update([
-                'mediumpath' => $link[1],
-                'tinypath' => $link[2]
-            ]);
         });
     }
 
