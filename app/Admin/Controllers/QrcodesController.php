@@ -10,6 +10,7 @@ use Encore\Admin\Show;
 use App\Admin\Actions\Qrcode\BatchDeletion;
 use App\Admin\Actions\Qrcode\BatchReplicate;
 use App\Admin\Actions\Qrcode\Create;
+use App\Admin\Extensions\PostsExporter;
 
 class QrcodesController extends AdminController
 {
@@ -18,7 +19,7 @@ class QrcodesController extends AdminController
      *
      * @var string
      */
-    protected $title = '二维码';
+    protected $title = '绑定座位二维码';
 
     /**
      * Make a grid builder.
@@ -56,6 +57,8 @@ class QrcodesController extends AdminController
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new Create());
         });
+
+        $grid->exporter(new PostsExporter());
 
         return $grid;
     }

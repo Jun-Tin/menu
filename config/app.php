@@ -242,7 +242,7 @@ return [
         'EasySms' => App\Facades\EasySms::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Zipper' => Chumper\Zipper\Zipper::class,
-        'Imagessss' => Intervention\Image\Facades\Image::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
 
     ],

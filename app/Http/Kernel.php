@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'Code'  => \App\Http\Middleware\Code::class,
         'setLocale' => \App\Http\Middleware\SetLocale::class,
+        'acceptHeader' => \App\Http\Middleware\AcceptHeader::class,
     ];
 }

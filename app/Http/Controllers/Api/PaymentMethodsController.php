@@ -14,9 +14,13 @@ class PaymentMethodsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(PaymentMethod $paymentmethod)
+    public function index(Request $request, PaymentMethod $paymentmethod)
     {
-        return (PaymentMethodResource::collection($paymentmethod::where('show', 1)->orderByDesc('order_number')->get()))->additional(['status' => 200]);
+        $whereNot = [];
+        if ($request->category == 'inside') {
+            $whereNot = array(1, 6);
+        }
+        return (PaymentMethodResource::collection($paymentmethod::whereNotIn('id', $whereNot)->where('show', 1)->orderByDesc('order_number')->get()))->additional(['status' => 200]);
     }
 
     /**

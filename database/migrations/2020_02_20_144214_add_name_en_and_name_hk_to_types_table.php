@@ -14,8 +14,8 @@ class AddNameEnAndNameHkToTypesTable extends Migration
     public function up()
     {
         Schema::table('types', function (Blueprint $table) {
-            $table->string('name_en')->nullable()->after('name')->comment('英文名称');
-            $table->string('name_hk')->nullable()->after('name')->comment('中文名称繁体');
+            $table->string('name_en')->nullable()->after('name_cn')->comment('英文名称');
+            $table->string('name_hk')->nullable()->after('name_cn')->comment('中文名称繁体');
         });
     }
 

@@ -175,7 +175,7 @@ class ImagesController extends Controller
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 500;
+                        $fixed = 800;
                         break;
                 }
                 // 拼接文件名称
@@ -236,7 +236,7 @@ class ImagesController extends Controller
                         $fixed = 200;
                         break;
                     case 2:
-                        $fixed = 300;
+                        $fixed = 800;
                         break;
                 }
                 // 拼接文件名称

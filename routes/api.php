@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 /**【 获取验证码 】*/ 
-Route::post('send', 'Api\MessageCodesController@store')->middleware('setLocale');
+Route::post('send', 'Api\MessageCodesController@store')->middleware('acceptHeader', 'setLocale');
 /**【 注册 】*/ 
 Route::post('user/register', 'Api\UsersController@register')->middleware('setLocale');
 /**【 登录 】*/ 
@@ -63,7 +63,7 @@ Route::post('socket/test', 'Api\SocketsController@test');
 
 
 /**【 验证类接口 】*/ 
-Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
+Route::group(['middleware' => ['acceptHeader', 'auth:api', 'setLocale']], function(){
     /**【 个人信息 】*/ 
     Route::get('user/member', 'Api\UsersController@member');
     /**【 退出登录 】*/
@@ -328,7 +328,7 @@ Route::group(['middleware' => ['auth:api', 'setLocale']], function(){
 
     /** 【 支付类型 】 */
     // 列表
-    Route::get('paymentmethod/index', 'Api\PaymentMethodsController@index');
+    Route::get('paymentmethod/{category}/index', 'Api\PaymentMethodsController@index');
     // 创建
     Route::post('paymentmethod/store', 'Api\PaymentMethodsController@store');
     // 修改
