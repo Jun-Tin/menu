@@ -30,9 +30,10 @@ class Create extends Action
             $image = env('APP_URL').'/images/systems/'. date('Ymd',time()). '/'. $filename;
             // 保存二维码
             $create = Qrcode::create([
-                'image' => $image
+                'image' => $image,
+                'code' => substr(uniqid(), -5)
             ]);
-            Qrcodes::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate('http://47.56.146.107/menu/#/BindCode/'. $create->id, $dir. '/'. $filename);
+            Qrcodes::format('png')->errorCorrection('L')->size(200)->margin(2)->encoding('UTF-8')->generate('http://47.56.146.107/menu/#/BC/'. $create->code, $dir. '/'. $filename);
         }
 
         return $this->response()->success('创建成功')->refresh();

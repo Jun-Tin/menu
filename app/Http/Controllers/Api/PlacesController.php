@@ -422,4 +422,16 @@ class PlacesController extends Controller
     {
         dd(Redis::keys('store_line_96_*'));
     }
+
+    public function floor(Request $request)
+    {
+        $store_id = $request->get('q');
+        return Place::where('store_id', $store_id)->where('floor', 0)->get(['id', 'name as text']);
+    }
+
+    public function place(Request $request)
+    {
+        $floor = $request->get('q');
+        return Place::where('floor', $floor)->get(['id', 'name as text']);
+    }
 }

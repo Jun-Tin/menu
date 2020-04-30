@@ -40,9 +40,9 @@ Route::get('paypal/notify', 'Api\PaypalsController@notify');
 
 /** 【 系统创建二维码 】 */
 // 查询
-Route::get('qrcode/{qrcode}/index', 'Api\QrcodesController@index');
+Route::get('qrcode/{code}/index', 'Api\QrcodesController@index');
 // 绑定
-Route::patch('qrcode/{qrcode}/update', 'Api\QrcodesController@update');
+Route::patch('qrcode/{code}/update', 'Api\QrcodesController@update');
 
 /** 【 定时调用 】 */
 // 定时计算上线天数
@@ -54,6 +54,12 @@ Route::get('place/redis', 'Api\PlacesController@redis');
 Route::get('GrabImage', 'Api\ImagesController@GrabImage');
 // 根据url删除就有图片
 Route::get('deleteImage', 'Api\ImagesController@deleteImage');
+
+/** 【 后台 】 */
+// 座位楼层 
+Route::get('floor', 'Api\PlacesController@floor');
+// 座位
+Route::get('place', 'Api\PlacesController@place');
 
 
 

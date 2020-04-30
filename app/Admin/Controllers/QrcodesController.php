@@ -2,14 +2,13 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Qrcode;
+use App\Models\{Menu, Qrcode, Image, place};
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Admin\Actions\Qrcode\BatchDeletion;
-use App\Admin\Actions\Qrcode\BatchReplicate;
-use App\Admin\Actions\Qrcode\Create;
+use App\Admin\Actions\Qrcode\{Create, BatchReplicate, BatchDeletion};
+use App\Admin\Extensions\QrcodesExporter;
 
 class QrcodesController extends AdminController
 {
@@ -37,7 +36,7 @@ class QrcodesController extends AdminController
         // 禁用创建按钮
         $grid->disableCreateButton();
         // 禁用行操作列
-        $grid->disableActions();
+        // $grid->disableActions();
         // 禁用原有批量删除
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
@@ -48,7 +47,6 @@ class QrcodesController extends AdminController
         $grid->batchActions(function ($batch) {
             $batch->add(new BatchReplicate());
             $batch->add(new BatchDeletion());
-            
         });
 
         // 批量创建
@@ -56,6 +54,18 @@ class QrcodesController extends AdminController
             $tools->append(new Create());
         });
 
+        // $grid->actions(function ($actions) {
+        //     // 去掉删除
+        //     $actions->disableDelete();
+        //     // 去掉编辑
+        //     $actions->disableEdit();
+        //     // 去掉查看
+        //     $actions->disableView();
+        //     $actions->add(new Bind);
+        // });
+        $excel = new QrcodesExporter();
+        $excel->setAttr(['id', '图片', '链接地址'], ['id', 'image', 'link']);
+        $grid->exporter($excel);
 
         return $grid;
     }
@@ -70,9 +80,9 @@ class QrcodesController extends AdminController
     {
         $show = new Show(Qrcode::findOrFail($id));
 
-        $show->field('id', __('Id'));
-        $show->field('image', __('Image'));
-        $show->field('link', __('Link'));
+        $show->id('id');
+        $show->image('二维码')->image();
+        $show->link('链接地址');
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -88,8 +98,18 @@ class QrcodesController extends AdminController
     {
         $form = new Form(new Qrcode());
 
-        $form->image('image', __('Image'));
-        $form->url('link', __('Link'));
+        $form->image('image', '二维码');
+        $form->select('store_id', '门店')->options(Menu::getSelectOptions())->load('floor', '/api/floor');
+        $form->select('floor', '楼层')->load('place', '/api/place');
+        $form->select('place', '座位');
+
+        //保存前回调
+        $form->saving(function (Form $form) {
+            if (\request('place')) {
+                $form->model()->link = Image::find(place::find(\request('place'))->image_id)->link;
+            }
+        });
+        $form->ignore(['store_id', 'floor', 'place']);
 
         return $form;
     }

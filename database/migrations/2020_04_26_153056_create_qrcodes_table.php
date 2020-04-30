@@ -17,6 +17,7 @@ class CreateQrcodesTable extends Migration
             $table->increments('id');
             $table->string('image')->nullable()->comment('图片地址');
             $table->string('link')->nullable()->comment('链接地址');
+            $table->string('code')->nullable()->comment('标识码');
             $table->timestamps();
         });
     }

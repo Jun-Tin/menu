@@ -34,6 +34,11 @@ class UsersController extends AdminController
         $grid->column('phone', '手机号码');
         $grid->column('gender', '性别')->using(['0' => '女', '1' => '男']);
         $grid->column('post', '职位')->using(['boss' => '老板', 'waiter' => '服务员', 'chef' => '后厨']);
+        $grid->column('created_by', '推荐人')->display(function ($item) {
+            if ($this->created_by) {
+                return $this->user->name;
+            }
+        });
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
         $grid->disableCreateButton();
@@ -50,6 +55,7 @@ class UsersController extends AdminController
     protected function detail($id)
     {
         $show = new Show(User::findOrFail($id));
+        
         $show->id('ID');
         $show->name('用户名');
         $show->field('store_name', '门店名称')->as(function (){

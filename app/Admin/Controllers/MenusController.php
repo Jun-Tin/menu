@@ -56,6 +56,10 @@ class MenusController extends AdminController
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
 
+        $grid->filter(function($filter){
+            $filter->equal('store_id', '门店名称')->select(Menu::getSelectOptions());
+        });
+
         return $grid;
     }
 

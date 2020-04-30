@@ -14,8 +14,13 @@ class QrcodesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Qrcode $qrcode)
+    public function index(Request $request, Qrcode $qrcode)
     {
+        $qrcode = Qrcode::where('code', $request->code)->first();
+        if (!$qrcode) {
+            return response()->json(['error' => ['message' => __('illegal')], 'status' => 404]);
+        }
+
         return (new QrcodeResource($qrcode))->additional(['status' => 200]);
     }
 
@@ -30,10 +35,11 @@ class QrcodesController extends Controller
     {
         $place = Place::find($request->id);
         if (!$place) {
-            return response()->json(['error' => ['message' => '座位不存在'], 'status' => 404]);
+            return response()->json(['error' => ['message' => __('illegal')], 'status' => 404]);
         }
-        $qrcode->update(['link' => $place->image->link]);
-
+        Qrcode::where('code', $request->code)->update(['link' => $place->image->link]);
+        $qrcode = Qrcode::where('code', $request->code)->first();
+        
         return (new QrcodeResource($qrcode))->additional(['status' => 200, 'message' => __('messages.update')]);
     }
 }

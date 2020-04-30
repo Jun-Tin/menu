@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Qrcode extends Model
 {
     protected $fillable = [
-        'image', 'link'
+        'image', 'link', 'code'
     ];
 }
